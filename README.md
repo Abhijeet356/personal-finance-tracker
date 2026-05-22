@@ -167,3 +167,8 @@ Health check:
 ```http
 GET http://localhost:5000/api/health
 ```
+
+## API Docs
+
+- API reference: [docs/API_DOCS.md](docs/API_DOCS.md)
+- Postman collection: [docs/postman_collection.json](docs/postman_collection.json)
