@@ -32,6 +32,45 @@ POST /api/auth/login
 GET  /api/auth/me
 ```
 
+Signup request:
+
+```json
+{
+  "name": "Abhijeet",
+  "email": "abhijeet@example.com",
+  "password": "password123"
+}
+```
+
+Login request:
+
+```json
+{
+  "email": "abhijeet@example.com",
+  "password": "password123"
+}
+```
+
+Auth success response:
+
+```json
+{
+  "success": true,
+  "token": "jwt_token_here",
+  "user": {
+    "id": "user_id",
+    "name": "Abhijeet",
+    "email": "abhijeet@example.com"
+  }
+}
+```
+
+Protected routes need this header:
+
+```http
+Authorization: Bearer jwt_token_here
+```
+
 ### Transactions
 
 ```http

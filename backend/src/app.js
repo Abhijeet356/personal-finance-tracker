@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 
+import authRoutes from "./routes/auth.routes.js";
 import healthRoutes from "./routes/health.routes.js";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(
 app.use(express.json());
 
 app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -32,4 +34,3 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
-
