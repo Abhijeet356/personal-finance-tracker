@@ -2,7 +2,9 @@ import cors from "cors";
 import express from "express";
 
 import authRoutes from "./routes/auth.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 import healthRoutes from "./routes/health.routes.js";
+import transactionRoutes from "./routes/transaction.routes.js";
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(express.json());
 
 app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

@@ -81,12 +81,39 @@ PUT    /api/transactions/:id
 DELETE /api/transactions/:id
 ```
 
+Transaction request:
+
+```json
+{
+  "type": "expense",
+  "amount": 250,
+  "category": "Food",
+  "description": "Lunch",
+  "date": "2026-05-22",
+  "paymentMethod": "upi"
+}
+```
+
+Transaction filters:
+
+```http
+GET /api/transactions?type=expense&category=Food&month=5&year=2026
+```
+
 ### Dashboard
 
 ```http
 GET /api/dashboard/summary
 GET /api/dashboard/monthly
 GET /api/dashboard/category-breakdown
+```
+
+Dashboard filters:
+
+```http
+GET /api/dashboard/summary?month=5&year=2026
+GET /api/dashboard/monthly?year=2026
+GET /api/dashboard/category-breakdown?type=expense&month=5&year=2026
 ```
 
 ## Local Development Plan
