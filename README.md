@@ -87,3 +87,17 @@ http://localhost:5000/api
 - Implement JWT authentication
 - Test APIs with Postman or Thunder Client
 
+## Backend Setup
+
+```bash
+cd backend
+npm install
+copy .env.example .env
+npm run dev
+```
+
+Health check:
+
+```http
+GET http://localhost:5000/api/health
+```
