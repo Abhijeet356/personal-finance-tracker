@@ -17,6 +17,7 @@ personal-finance-tracker/
 
 - User signup and login
 - Add income and expense transactions
+- Default and custom categories
 - View, edit, and delete transactions
 - Filter transactions by type, category, and month
 - Dashboard summary with income, expenses, balance, and recent transactions
@@ -79,6 +80,16 @@ GET    /api/transactions
 GET    /api/transactions/:id
 PUT    /api/transactions/:id
 DELETE /api/transactions/:id
+```
+
+### Categories
+
+```http
+POST   /api/categories
+GET    /api/categories
+GET    /api/categories/:id
+PUT    /api/categories/:id
+DELETE /api/categories/:id
 ```
 
 Transaction request:

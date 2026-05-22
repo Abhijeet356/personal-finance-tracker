@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import createDefaultCategories from "../utils/createDefaultCategories.js";
 import sendTokenResponse from "../utils/sendTokenResponse.js";
 
 export const signup = async (req, res, next) => {
@@ -19,6 +20,8 @@ export const signup = async (req, res, next) => {
       email,
       password,
     });
+
+    await createDefaultCategories(user._id);
 
     sendTokenResponse(res, 201, user);
   } catch (error) {
@@ -64,4 +67,3 @@ export const getMe = (req, res) => {
     },
   });
 };
-

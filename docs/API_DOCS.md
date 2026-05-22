@@ -207,6 +207,97 @@ Success response:
 }
 ```
 
+## Categories
+
+New users automatically receive default income and expense categories.
+
+### Create Category
+
+```http
+POST /categories
+```
+
+Headers:
+
+```http
+Authorization: Bearer <token>
+```
+
+Request body:
+
+```json
+{
+  "name": "Books",
+  "type": "expense",
+  "color": "#2563EB"
+}
+```
+
+Allowed values:
+
+```text
+type: income, expense
+color: hex color, for example #2563EB
+```
+
+### Get Categories
+
+```http
+GET /categories
+```
+
+Optional filter:
+
+```http
+GET /categories?type=expense
+```
+
+Success response:
+
+```json
+{
+  "success": true,
+  "count": 1,
+  "categories": []
+}
+```
+
+### Get Single Category
+
+```http
+GET /categories/:id
+```
+
+### Update Category
+
+```http
+PUT /categories/:id
+```
+
+Request body can contain one or more category fields:
+
+```json
+{
+  "name": "Books and Study",
+  "color": "#1D4ED8"
+}
+```
+
+### Delete Category
+
+```http
+DELETE /categories/:id
+```
+
+Success response:
+
+```json
+{
+  "success": true,
+  "message": "Category deleted"
+}
+```
+
 ## Dashboard
 
 ### Summary
@@ -272,4 +363,3 @@ GET /dashboard/category-breakdown?type=expense&month=5&year=2026
 - Send the token in the `Authorization` header for protected routes.
 - Use `http://localhost:5000/api` as `NEXT_PUBLIC_API_URL` during local development.
 - Keep `.env.local` on the frontend out of Git.
-

@@ -11,4 +11,5 @@ build/
 coverage/
 .DS_Store
 Thumbs.db
-
+backend/.postman/
+backend/postman/
