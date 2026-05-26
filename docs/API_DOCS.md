@@ -56,7 +56,10 @@ Success response:
   "user": {
     "id": "user_id",
     "name": "Abhijeet",
-    "email": "abhijeet@example.com"
+    "email": "abhijeet@example.com",
+    "currentBalance": 0,
+    "monthlySalary": 0,
+    "onboardingComplete": false
   }
 }
 ```
@@ -85,7 +88,10 @@ Success response:
   "user": {
     "id": "user_id",
     "name": "Abhijeet",
-    "email": "abhijeet@example.com"
+    "email": "abhijeet@example.com",
+    "currentBalance": 0,
+    "monthlySalary": 0,
+    "onboardingComplete": false
   }
 }
 ```
@@ -110,8 +116,69 @@ Success response:
   "user": {
     "id": "user_id",
     "name": "Abhijeet",
-    "email": "abhijeet@example.com"
+    "email": "abhijeet@example.com",
+    "currentBalance": 25000,
+    "monthlySalary": 50000,
+    "onboardingComplete": true
   }
+}
+```
+
+### Complete Onboarding
+
+```http
+POST /auth/onboarding
+```
+
+Headers:
+
+```http
+Authorization: Bearer <token>
+```
+
+Request body:
+
+```json
+{
+  "currentBalance": 25000,
+  "monthlySalary": 50000
+}
+```
+
+Success response:
+
+```json
+{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "name": "Abhijeet",
+    "email": "abhijeet@example.com",
+    "currentBalance": 25000,
+    "monthlySalary": 50000,
+    "onboardingComplete": true
+  }
+}
+```
+
+### Update Profile
+
+```http
+PATCH /auth/profile
+```
+
+Headers:
+
+```http
+Authorization: Bearer <token>
+```
+
+Request body can contain one or both profile fields:
+
+```json
+{
+  "currentBalance": 30000,
+  "monthlySalary": 55000
 }
 ```
 
@@ -357,9 +424,8 @@ GET /dashboard/category-breakdown?type=expense&month=5&year=2026
 }
 ```
 
-## Frontend Notes
+## Backend Notes
 
-- Store the token after signup/login.
+- Store the token returned by signup/login in the client or API consumer.
 - Send the token in the `Authorization` header for protected routes.
-- Use `http://localhost:5000/api` as `NEXT_PUBLIC_API_URL` during local development.
-- Keep `.env.local` on the frontend out of Git.
+- Use `http://localhost:5000/api` as the local API base URL.

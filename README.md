@@ -1,16 +1,13 @@
-# Personal Finance Tracker
+# Personal Finance Tracker API
 
-A full-stack personal finance tracker app built by a two-person team.
-
-- Frontend: Next.js
-- Backend: Node.js, Express.js, MongoDB, Mongoose
+A backend-only personal finance tracker API built with Node.js, Express.js, MongoDB, and Mongoose.
 
 ## Project Structure
 
 ```text
 personal-finance-tracker/
-  frontend/   Next.js app
   backend/    Express API
+  docs/       API documentation and Postman collection
 ```
 
 ## MVP Features
@@ -23,7 +20,7 @@ personal-finance-tracker/
 - Dashboard summary with income, expenses, balance, and recent transactions
 - Category-wise spending breakdown
 
-## Planned Backend API Routes
+## Backend API Routes
 
 ### Auth
 
@@ -31,6 +28,8 @@ personal-finance-tracker/
 POST /api/auth/signup
 POST /api/auth/login
 GET  /api/auth/me
+POST /api/auth/onboarding
+PATCH /api/auth/profile
 ```
 
 Signup request:
@@ -61,7 +60,10 @@ Auth success response:
   "user": {
     "id": "user_id",
     "name": "Abhijeet",
-    "email": "abhijeet@example.com"
+    "email": "abhijeet@example.com",
+    "currentBalance": 0,
+    "monthlySalary": 0,
+    "onboardingComplete": false
   }
 }
 ```
@@ -129,40 +131,11 @@ GET /api/dashboard/category-breakdown?type=expense&month=5&year=2026
 
 ## Local Development Plan
 
-The Next.js frontend will run on:
-
-```text
-http://localhost:3000
-```
-
 The Express backend will run on:
 
 ```text
 http://localhost:5000
 ```
-
-The frontend can call backend endpoints using:
-
-```text
-http://localhost:5000/api
-```
-
-## Team Split
-
-### Frontend
-
-- Build the Next.js UI
-- Create pages and forms
-- Call backend APIs
-- Display dashboard charts and transaction data
-
-### Backend
-
-- Build the Express API
-- Connect MongoDB
-- Create models and controllers
-- Implement JWT authentication
-- Test APIs with Postman or Thunder Client
 
 ## Backend Setup
 

@@ -11,3 +11,14 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const onboardingSchema = z.object({
+  currentBalance: z.number().min(0, "Current balance cannot be negative"),
+  monthlySalary: z.number().min(0, "Monthly salary cannot be negative"),
+});
+
+export const profileSchema = onboardingSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  {
+    message: "At least one profile field is required",
+  }
+);

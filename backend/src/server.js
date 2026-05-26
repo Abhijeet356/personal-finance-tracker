@@ -7,7 +7,7 @@ dotenv.config({ quiet: true });
 
 const PORT = process.env.PORT || 5000;
 
-await connectDB();
+connectDB();
 
 app.listen(PORT, () => {
   console.log(`Backend API running on http://localhost:${PORT}`);

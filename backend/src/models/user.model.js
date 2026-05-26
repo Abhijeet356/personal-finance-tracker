@@ -23,6 +23,24 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false,
     },
+    currentBalance: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    monthlySalary: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    onboardingComplete: {
+      type: Boolean,
+      default: false,
+    },
+    lastSalaryCreditMonth: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
