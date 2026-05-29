@@ -3,14 +3,19 @@ import Transaction from "../models/transaction.model.js";
 import createDefaultCategories from "../utils/createDefaultCategories.js";
 import sendTokenResponse from "../utils/sendTokenResponse.js";
 
-const userPayload = (user) => ({
-  id: user._id,
-  name: user.name,
-  email: user.email,
-  currentBalance: user.currentBalance,
-  monthlySalary: user.monthlySalary,
-  onboardingComplete: user.onboardingComplete,
-});
+const userPayload = (user) => {
+  const monthlyBudget = user.monthlyBudget ?? 0;
+
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    currentBalance: user.currentBalance,
+    monthlySalary: user.monthlySalary,
+    monthlyBudget,
+    onboardingComplete: user.onboardingComplete,
+  };
+};
 
 const getMonthKey = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
@@ -38,6 +43,7 @@ const maybeCreditMonthlySalary = async (user) => {
     paymentMethod: "bank_transfer",
   });
 
+  user.currentBalance += user.monthlySalary;
   user.lastSalaryCreditMonth = monthKey;
   await user.save();
 
@@ -46,7 +52,7 @@ const maybeCreditMonthlySalary = async (user) => {
 
 export const signup = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, monthlyBudget } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -61,6 +67,7 @@ export const signup = async (req, res, next) => {
       name,
       email,
       password,
+      monthlyBudget: monthlyBudget ?? 0,
     });
 
     await createDefaultCategories(user._id);
@@ -114,11 +121,20 @@ export const getMe = async (req, res, next) => {
 
 export const completeOnboarding = async (req, res, next) => {
   try {
-    const { currentBalance, monthlySalary } = req.body;
+    const { currentBalance, monthlySalary, monthlyBudget } = req.body;
     const user = req.user;
+    const budget = monthlyBudget ?? monthlySalary ?? 0;
+    const hasSeparateSalary = monthlyBudget !== undefined;
 
     user.currentBalance = currentBalance;
-    user.monthlySalary = monthlySalary;
+    user.monthlyBudget = budget;
+
+    if (monthlySalary !== undefined && hasSeparateSalary) {
+      user.monthlySalary = monthlySalary;
+    } else if (!hasSeparateSalary) {
+      user.monthlySalary = 0;
+    }
+
     user.onboardingComplete = true;
 
     if (currentBalance > 0) {
@@ -133,7 +149,7 @@ export const completeOnboarding = async (req, res, next) => {
       });
     }
 
-    if (monthlySalary > 0 && new Date().getDate() === 1) {
+    if (hasSeparateSalary && monthlySalary > 0 && new Date().getDate() === 1) {
       await Transaction.create({
         user: user._id,
         type: "income",
@@ -143,6 +159,7 @@ export const completeOnboarding = async (req, res, next) => {
         date: new Date(),
         paymentMethod: "bank_transfer",
       });
+      user.currentBalance += monthlySalary;
       user.lastSalaryCreditMonth = getMonthKey();
     }
 
@@ -159,7 +176,7 @@ export const completeOnboarding = async (req, res, next) => {
 
 export const updateProfile = async (req, res, next) => {
   try {
-    const { currentBalance, monthlySalary } = req.body;
+    const { currentBalance, monthlySalary, monthlyBudget } = req.body;
     const user = req.user;
 
     if (currentBalance !== undefined) {
@@ -168,6 +185,10 @@ export const updateProfile = async (req, res, next) => {
 
     if (monthlySalary !== undefined) {
       user.monthlySalary = monthlySalary;
+    }
+
+    if (monthlyBudget !== undefined) {
+      user.monthlyBudget = monthlyBudget;
     }
 
     await user.save();

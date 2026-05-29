@@ -51,7 +51,14 @@ export default function Dashboard() {
 
   const [balance, setBalance] = useState(0);
   // const [showBalanceModal, setShowBalanceModal] = useState(false);
-  const [budgetSettings, setBudgetSettings] = useState(null);
+  const [budgetSettings] = useState(() => {
+    const savedBudget =
+      typeof window !== "undefined"
+        ? localStorage.getItem("budget_settings")
+        : null;
+
+    return savedBudget ? JSON.parse(savedBudget) : null;
+  });
   const [user, setUser] = useState(null);
   // BALANCE
 
@@ -80,7 +87,7 @@ export default function Dashboard() {
 
         setUser(response.data.user);
         setBalance(response.data.user.currentBalance || 0);
-        console.log("Monthly Salary:", response.data.user.monthlySalary);
+        console.log("Monthly Budget:", response.data.user.monthlyBudget);
       } catch (error) {
         console.log(error);
 
@@ -102,14 +109,6 @@ export default function Dashboard() {
   //     setShowBalanceModal(true);
   //   }
   // }, []);
-
-  useEffect(() => {
-    const savedBudget = localStorage.getItem("budget_settings");
-
-    if (savedBudget) {
-      setBudgetSettings(JSON.parse(savedBudget));
-    }
-  }, []);
 
   // TOTALS
 
@@ -177,7 +176,7 @@ export default function Dashboard() {
 
   const savings = totalBalance;
 
-  const monthlyBudget =Number(user?.monthlySalary || 0);
+  const monthlyBudget = Number(user?.monthlyBudget || user?.monthlySalary || 0);
   
   const totalSpent = expenses;
 

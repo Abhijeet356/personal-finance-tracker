@@ -154,7 +154,7 @@ export default function ResetDataModal({ isOpen, closeModal }) {
               darkMode ? "text-white" : "text-black"
             }`}
           >
-            Type "DELETE MY DATA"
+            Type &quot;DELETE MY DATA&quot;
           </label>
 
           <input

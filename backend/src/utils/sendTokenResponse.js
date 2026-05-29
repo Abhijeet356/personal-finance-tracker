@@ -12,6 +12,7 @@ const sendTokenResponse = (res, statusCode, user) => {
       email: user.email,
       currentBalance: user.currentBalance,
       monthlySalary: user.monthlySalary,
+      monthlyBudget: user.monthlyBudget,
       onboardingComplete: user.onboardingComplete,
     },
   });

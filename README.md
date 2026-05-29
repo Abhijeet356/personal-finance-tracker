@@ -19,6 +19,7 @@ personal-finance-tracker/
 - Filter transactions by type, category, and month
 - Dashboard summary with income, expenses, balance, and recent transactions
 - Category-wise spending breakdown
+- Monthly budget tracking with exceeded-budget status
 
 ## Backend API Routes
 
@@ -38,7 +39,8 @@ Signup request:
 {
   "name": "Abhijeet",
   "email": "abhijeet@example.com",
-  "password": "password123"
+  "password": "password123",
+  "monthlyBudget": 20000
 }
 ```
 
@@ -63,6 +65,7 @@ Auth success response:
     "email": "abhijeet@example.com",
     "currentBalance": 0,
     "monthlySalary": 0,
+    "monthlyBudget": 20000,
     "onboardingComplete": false
   }
 }
@@ -127,6 +130,22 @@ Dashboard filters:
 GET /api/dashboard/summary?month=5&year=2026
 GET /api/dashboard/monthly?year=2026
 GET /api/dashboard/category-breakdown?type=expense&month=5&year=2026
+```
+
+Summary includes the saved total balance plus monthly budget status:
+
+```json
+{
+  "success": true,
+  "totalIncome": 50000,
+  "totalExpenses": 22000,
+  "balance": 78000,
+  "monthlyBudget": 20000,
+  "budgetUsed": 22000,
+  "budgetRemaining": -2000,
+  "isBudgetExceeded": true,
+  "recentTransactions": []
+}
 ```
 
 ## Local Development Plan

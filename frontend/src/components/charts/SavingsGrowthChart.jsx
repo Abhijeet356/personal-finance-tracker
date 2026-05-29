@@ -20,26 +20,24 @@ export default function SavingsGrowthChart({ transactions }) {
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
-  // RUNNING BALANCE
+  const chartData = sortedTransactions.reduce((data, item) => {
+    const previousBalance = data.at(-1)?.balance || 0;
+    const balance =
+      item.type === "income"
+        ? previousBalance + item.amount
+        : previousBalance - item.amount;
 
-  let balance = 0;
-
-  const chartData = sortedTransactions.map((item) => {
-    if (item.type === "income") {
-      balance += item.amount;
-    } else {
-      balance -= item.amount;
-    }
-
-    return {
+    data.push({
       date: new Date(item.date).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "short",
       }),
 
       balance,
-    };
-  });
+    });
+
+    return data;
+  }, []);
 
   return (
     <div

@@ -5,7 +5,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 const TransactionContext = createContext();
 
 export function TransactionProvider({ children }) {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(() => {
+    const saved =
+      typeof window !== "undefined" ? localStorage.getItem("transactions") : null;
+
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -20,16 +25,6 @@ export function TransactionProvider({ children }) {
   const [sortBy, setSortBy] = useState("newest");
 
   const [searchQuery, setSearchQuery] = useState("");
-
-  // LOAD
-
-  useEffect(() => {
-    const saved = localStorage.getItem("transactions");
-
-    if (saved) {
-      setTransactions(JSON.parse(saved));
-    }
-  }, []);
 
   // SAVE
 

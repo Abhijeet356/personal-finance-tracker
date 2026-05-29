@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import {
   FaTimes,
@@ -24,31 +24,17 @@ export default function ProfileModal({ isOpen, closeModal }) {
 
   const { userData, setUserData } = useUser();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(userData?.name || "");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(userData?.email || "");
 
-  const [currency, setCurrency] = useState("INR");
+  const [currency, setCurrency] = useState(userData?.currency || "INR");
 
-  const [financialGoal, setFinancialGoal] = useState("Save More");
+  const [financialGoal, setFinancialGoal] = useState(
+    userData?.financialGoal || "Save More",
+  );
 
-  const [avatar, setAvatar] = useState(null);
-
-  // LOAD USER DATA
-
-  useEffect(() => {
-    if (userData) {
-      setName(userData.name || "");
-
-      setEmail(userData.email || "");
-
-      setCurrency(userData.currency || "INR");
-
-      setFinancialGoal(userData.financialGoal || "Save More");
-
-      setAvatar(userData.avatar || null);
-    }
-  }, [userData]);
+  const [avatar, setAvatar] = useState(userData?.avatar || null);
 
   // IMAGE UPLOAD
 
