@@ -121,17 +121,6 @@ export const completeOnboarding = async (req, res, next) => {
     user.monthlySalary = monthlySalary;
     user.onboardingComplete = true;
 
-    if (currentBalance > 0) {
-      await Transaction.create({
-        user: user._id,
-        type: "income",
-        amount: currentBalance,
-        category: "Opening Balance",
-        description: "Opening balance",
-        date: new Date(),
-        paymentMethod: "bank_transfer",
-      });
-    }
 
     if (monthlySalary > 0 && new Date().getDate() === 1) {
       await Transaction.create({

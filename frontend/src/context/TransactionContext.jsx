@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-
+import api from "@/lib/api";
 const TransactionContext = createContext();
 
 export function TransactionProvider({ children }) {
@@ -15,7 +15,7 @@ export function TransactionProvider({ children }) {
 
   const [filterCategory, setFilterCategory] = useState("all");
 
-  const [paymentMode, setPaymentMode] = useState("all");
+  const [paymentMethod, setPaymentMethod] = useState("all");
 
   const [sortBy, setSortBy] = useState("newest");
 
@@ -24,12 +24,18 @@ export function TransactionProvider({ children }) {
   // LOAD
 
   useEffect(() => {
-    const saved = localStorage.getItem("transactions");
+  const fetchTransactions = async () => {
+    try {
+      const response = await api.get("/transactions");
 
-    if (saved) {
-      setTransactions(JSON.parse(saved));
+      setTransactions(response.data.transactions);
+    } catch (error) {
+      console.error("Failed to load transactions", error);
     }
-  }, []);
+  };
+
+  fetchTransactions();
+}, []);
 
   // SAVE
 
@@ -57,11 +63,11 @@ export function TransactionProvider({ children }) {
     );
   }
 
-  // PAYMENT MODE
+  // PAYMENT METHOD
 
-  if (paymentMode !== "all") {
+  if (paymentMethod !== "all") {
     filteredTransactions = filteredTransactions.filter(
-      (item) => item.paymentMode === paymentMode,
+      (item) => item.paymentMethod === paymentMethod,
     );
   }
 
@@ -120,8 +126,8 @@ export function TransactionProvider({ children }) {
         filterCategory,
         setFilterCategory,
 
-        paymentMode,
-        setPaymentMode,
+        paymentMethod,
+        setPaymentMethod,
 
         sortBy,
         setSortBy,

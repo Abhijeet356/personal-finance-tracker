@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
+import api from "@/lib/api";
 
 export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const { darkMode } = useTheme();
@@ -32,7 +33,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
       date: "",
     });
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !formData.category ||
       !formData.amount ||
@@ -43,18 +44,30 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
       return;
     }
 
-    const transaction = {
-      id: Date.now(),
-      title: formData.title,
-      amount: Number(formData.amount),
-      type: formData.type,
-      category: formData.category,
-      paymentMethod: formData.paymentMethod,
-      notes: formData.notes,
-      date: formData.date,
-    };
+    try {
+  const response = await api.post("/transactions", {
+    amount: Number(formData.amount),
+    type: formData.type,
+    category: formData.category,
+    description: formData.notes,
+    date: formData.date,
+    paymentMethod:
+      formData.paymentMethod === "UPI"
+        ? "upi"
+        : formData.paymentMethod === "Cash"
+        ? "cash"
+        : formData.paymentMethod === "Net Banking"
+        ? "bank_transfer"
+        : "card",
+  });
 
-    onSave(transaction);
+  console.log(response.data);
+  onSave(response.data.transaction);
+  onClose();
+} catch (error) {
+  console.error(error);
+  alert("Failed to save transaction");
+}
 
     setFormData({
       title: "",

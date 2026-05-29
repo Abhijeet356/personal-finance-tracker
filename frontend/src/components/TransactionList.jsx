@@ -195,7 +195,7 @@ export default function TransactionList({
       <div className="space-y-4">
         {transactions.map((item) => (
           <div
-            key={item.id}
+            key={item._id || item.id}
             onClick={() => {
               setSelected(item);
               setIsEditing(false);
