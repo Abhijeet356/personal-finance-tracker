@@ -44,7 +44,11 @@ export const getSummary = async (req, res, next) => {
       success: true,
       totalIncome,
       totalExpenses,
-      balance: totalIncome - totalExpenses,
+      balance: req.user.currentBalance,
+      monthlyBudget: req.user.monthlyBudget,
+      budgetUsed: totalExpenses,
+      budgetRemaining: req.user.monthlyBudget - totalExpenses,
+      isBudgetExceeded: totalExpenses > req.user.monthlyBudget,
       recentTransactions,
     });
   } catch (error) {
@@ -132,4 +136,3 @@ export const getCategoryBreakdown = async (req, res, next) => {
     next(error);
   }
 };
-

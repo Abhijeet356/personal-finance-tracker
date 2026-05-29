@@ -2,7 +2,7 @@
 
 import { FaTimes, FaBell } from "react-icons/fa";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useTheme } from "@/context/ThemeContext";
 
@@ -13,25 +13,24 @@ export default function NotificationSettingsModal({ isOpen, closeModal }) {
 
   const { addNotification } = useNotifications();
 
-  const [settings, setSettings] = useState({
-    transactions: true,
+  const [settings, setSettings] = useState(() => {
+    const saved =
+      typeof window !== "undefined"
+        ? localStorage.getItem("notification_settings")
+        : null;
 
-    exports: true,
+    return saved
+      ? JSON.parse(saved)
+      : {
+          transactions: true,
 
-    email: false,
+          exports: true,
 
-    push: true,
+          email: false,
+
+          push: true,
+        };
   });
-
-  // LOAD SETTINGS
-
-  useEffect(() => {
-    const saved = localStorage.getItem("notification_settings");
-
-    if (saved) {
-      setSettings(JSON.parse(saved));
-    }
-  }, []);
 
   // TOGGLE
 

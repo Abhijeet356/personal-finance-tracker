@@ -43,7 +43,8 @@ Request body:
 {
   "name": "Abhijeet",
   "email": "abhijeet@example.com",
-  "password": "password123"
+  "password": "password123",
+  "monthlyBudget": 20000
 }
 ```
 
@@ -59,6 +60,7 @@ Success response:
     "email": "abhijeet@example.com",
     "currentBalance": 0,
     "monthlySalary": 0,
+    "monthlyBudget": 20000,
     "onboardingComplete": false
   }
 }
@@ -91,6 +93,7 @@ Success response:
     "email": "abhijeet@example.com",
     "currentBalance": 0,
     "monthlySalary": 0,
+    "monthlyBudget": 20000,
     "onboardingComplete": false
   }
 }
@@ -119,6 +122,7 @@ Success response:
     "email": "abhijeet@example.com",
     "currentBalance": 25000,
     "monthlySalary": 50000,
+    "monthlyBudget": 20000,
     "onboardingComplete": true
   }
 }
@@ -141,7 +145,8 @@ Request body:
 ```json
 {
   "currentBalance": 25000,
-  "monthlySalary": 50000
+  "monthlySalary": 50000,
+  "monthlyBudget": 20000
 }
 ```
 
@@ -156,6 +161,7 @@ Success response:
     "email": "abhijeet@example.com",
     "currentBalance": 25000,
     "monthlySalary": 50000,
+    "monthlyBudget": 20000,
     "onboardingComplete": true
   }
 }
@@ -178,7 +184,8 @@ Request body can contain one or both profile fields:
 ```json
 {
   "currentBalance": 30000,
-  "monthlySalary": 55000
+  "monthlySalary": 55000,
+  "monthlyBudget": 25000
 }
 ```
 
@@ -386,10 +393,16 @@ Success response:
   "success": true,
   "totalIncome": 50000,
   "totalExpenses": 18500,
-  "balance": 31500,
+  "balance": 81500,
+  "monthlyBudget": 20000,
+  "budgetUsed": 18500,
+  "budgetRemaining": 1500,
+  "isBudgetExceeded": false,
   "recentTransactions": []
 }
 ```
+
+`budgetRemaining` can become negative when monthly expenses are higher than `monthlyBudget`.
 
 ### Monthly Trend
 

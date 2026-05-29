@@ -5,17 +5,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(() => {
+    const savedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user_setup") : null;
 
-  // LOAD USER
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user_setup");
-
-    if (savedUser) {
-      setUserData(JSON.parse(savedUser));
-    }
-  }, []);
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   // SAVE USER
 

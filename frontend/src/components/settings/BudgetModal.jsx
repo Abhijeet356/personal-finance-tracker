@@ -2,47 +2,60 @@
 
 import { FaTimes, FaWallet, FaPiggyBank, FaPercentage } from "react-icons/fa";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useTheme } from "@/context/ThemeContext";
 
 import { useNotifications } from "@/context/NotificationContext";
+import api from "@/lib/api";
 
 export default function BudgetModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
 
   const { addNotification } = useNotifications();
 
-  const [monthlyBudget, setMonthlyBudget] = useState("");
+  const savedBudgetSettings =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("budget_settings") || "null")
+      : null;
 
-  const [savingsGoal, setSavingsGoal] = useState("");
+  const [monthlyBudget, setMonthlyBudget] = useState(
+    savedBudgetSettings?.monthlyBudget || "",
+  );
 
-  const [warningThreshold, setWarningThreshold] = useState("80");
+  const [savingsGoal, setSavingsGoal] = useState(
+    savedBudgetSettings?.savingsGoal || "",
+  );
 
-  // LOAD
-
-  useEffect(() => {
-    const saved = localStorage.getItem("budget_settings");
-
-    if (saved) {
-      const parsed = JSON.parse(saved);
-
-      setMonthlyBudget(parsed.monthlyBudget);
-
-      setSavingsGoal(parsed.savingsGoal);
-
-      setWarningThreshold(parsed.warningThreshold);
-    }
-  }, []);
+  const [warningThreshold, setWarningThreshold] = useState(
+    savedBudgetSettings?.warningThreshold || "80",
+  );
 
   // SAVE
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+    const nextMonthlyBudget = Number(monthlyBudget || 0);
+
+    if (token) {
+      await api.patch(
+        "/auth/profile",
+        {
+          monthlyBudget: nextMonthlyBudget,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    }
+
     localStorage.setItem(
       "budget_settings",
 
       JSON.stringify({
-        monthlyBudget,
+        monthlyBudget: nextMonthlyBudget,
 
         savingsGoal,
 

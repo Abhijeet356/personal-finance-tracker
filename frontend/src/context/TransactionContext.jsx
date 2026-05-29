@@ -5,7 +5,12 @@ import api from "@/lib/api";
 const TransactionContext = createContext();
 
 export function TransactionProvider({ children }) {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(() => {
+    const saved =
+      typeof window !== "undefined" ? localStorage.getItem("transactions") : null;
+
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -21,9 +26,8 @@ export function TransactionProvider({ children }) {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // LOAD
 
-  useEffect(() => {
+useEffect(() => {
   const fetchTransactions = async () => {
     try {
       const response = await api.get("/transactions");
@@ -35,7 +39,7 @@ export function TransactionProvider({ children }) {
   };
 
   fetchTransactions();
-}, []);
+}, []);  
 
   // SAVE
 

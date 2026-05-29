@@ -42,7 +42,7 @@ export default function SetupPage() {
 
         {
           currentBalance: Number(balance),
-          monthlySalary: Number(budget),
+          monthlyBudget: Number(budget),
         },
 
         {
@@ -71,7 +71,6 @@ export default function SetupPage() {
 
       alert("Setup failed");
     }
-    e;
   };
 
   // IMAGE UPLOAD
