@@ -120,8 +120,8 @@ export default function TransactionList({
 
   return (
     <div
-      className={`relative z-10 p-8 rounded-3xl shadow-xl transition-all duration-300 ${
-        darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+      className={`app-surface relative z-10 p-6 md:p-8 ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -153,8 +153,8 @@ export default function TransactionList({
 
       {transactions.length === 0 && (
         <div
-          className={`text-center py-16 rounded-3xl ${
-            darkMode ? "bg-slate-700" : "bg-slate-100"
+          className={`app-panel text-center py-16 ${
+            darkMode ? "app-panel-dark" : "app-panel-light"
           }`}
         >
           <h2 className="text-2xl font-bold">No Transactions Yet</h2>
@@ -171,12 +171,10 @@ export default function TransactionList({
               setSelected(item);
               setIsEditing(false);
             }}
-            className={`flex justify-between items-center p-5 rounded-2xl border-l-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
+            className={`app-panel flex justify-between items-center p-5 border-l-4 cursor-pointer ${
               item.type === "expense" ? "border-red-500" : "border-green-500"
             } ${
-              darkMode
-                ? "bg-slate-700 hover:bg-slate-600"
-                : "bg-slate-100 hover:bg-slate-200"
+              darkMode ? "app-panel-dark hover:bg-slate-700" : "app-panel-light hover:bg-slate-100"
             }`}
           >
             {/* LEFT */}
@@ -231,8 +229,8 @@ export default function TransactionList({
       {selected && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div
-            className={`w-[520px] p-8 rounded-[32px] shadow-2xl relative overflow-hidden ${
-              darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+            className={`app-surface w-[520px] max-w-[calc(100vw-2rem)] p-8 relative overflow-hidden ${
+              darkMode ? "app-surface-dark" : "app-surface-light"
             }`}
           >
             {/* GLOW */}
@@ -288,10 +286,10 @@ export default function TransactionList({
                         amount: Number(e.target.value),
                       })
                     }
-                    className={`w-36 px-4 py-2 rounded-xl outline-none border-2 text-right ${
+                    className={`app-field w-36 px-4 py-2 text-right ${
                       darkMode
-                        ? "bg-slate-700 border-green-500 text-white"
-                        : "bg-green-50 border-green-400 text-black"
+                        ? "app-field-dark"
+                        : "app-field-light"
                     }`}
                   />
                 ) : (
@@ -331,10 +329,8 @@ export default function TransactionList({
                         paymentMethod: e.target.value,
                       })
                     }
-                    className={`px-4 py-2 rounded-xl outline-none border-2 ${
-                      darkMode
-                        ? "bg-slate-700 border-blue-500 text-white"
-                        : "bg-blue-50 border-blue-400 text-black"
+                    className={`app-field w-auto px-4 py-2 ${
+                      darkMode ? "app-field-dark" : "app-field-light"
                     }`}
                   >
                     <option value="upi">UPI</option>
@@ -364,10 +360,8 @@ export default function TransactionList({
                         category: e.target.value,
                       })
                     }
-                    className={`px-4 py-2 rounded-xl outline-none border-2 ${
-                      darkMode
-                        ? "bg-slate-700 border-yellow-500 text-white"
-                        : "bg-yellow-50 border-yellow-400 text-black"
+                    className={`app-field w-auto px-4 py-2 ${
+                      darkMode ? "app-field-dark" : "app-field-light"
                     }`}
                   >
                     <option>Food</option>
@@ -399,16 +393,14 @@ export default function TransactionList({
                         description: e.target.value,
                       })
                     }
-                    className={`w-full p-4 rounded-2xl outline-none resize-none border-2 ${
-                      darkMode
-                        ? "bg-slate-700 border-purple-500 text-white"
-                        : "bg-purple-50 border-purple-400 text-black"
+                    className={`app-field resize-none ${
+                      darkMode ? "app-field-dark" : "app-field-light"
                     }`}
                   />
                 ) : (
                   <div
-                    className={`p-4 rounded-2xl ${
-                      darkMode ? "bg-slate-700" : "bg-slate-100"
+                    className={`app-panel p-4 ${
+                      darkMode ? "app-panel-dark" : "app-panel-light"
                     }`}
                   >
                     {selected.description || "No description added"}
@@ -423,14 +415,14 @@ export default function TransactionList({
               {isEditing ? (
                 <button
                   onClick={handleSaveEdit}
-                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105 transition-all duration-300 text-white shadow-lg"
+                  className="app-button flex-1 bg-emerald-600 py-3 text-white hover:bg-emerald-700"
                 >
                   Save
                 </button>
               ) : (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-700 hover:scale-105 transition-all duration-300 text-white shadow-lg flex items-center justify-center gap-2"
+                  className="app-button app-button-primary flex-1 py-3"
                 >
                   <FaEdit />
                   Edit
@@ -439,7 +431,7 @@ export default function TransactionList({
 
               <button
                 onClick={() => handleDelete(selected)}
-                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 hover:scale-105 transition-all duration-300 text-white shadow-lg flex items-center justify-center gap-2"
+                className="app-button app-button-danger flex-1 py-3"
               >
                 <FaTrash />
                 Delete

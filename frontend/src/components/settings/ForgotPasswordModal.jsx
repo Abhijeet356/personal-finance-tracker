@@ -50,10 +50,8 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div
-        className={`w-full max-w-2xl rounded-[36px] p-8 shadow-2xl border relative ${
-          darkMode
-            ? "bg-[#111827] border-white/10"
-            : "bg-white border-slate-200"
+        className={`app-surface w-full max-w-2xl p-8 relative ${
+          darkMode ? "app-surface-dark" : "app-surface-light"
         }`}
       >
         {/* CLOSE */}
@@ -101,10 +99,8 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email"
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               />
             </div>
@@ -129,10 +125,8 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="New password"
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               />
             </div>
@@ -157,10 +151,8 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm password"
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               />
             </div>
@@ -172,14 +164,16 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
         <div className="flex justify-end gap-4 mt-10">
           <button
             onClick={closeModal}
-            className="px-8 py-4 rounded-2xl bg-slate-500 text-white font-semibold hover:bg-slate-600 transition"
+            className={`app-button app-button-secondary px-8 py-4 ${
+              darkMode ? "bg-white/10 text-white hover:bg-white/15" : ""
+            }`}
           >
             Cancel
           </button>
 
           <button
             onClick={handleReset}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-700 text-white font-semibold shadow-2xl hover:scale-105 transition-all duration-300"
+            className="app-button app-button-primary px-8 py-4"
           >
             Reset Password
           </button>

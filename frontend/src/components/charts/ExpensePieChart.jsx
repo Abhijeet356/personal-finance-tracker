@@ -56,8 +56,8 @@ export default function ExpensePieChart({ transactions, isDashboard = false }) {
 
   return (
     <div
-      className={`p-7 rounded-[30px] shadow-2xl transition-all duration-300 ${
-        darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+      className={`app-surface p-6 ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -73,7 +73,7 @@ export default function ExpensePieChart({ transactions, isDashboard = false }) {
       {/* PIE CHART */}
 
       <div className="h-[320px]">
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height={320} minWidth={0}>
           <PieChart>
             <Pie
               data={pieData}

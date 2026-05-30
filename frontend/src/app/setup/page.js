@@ -17,7 +17,7 @@ export default function SetupPage() {
     if (existingUser) {
       router.push("/dashboard");
     }
-  }, []);
+  }, [router]);
 
   const [name, setName] = useState("");
   const [balance, setBalance] = useState("");

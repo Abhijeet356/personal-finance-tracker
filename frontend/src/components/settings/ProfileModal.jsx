@@ -16,8 +16,15 @@ import { useTheme } from "@/context/ThemeContext";
 import { useNotifications } from "@/context/NotificationContext";
 
 import { useUser } from "@/context/UserContext";
+import api from "@/lib/api";
 
 export default function ProfileModal({ isOpen, closeModal }) {
+  if (!isOpen) return null;
+
+  return <ProfileModalContent closeModal={closeModal} />;
+}
+
+function ProfileModalContent({ closeModal }) {
   const { darkMode } = useTheme();
 
   const { addNotification } = useNotifications();
@@ -43,6 +50,11 @@ export default function ProfileModal({ isOpen, closeModal }) {
 
     if (!file) return;
 
+    if (file.size > 1500000) {
+      alert("Please choose an image smaller than 1.5 MB.");
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onloadend = () => {
@@ -54,51 +66,38 @@ export default function ProfileModal({ isOpen, closeModal }) {
 
   // SAVE
 
-  const handleSave = () => {
-    const updatedUser = {
-      ...userData,
+  const handleSave = async () => {
+    try {
+      const response = await api.patch("/auth/profile", {
+        name,
+        email,
+        currency,
+        financialGoal,
+        avatar: avatar || "",
+      });
 
-      name,
+      const updatedUser = response.data.user;
 
-      email,
+      setUserData(updatedUser);
+      localStorage.setItem("user_setup", JSON.stringify(updatedUser));
 
-      currency,
+      addNotification({
+        title: "Profile Updated",
 
-      financialGoal,
+        message: "Your profile information was updated successfully.",
+      });
 
-      avatar,
-    };
-
-    // UPDATE CONTEXT
-
-    setUserData(updatedUser);
-
-    // SAVE LOCALSTORAGE
-
-    localStorage.setItem(
-      "user_setup",
-
-      JSON.stringify(updatedUser),
-    );
-
-    addNotification({
-      title: "Profile Updated",
-
-      message: "Your profile information was updated successfully.",
-    });
-
-    closeModal();
+      closeModal();
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to update profile");
+    }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
       <div
-        className={`w-full max-w-2xl rounded-[36px] p-8 shadow-2xl border relative transition-all duration-300 ${
-          darkMode
-            ? "bg-[#111827] border-white/10"
-            : "bg-white border-slate-200"
+        className={`app-surface w-full max-w-2xl p-8 relative ${
+          darkMode ? "app-surface-dark" : "app-surface-light"
         }`}
       >
         {/* CLOSE */}
@@ -179,10 +178,8 @@ export default function ProfileModal({ isOpen, closeModal }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               />
             </div>
@@ -207,10 +204,8 @@ export default function ProfileModal({ isOpen, closeModal }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               />
             </div>
@@ -233,10 +228,8 @@ export default function ProfileModal({ isOpen, closeModal }) {
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
                 <option value="INR">₹ INR</option>
@@ -267,10 +260,8 @@ export default function ProfileModal({ isOpen, closeModal }) {
               <select
                 value={financialGoal}
                 onChange={(e) => setFinancialGoal(e.target.value)}
-                className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field pl-14 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
                 <option>Save More</option>
@@ -299,10 +290,10 @@ export default function ProfileModal({ isOpen, closeModal }) {
               type="text"
               value={userData?.memberSince || ""}
               readOnly
-              className={`w-full mt-3 px-5 py-4 rounded-2xl border-2 outline-none ${
+              className={`app-field mt-3 ${
                 darkMode
-                  ? "bg-slate-800 border-slate-600 text-slate-300"
-                  : "bg-slate-100 border-slate-300 text-slate-600"
+                  ? "app-field-dark text-slate-300"
+                  : "app-field-light text-slate-600"
               }`}
             />
           </div>
@@ -313,14 +304,16 @@ export default function ProfileModal({ isOpen, closeModal }) {
         <div className="flex justify-end gap-4 mt-10">
           <button
             onClick={closeModal}
-            className="px-8 py-4 rounded-2xl bg-slate-500 text-white font-semibold hover:bg-slate-600 transition"
+            className={`app-button app-button-secondary px-8 py-4 ${
+              darkMode ? "bg-white/10 text-white hover:bg-white/15" : ""
+            }`}
           >
             Cancel
           </button>
 
           <button
             onClick={handleSave}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-700 text-white font-semibold shadow-2xl hover:scale-105 transition-all duration-300"
+            className="app-button app-button-primary px-8 py-4"
           >
             Save Changes
           </button>

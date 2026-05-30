@@ -4,7 +4,13 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { exportPDF, exportCSV, exportExcel, exportAnalyticsReport } from "@/utils/exportUtils";
 import { useNotifications } from "@/context/NotificationContext";
-import { FaFilePdf, FaFileCsv, FaFileExcel, FaChartPie } from "react-icons/fa";
+import {
+  FaFilePdf,
+  FaFileCsv,
+  FaFileExcel,
+  FaChartPie,
+  FaDownload,
+} from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
@@ -33,6 +39,8 @@ export default function ExportPage() {
       icon: <FaFilePdf />,
 
       gradient: "from-red-500 to-pink-600",
+      accent: "text-red-500 border-red-500 hover:bg-red-50",
+      iconBg: "bg-red-500",
 
       action: () => {
         exportPDF(transactions, userData?.currentBalance || 0);
@@ -53,6 +61,8 @@ export default function ExportPage() {
       icon: <FaFileCsv />,
 
       gradient: "from-green-500 to-emerald-600",
+      accent: "text-emerald-600 border-emerald-600 hover:bg-emerald-50",
+      iconBg: "bg-emerald-600",
 
       action: () => {
         exportCSV(transactions);
@@ -71,6 +81,8 @@ export default function ExportPage() {
       icon: <FaFileExcel />,
 
       gradient: "from-blue-500 to-cyan-600",
+      accent: "text-sky-600 border-sky-600 hover:bg-sky-50",
+      iconBg: "bg-sky-600",
 
       action: () => {
         exportExcel(transactions);
@@ -91,6 +103,8 @@ export default function ExportPage() {
       icon: <FaChartPie />,
 
       gradient: "from-violet-600 to-purple-700",
+      accent: "text-violet-600 border-violet-600 hover:bg-violet-50",
+      iconBg: "bg-violet-600",
 
       action: () => {
         exportAnalyticsReport(transactions, userData?.currentBalance || 0, userData?.monthlyBudget || 0);
@@ -109,12 +123,6 @@ export default function ExportPage() {
         darkMode ? "bg-[#0f172a]" : "bg-slate-100"
       }`}
     >
-      {/* BACKGROUND GLOWS */}
-
-      <div className="absolute top-20 left-20 w-[350px] h-[350px] bg-violet-500/20 blur-[120px] rounded-full" />
-
-      <div className="absolute bottom-20 right-20 w-[350px] h-[350px] bg-cyan-500/20 blur-[120px] rounded-full" />
-
       {/* SIDEBAR */}
 
       <Sidebar
@@ -154,8 +162,8 @@ export default function ExportPage() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             <div
-              className={`p-6 rounded-[28px] shadow-xl ${
-                darkMode ? "bg-white/5 border border-white/10" : "bg-white"
+              className={`app-surface p-6 ${
+                darkMode ? "app-surface-dark" : "app-surface-light"
               }`}
             >
               <p className="text-slate-500">Total Transactions</p>
@@ -170,8 +178,8 @@ export default function ExportPage() {
             </div>
 
             <div
-              className={`p-6 rounded-[28px] shadow-xl ${
-                darkMode ? "bg-white/5 border border-white/10" : "bg-white"
+              className={`app-surface p-6 ${
+                darkMode ? "app-surface-dark" : "app-surface-light"
               }`}
             >
               <p className="text-slate-500">Available Formats</p>
@@ -186,8 +194,8 @@ export default function ExportPage() {
             </div>
 
             <div
-              className={`p-6 rounded-[28px] shadow-xl ${
-                darkMode ? "bg-white/5 border border-white/10" : "bg-white"
+              className={`app-surface p-6 ${
+                darkMode ? "app-surface-dark" : "app-surface-light"
               }`}
             >
               <p className="text-slate-500">Export Ready</p>
@@ -210,26 +218,14 @@ export default function ExportPage() {
             {exportCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative overflow-hidden rounded-[36px] p-8 border backdrop-blur-xl shadow-2xl transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 ${
-                  darkMode
-                    ? "bg-white/5 border-white/10"
-                    : "bg-white/70 border-white"
+                className={`app-surface relative overflow-hidden p-8 ${
+                  darkMode ? "app-surface-dark" : "app-surface-light"
                 }`}
               >
-                {/* GLOW */}
-
-                <div
-                  className={`absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-br ${card.gradient} opacity-40 rounded-full blur-[90px] group-hover:scale-125 transition-all duration-700`}
-                />
-
-                {/* SHINE EFFECT */}
-
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full" />
-
                 {/* ICON */}
 
                 <div
-                  className={`w-24 h-24 rounded-[30px] bg-gradient-to-br ${card.gradient} text-white text-5xl flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.25)] group-hover:rotate-6 transition-all duration-500`}
+                  className={`w-20 h-20 rounded-3xl ${card.iconBg} text-white text-4xl flex items-center justify-center shadow-lg`}
                 >
                   {card.icon}
                 </div>
@@ -260,10 +256,8 @@ export default function ExportPage() {
                   <button
                     onClick={card.action}
                     className={`
-      w-28
-      h-28
-
-      rounded-[28px]
+      w-24
+      h-24
 
       border-2
 
@@ -276,21 +270,10 @@ export default function ExportPage() {
       transition-all
       duration-300
 
-      hover:scale-105
-      hover:shadow-xl
-
-      ${
-        card.title === "Export PDF"
-          ? "border-red-500 text-red-500 hover:bg-red-50"
-          : card.title === "Export CSV"
-            ? "border-green-500 text-green-500 hover:bg-green-50"
-            : card.title === "Export Excel"
-              ? "border-blue-500 text-blue-500 hover:bg-blue-50"
-              : "border-violet-500 text-violet-500 hover:bg-violet-50"
-      }
+      ${card.accent}
     `}
                   >
-                    <div className="text-3xl">⬇</div>
+                    <FaDownload className="text-2xl" />
 
                     <span className="font-bold text-lg">Export</span>
                   </button>

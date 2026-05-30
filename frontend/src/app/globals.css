@@ -41,3 +41,63 @@ body {
   outline: none;
   color: black;
 }
+
+@layer components {
+  .app-surface {
+    @apply border transition-all duration-300;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .app-surface-light {
+    @apply bg-white border-slate-200 text-slate-950;
+  }
+
+  .app-surface-dark {
+    @apply bg-slate-900 border-white/10 text-white;
+  }
+
+  .app-panel {
+    @apply border transition-all duration-300;
+    border-radius: 20px;
+  }
+
+  .app-panel-light {
+    @apply bg-slate-50 border-slate-200 text-slate-950;
+  }
+
+  .app-panel-dark {
+    @apply bg-slate-800 border-white/10 text-white;
+  }
+
+  .app-field {
+    @apply w-full px-5 py-4 outline-none border transition-all;
+    border-radius: 16px;
+  }
+
+  .app-field-light {
+    @apply bg-slate-100 border-slate-300 text-slate-950 placeholder:text-slate-500;
+  }
+
+  .app-field-dark {
+    @apply bg-white/10 border-white/10 text-white placeholder:text-slate-400;
+  }
+
+  .app-button {
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-300;
+    border-radius: 16px;
+  }
+
+  .app-button-primary {
+    @apply bg-violet-600 text-white hover:bg-violet-700;
+    box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22);
+  }
+
+  .app-button-secondary {
+    @apply bg-slate-200 text-slate-950 hover:bg-slate-300;
+  }
+
+  .app-button-danger {
+    @apply bg-red-500 text-white hover:bg-red-600;
+  }
+}

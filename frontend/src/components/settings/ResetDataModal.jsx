@@ -48,10 +48,10 @@ export default function ResetDataModal({ isOpen, closeModal }) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div
-        className={`w-full max-w-3xl rounded-[36px] p-8 shadow-2xl border relative ${
+        className={`app-surface w-full max-w-3xl p-8 relative ${
           darkMode
-            ? "bg-[#111827] border-red-500/20"
-            : "bg-white border-red-200"
+            ? "app-surface-dark border-red-500/20"
+            : "app-surface-light border-red-200"
         }`}
       >
         {/* CLOSE */}
@@ -66,7 +66,7 @@ export default function ResetDataModal({ isOpen, closeModal }) {
         {/* HEADER */}
 
         <div className="flex items-center gap-5">
-          <div className="w-24 h-24 rounded-[30px] bg-red-500 text-white text-5xl flex items-center justify-center shadow-2xl">
+          <div className="w-20 h-20 rounded-3xl bg-red-500 text-white text-4xl flex items-center justify-center shadow-lg">
             <FaTrash />
           </div>
 
@@ -86,7 +86,7 @@ export default function ResetDataModal({ isOpen, closeModal }) {
         {/* WARNING */}
 
         <div
-          className={`mt-8 p-6 rounded-2xl border flex gap-4 ${
+          className={`app-panel mt-8 p-6 flex gap-4 ${
             darkMode
               ? "bg-red-500/10 border-red-500/20"
               : "bg-red-50 border-red-200"
@@ -124,10 +124,8 @@ export default function ResetDataModal({ isOpen, closeModal }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
-            className={`mt-3 w-full px-5 py-4 rounded-2xl border-2 outline-none ${
-              darkMode
-                ? "bg-slate-800 border-slate-600 text-white"
-                : "bg-slate-100 border-slate-300 text-black"
+            className={`app-field mt-3 ${
+              darkMode ? "app-field-dark" : "app-field-light"
             }`}
           />
         </div>
@@ -148,10 +146,8 @@ export default function ResetDataModal({ isOpen, closeModal }) {
             value={confirmation}
             onChange={(e) => setConfirmation(e.target.value)}
             placeholder="DELETE MY DATA"
-            className={`mt-3 w-full px-5 py-4 rounded-2xl border-2 outline-none ${
-              darkMode
-                ? "bg-slate-800 border-slate-600 text-white"
-                : "bg-slate-100 border-slate-300 text-black"
+            className={`app-field mt-3 ${
+              darkMode ? "app-field-dark" : "app-field-light"
             }`}
           />
         </div>
@@ -161,14 +157,16 @@ export default function ResetDataModal({ isOpen, closeModal }) {
         <div className="flex justify-end gap-4 mt-10">
           <button
             onClick={closeModal}
-            className="px-8 py-4 rounded-2xl bg-slate-500 text-white font-semibold hover:bg-slate-600 transition"
+            className={`app-button app-button-secondary px-8 py-4 ${
+              darkMode ? "bg-white/10 text-white hover:bg-white/15" : ""
+            }`}
           >
             Cancel
           </button>
 
           <button
             onClick={handleReset}
-            className="px-8 py-4 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-semibold shadow-2xl transition-all duration-300"
+            className="app-button app-button-danger px-8 py-4"
           >
             Delete
           </button>

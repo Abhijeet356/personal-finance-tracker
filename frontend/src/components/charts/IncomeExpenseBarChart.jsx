@@ -45,8 +45,8 @@ export default function IncomeExpenseBarChart({ transactions }) {
 
   return (
     <div
-      className={`p-7 rounded-[30px] shadow-2xl ${
-        darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+      className={`app-surface p-6 ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -62,7 +62,7 @@ export default function IncomeExpenseBarChart({ transactions }) {
       {/* CHART */}
 
       <div className="h-[350px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={chartData}>
             <XAxis dataKey="month" stroke={darkMode ? "#94a3b8" : "#475569"} />
 

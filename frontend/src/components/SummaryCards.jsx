@@ -33,7 +33,7 @@ export default function SummaryCards({ balance, income, expenses, savings }) {
       {cards.map((card, index) => (
         <div
           key={index}
-          className="relative overflow-hidden rounded-[32px] h-[210px] p-7 shadow-2xl hover:scale-[1.03] transition-all duration-500 group"
+          className="app-surface relative h-[210px] overflow-hidden p-6 transition-all duration-300 group"
         >
           {/* BACKGROUND IMAGE */}
 
@@ -48,10 +48,6 @@ export default function SummaryCards({ balance, income, expenses, savings }) {
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent"></div>
 
           {/* GLOW */}
-
-          <div
-            className={`absolute -top-16 -right-16 w-72 h-72 rounded-full blur-[120px] opacity-50 bg-gradient-to-br ${card.glow}`}
-          ></div>
 
           {/* CONTENT */}
 

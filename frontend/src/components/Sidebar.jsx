@@ -58,6 +58,7 @@ const resetFilters = () => {
         <div className="flex flex-col items-center justify-center mb-10">
           <img
             src="/images/logo.png"
+            alt="Finance Tracker logo"
             className="w-24 h-24 object-contain drop-shadow-2xl"
           />
         </div>

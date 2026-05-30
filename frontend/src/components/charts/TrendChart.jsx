@@ -44,8 +44,8 @@ export default function TrendChart({ transactions, isDashboard = false }) {
 
   return (
     <div
-      className={`p-7 rounded-[30px] shadow-2xl transition-all duration-300 ${
-        darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+      className={`app-surface p-6 ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -61,7 +61,7 @@ export default function TrendChart({ transactions, isDashboard = false }) {
       {/* CHART */}
 
       <div className="h-[320px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">

@@ -2,12 +2,18 @@
 
 import { FaTimes, FaWallet, FaPiggyBank, FaPercentage } from "react-icons/fa";
 import { useUser } from "@/context/UserContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { useNotifications } from "@/context/NotificationContext";
 import api from "@/lib/api";
 
 export default function BudgetModal({ isOpen, closeModal }) {
+  if (!isOpen) return null;
+
+  return <BudgetModalContent closeModal={closeModal} />;
+}
+
+function BudgetModalContent({ closeModal }) {
   const { darkMode } = useTheme();
   const { userData, setUserData } = useUser();
   const { addNotification } = useNotifications();
@@ -22,13 +28,6 @@ export default function BudgetModal({ isOpen, closeModal }) {
   const [monthlySalary, setMonthlySalary] = useState(
     userData?.monthlySalary || "",
   );
-
-  useEffect(() => {
-  if (userData) {
-    setMonthlyBudget(userData.monthlyBudget || "");
-    setMonthlySalary(userData.monthlySalary || "");
-  }
-}, [userData]);
 
   const [savingsGoal, setSavingsGoal] = useState(
     savedBudgetSettings?.savingsGoal || "",
@@ -82,14 +81,11 @@ export default function BudgetModal({ isOpen, closeModal }) {
   closeModal();
 }
 
-if (!isOpen) return null;
-
-
 return (
   <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
     <div
-      className={`w-full max-w-3xl rounded-[36px] p-8 shadow-2xl border relative ${
-        darkMode ? "bg-[#111827] border-white/10" : "bg-white border-slate-200"
+      className={`app-surface w-full max-w-3xl p-8 relative ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* CLOSE */}
@@ -104,7 +100,7 @@ return (
       {/* HEADER */}
 
       <div className="flex items-center gap-5">
-        <div className="w-24 h-24 rounded-[30px] bg-gradient-to-r from-green-500 to-emerald-600 text-white text-5xl flex items-center justify-center shadow-2xl">
+        <div className="w-20 h-20 rounded-3xl bg-emerald-600 text-white text-4xl flex items-center justify-center shadow-lg">
           <FaWallet />
         </div>
 
@@ -147,10 +143,8 @@ return (
               value={monthlySalary || ""}
               onChange={(e) => setMonthlySalary(e.target.value)}
               placeholder="Enter monthly salary"
-              className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                darkMode
-                  ? "bg-slate-800 border-slate-600 text-white"
-                  : "bg-slate-100 border-slate-300 text-black"
+              className={`app-field pl-14 ${
+                darkMode ? "app-field-dark" : "app-field-light"
               }`}
             />
           </div>
@@ -174,10 +168,8 @@ return (
               value={monthlyBudget || ""}
               onChange={(e) => setMonthlyBudget(e.target.value)}
               placeholder="Enter monthly budget"
-              className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                darkMode
-                  ? "bg-slate-800 border-slate-600 text-white"
-                  : "bg-slate-100 border-slate-300 text-black"
+              className={`app-field pl-14 ${
+                darkMode ? "app-field-dark" : "app-field-light"
               }`}
             />
           </div>
@@ -202,10 +194,8 @@ return (
               value={savingsGoal || ""}
               onChange={(e) => setSavingsGoal(e.target.value)}
               placeholder="Enter savings goal"
-              className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                darkMode
-                  ? "bg-slate-800 border-slate-600 text-white"
-                  : "bg-slate-100 border-slate-300 text-black"
+              className={`app-field pl-14 ${
+                darkMode ? "app-field-dark" : "app-field-light"
               }`}
             />
           </div>
@@ -230,10 +220,8 @@ return (
               value={warningThreshold || ""}
               onChange={(e) => setWarningThreshold(e.target.value)}
               placeholder="80"
-              className={`w-full pl-14 pr-5 py-4 rounded-2xl border-2 outline-none ${
-                darkMode
-                  ? "bg-slate-800 border-slate-600 text-white"
-                  : "bg-slate-100 border-slate-300 text-black"
+              className={`app-field pl-14 ${
+                darkMode ? "app-field-dark" : "app-field-light"
               }`}
             />
           </div>
@@ -245,14 +233,16 @@ return (
       <div className="flex justify-end gap-4 mt-10">
         <button
           onClick={closeModal}
-          className="px-8 py-4 rounded-2xl bg-slate-500 text-white font-semibold hover:bg-slate-600 transition"
+          className={`app-button app-button-secondary px-8 py-4 ${
+            darkMode ? "bg-white/10 text-white hover:bg-white/15" : ""
+          }`}
         >
           Cancel
         </button>
 
         <button
           onClick={handleSave}
-          className="px-8 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-2xl hover:scale-105 transition-all duration-300"
+          className="app-button bg-emerald-600 px-8 py-4 text-white hover:bg-emerald-700"
         >
           Save Changes
         </button>

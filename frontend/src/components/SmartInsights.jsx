@@ -119,8 +119,8 @@ export default function SmartInsights({ transactions }) {
 
   return (
     <div
-      className={`p-7 rounded-[30px] shadow-2xl ${
-        darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+      className={`app-surface p-6 ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -139,8 +139,8 @@ export default function SmartInsights({ transactions }) {
         {insights.map((item, index) => (
           <div
             key={index}
-            className={`p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02] ${
-              darkMode ? "bg-slate-700" : "bg-slate-100"
+            className={`app-panel p-6 ${
+              darkMode ? "app-panel-dark" : "app-panel-light"
             }`}
           >
             {/* ICON */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import NotificationDropdown from "@/components/NotificationDropdown";
 
@@ -29,12 +29,6 @@ export default function Navbar() {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
-
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <div
@@ -93,7 +87,7 @@ export default function Navbar() {
           >
             <FaBell className="text-xl" />
 
-            {mounted && unreadCount > 0 && (
+            {unreadCount > 0 && (
               <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
                 {unreadCount}
               </div>
@@ -118,6 +112,7 @@ export default function Navbar() {
               {userData?.avatar ? (
                 <img
                   src={userData.avatar}
+                  alt={userData?.name ? `${userData.name} avatar` : "User avatar"}
                   className="w-12 h-12 rounded-full object-cover"
                 />
               ) : (

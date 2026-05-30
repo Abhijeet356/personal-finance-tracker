@@ -12,8 +12,7 @@ import {
   FaWallet,
   FaTrash,
   FaShieldAlt,
-  FaPalette,
-  FaDownload,
+  FaCog,
 } from "react-icons/fa";
 
 import SecurityModal from "@/components/settings/SecurityModal";
@@ -61,6 +60,8 @@ export default function SettingsPage() {
       icon: <FaUser />,
 
       gradient: "from-violet-600 to-purple-700",
+      accent: "text-violet-600 border-violet-600 hover:bg-violet-50",
+      iconBg: "bg-violet-600",
     },
 
     {
@@ -71,6 +72,8 @@ export default function SettingsPage() {
       icon: <FaBell />,
 
       gradient: "from-orange-500 to-amber-500",
+      accent: "text-orange-500 border-orange-500 hover:bg-orange-50",
+      iconBg: "bg-orange-500",
     },
 
     {
@@ -81,6 +84,8 @@ export default function SettingsPage() {
       icon: <FaWallet />,
 
       gradient: "from-green-500 to-emerald-600",
+      accent: "text-emerald-600 border-emerald-600 hover:bg-emerald-50",
+      iconBg: "bg-emerald-600",
     },
 
     {
@@ -91,6 +96,8 @@ export default function SettingsPage() {
       icon: <FaShieldAlt />,
 
       gradient: "from-blue-500 to-cyan-600",
+      accent: "text-sky-600 border-sky-600 hover:bg-sky-50",
+      iconBg: "bg-sky-600",
     },
   ];
 
@@ -100,12 +107,6 @@ export default function SettingsPage() {
         darkMode ? "bg-[#071028]" : "bg-slate-100"
       }`}
     >
-      {/* GLOWS */}
-
-      <div className="absolute top-20 left-20 w-[350px] h-[350px] bg-violet-500/20 blur-[120px] rounded-full" />
-
-      <div className="absolute bottom-20 right-20 w-[350px] h-[350px] bg-cyan-500/20 blur-[120px] rounded-full" />
-
       {/* SIDEBAR */}
 
       <Sidebar
@@ -147,22 +148,14 @@ export default function SettingsPage() {
             {settingsCards.map((card, index) => (
               <div
                 key={index}
-                className={`group relative overflow-hidden rounded-[36px] p-8 border backdrop-blur-xl shadow-2xl transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 ${
-                  darkMode
-                    ? "bg-white/5 border-white/10"
-                    : "bg-white/70 border-white"
+                className={`app-surface relative overflow-hidden p-8 ${
+                  darkMode ? "app-surface-dark" : "app-surface-light"
                 }`}
               >
-                {/* GLOW */}
-
-                <div
-                  className={`absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-br ${card.gradient} opacity-40 rounded-full blur-[90px] group-hover:scale-125 transition-all duration-700`}
-                />
-
                 {/* ICON */}
 
                 <div
-                  className={`w-24 h-24 rounded-[30px] bg-gradient-to-br ${card.gradient} text-white text-5xl flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.25)] group-hover:rotate-6 transition-all duration-500`}
+                  className={`w-20 h-20 rounded-3xl ${card.iconBg} text-white text-4xl flex items-center justify-center shadow-lg`}
                 >
                   {card.icon}
                 </div>
@@ -210,8 +203,7 @@ export default function SettingsPage() {
                       }
                     }}
                     className={`
-      w-28 h-28
-      rounded-[28px]
+      w-24 h-24
       border-2
       flex
       flex-col
@@ -222,23 +214,10 @@ export default function SettingsPage() {
       transition-all
       duration-300
 
-      hover:scale-105
-      hover:shadow-xl
-
-    ${
-      card.title === "Profile"
-        ? "border-violet-600 text-violet-600 hover:bg-violet-50"
-        : card.title === "Notifications"
-          ? "border-orange-500 text-orange-500 hover:bg-orange-50"
-          : card.title === "Financial Settings"
-            ? "border-green-500 text-green-500 hover:bg-green-50"
-            : card.title === "Privacy & Security"
-              ? "border-blue-500 text-blue-500 hover:bg-blue-50"
-              : "border-red-500 text-red-500 hover:bg-red-50"
-    }
+      ${card.accent}
    `}
                   >
-                    <div className="text-3xl ">⚙️</div>
+                    <FaCog className="text-2xl" />
 
                     <span className="font-bold text-lg">Open</span>
                   </button>
@@ -250,7 +229,7 @@ export default function SettingsPage() {
           {/* DANGER ZONE */}
 
           <div
-            className={`mt-12 p-8 rounded-[36px] border shadow-2xl ${
+            className={`app-surface mt-12 p-8 ${
               darkMode
                 ? "bg-red-500/10 border-red-500/20"
                 : "bg-red-50 border-red-200"
@@ -276,7 +255,7 @@ export default function SettingsPage() {
 
             <button
               onClick={() => setShowResetModal(true)}
-              className="mt-8 bg-red-500 hover:bg-red-600 transition px-8 py-4 rounded-2xl text-white text-lg font-semibold shadow-2xl"
+              className="app-button app-button-danger mt-8 px-8 py-4 text-lg"
             >
               Reset Application Data
             </button>

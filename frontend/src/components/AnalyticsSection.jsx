@@ -1,7 +1,13 @@
 "use client";
 
-import TrendChart from "./charts/TrendChart";
-import ExpensePieChart from "./charts/ExpensePieChart";
+import dynamic from "next/dynamic";
+
+const TrendChart = dynamic(() => import("./charts/TrendChart"), {
+  ssr: false,
+});
+const ExpensePieChart = dynamic(() => import("./charts/ExpensePieChart"), {
+  ssr: false,
+});
 
 export default function AnalyticsSection({ transactions }) {
   // CURRENT MONTH

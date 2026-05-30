@@ -21,8 +21,8 @@ export default function NotificationDropdown({ isOpen, closeDropdown }) {
 
   return (
     <div
-      className={`absolute top-20 right-0 w-[420px] max-h-[600px] overflow-y-auto rounded-[32px] shadow-2xl border z-[999] ${
-        darkMode ? "bg-[#111827] border-white/10" : "bg-white border-slate-200"
+      className={`app-surface absolute top-20 right-0 z-[999] max-h-[600px] w-[420px] overflow-y-auto ${
+        darkMode ? "app-surface-dark" : "app-surface-light"
       }`}
     >
       {/* HEADER */}
@@ -42,7 +42,7 @@ export default function NotificationDropdown({ isOpen, closeDropdown }) {
 
         <button
           onClick={clearNotifications}
-          className="text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition"
+          className="app-button app-button-danger px-4 py-2 text-sm"
         >
           Clear All
         </button>
@@ -64,11 +64,11 @@ export default function NotificationDropdown({ isOpen, closeDropdown }) {
             <div
               key={item.id}
               onClick={() => markAsRead(item.id)}
-              className={`p-5 rounded-2xl cursor-pointer transition-all duration-300 border ${
+              className={`app-panel p-5 cursor-pointer ${
                 item.read
                   ? darkMode
-                    ? "bg-slate-800 border-white/5"
-                    : "bg-slate-100 border-slate-200"
+                    ? "app-panel-dark"
+                    : "app-panel-light"
                   : darkMode
                     ? "bg-violet-500/10 border-violet-500/30"
                     : "bg-violet-50 border-violet-200"

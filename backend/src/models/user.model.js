@@ -45,6 +45,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    avatar: {
+      type: String,
+      default: "",
+      maxlength: 2500000,
+    },
+    currency: {
+      type: String,
+      enum: ["INR", "USD", "EUR", "GBP"],
+      default: "INR",
+    },
+    financialGoal: {
+      type: String,
+      trim: true,
+      maxlength: 80,
+      default: "Save More",
+    },
   },
   {
     timestamps: true,

@@ -95,7 +95,7 @@ export default function Dashboard() {
     };
 
     checkAuth();
-  }, []);
+  }, [router, setUserData]);
 
   // TOTALS
 
@@ -202,7 +202,7 @@ export default function Dashboard() {
     if (budgetUsage < threshold) {
       localStorage.removeItem("budget_warning_sent");
     }
-  }, [budgetUsage, budgetSettings]);
+  }, [addNotification, budgetUsage, budgetSettings]);
 
   return (
     <div
@@ -277,10 +277,9 @@ export default function Dashboard() {
 
               {monthlyBudget > 0 && (
                 <div
-                  className={`mt-6 rounded-[36px] border shadow-xl p-5 md:p-6
-     transition-all duration-300 ${
-       darkMode ? "bg-[#0f172a] border-white/10" : "bg-white border-gray-100"
-     }`}
+                  className={`app-surface mt-6 p-5 md:p-6 ${
+                    darkMode ? "app-surface-dark" : "app-surface-light"
+                  }`}
                 >
                   {/* TOP */}
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
@@ -400,10 +399,10 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {/* Daily Average */}
                     <div
-                      className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                      className={`app-panel p-4 flex items-center gap-5 ${
                         darkMode
-                          ? "bg-white/[0.03] border-white/5"
-                          : "bg-[#faf7ef] border-transparent"
+                          ? "app-panel-dark"
+                          : "app-panel-light"
                       }`}
                     >
                       <div className="w-16 h-16 rounded-2xl bg-[#fff3d6] dark:bg-yellow-500/10 flex items-center justify-center shadow-sm">
@@ -423,10 +422,10 @@ export default function Dashboard() {
 
                     {/* Remaining */}
                     <div
-                      className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                      className={`app-panel p-4 flex items-center gap-5 ${
                         darkMode
-                          ? "bg-green-500/5 border-green-500/10"
-                          : "bg-[#eefbf2] border-transparent"
+                          ? "app-panel-dark"
+                          : "app-panel-light"
                       }`}
                     >
                       <div className="w-16 h-16 rounded-2xl bg-[#dff7e6] dark:bg-green-500/10 flex items-center justify-center shadow-sm">
@@ -446,10 +445,10 @@ export default function Dashboard() {
 
                     {/* Days Left */}
                     <div
-                      className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                      className={`app-panel p-4 flex items-center gap-5 ${
                         darkMode
-                          ? "bg-blue-500/5 border-blue-500/10"
-                          : "bg-[#eef4ff] border-transparent"
+                          ? "app-panel-dark"
+                          : "app-panel-light"
                       }`}
                     >
                       <div className="w-16 h-16 rounded-2xl bg-[#dbe8ff] dark:bg-blue-500/10 flex items-center justify-center shadow-sm">
@@ -482,10 +481,8 @@ export default function Dashboard() {
               <div className="mt-6">
                 {transactions.length === 0 ? (
                   <div
-                    className={`rounded-[36px] border shadow-xl p-6 transition-all duration-300 ${
-                      darkMode
-                        ? "bg-[#0f172a] border-white/10"
-                        : "bg-white border-gray-100"
+                    className={`app-surface p-6 ${
+                      darkMode ? "app-surface-dark" : "app-surface-light"
                     }`}
                   >
                     {/* Header */}
@@ -516,10 +513,10 @@ export default function Dashboard() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                       <div
-                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                        className={`app-panel p-4 flex items-center gap-5 ${
                           darkMode
-                            ? "bg-white/[0.03] border-white/5"
-                            : "bg-[#faf7ef] border-transparent"
+                            ? "app-panel-dark"
+                            : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#fff3d6] dark:bg-yellow-500/10 flex items-center justify-center shadow-sm">
@@ -538,10 +535,10 @@ export default function Dashboard() {
                       </div>
 
                       <div
-                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                        className={`app-panel p-4 flex items-center gap-5 ${
                           darkMode
-                            ? "bg-green-500/5 border-green-500/10"
-                            : "bg-[#eefbf2]"
+                            ? "app-panel-dark"
+                            : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#dff7e6] dark:bg-green-500/10 flex items-center justify-center shadow-sm">
@@ -560,10 +557,10 @@ export default function Dashboard() {
                       </div>
 
                       <div
-                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                        className={`app-panel p-4 flex items-center gap-5 ${
                           darkMode
-                            ? "bg-blue-500/5 border-blue-500/10"
-                            : "bg-[#eef4ff] border-transparent"
+                            ? "app-panel-dark"
+                            : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#dbe8ff] dark:bg-blue-500/10 flex items-center justify-center shadow-sm">

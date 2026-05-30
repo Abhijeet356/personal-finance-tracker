@@ -1,8 +1,6 @@
 "use client";
 
-import { FaFilter } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
-import { useState, useEffect } from "react";
 
 export default function FilterPanel({
   filterType,
@@ -28,8 +26,8 @@ export default function FilterPanel({
 
       {showFilters && (
         <div
-          className={`mt-5 rounded-3xl p-5 shadow-xl transition-all duration-300 ${
-            darkMode ? "bg-[#111827] text-white" : "bg-white text-black"
+          className={`app-surface mt-5 p-6 ${
+            darkMode ? "app-surface-dark" : "app-surface-light"
           }`}
         >
           <h1 className="text-3xl font-bold mb-6">
@@ -45,12 +43,12 @@ export default function FilterPanel({
               onClick={() =>
                 setSortBy(sortBy === "newest" ? "default" : "newest")
               }
-              className={`px-4 py-2 rounded-xl transition-all border-2 ${
+              className={`app-button px-4 py-2 ${
                 sortBy === "newest"
-                  ? "bg-violet-600 text-white border-violet-600 scale-105"
+                  ? "app-button-primary"
                   : darkMode
-                    ? "bg-slate-700 hover:bg-violet-600 text-white border-transparent"
-                    : "bg-slate-200 hover:bg-violet-500 hover:text-white border-transparent"
+                    ? "bg-slate-800 text-white hover:bg-slate-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Today
@@ -62,12 +60,12 @@ export default function FilterPanel({
               onClick={() =>
                 setSortBy(sortBy === "oldest" ? "default" : "oldest")
               }
-              className={`px-4 py-2 rounded-xl transition-all border-2 ${
+              className={`app-button px-4 py-2 ${
                 sortBy === "oldest"
-                  ? "bg-blue-600 text-white border-blue-600 scale-105"
+                  ? "bg-sky-600 text-white hover:bg-sky-700"
                   : darkMode
-                    ? "bg-slate-700 hover:bg-blue-600 text-white border-transparent"
-                    : "bg-slate-200 hover:bg-blue-500 hover:text-white border-transparent"
+                    ? "bg-slate-800 text-white hover:bg-slate-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               This Week
@@ -79,12 +77,12 @@ export default function FilterPanel({
               onClick={() =>
                 setSortBy(sortBy === "highest" ? "default" : "highest")
               }
-              className={`px-4 py-2 rounded-xl transition-all border-2 ${
+              className={`app-button px-4 py-2 ${
                 sortBy === "highest"
-                  ? "bg-yellow-500 text-black border-yellow-500 scale-105"
+                  ? "bg-amber-500 text-slate-950 hover:bg-amber-400"
                   : darkMode
-                    ? "bg-slate-700 hover:bg-yellow-500 hover:text-black text-white border-transparent"
-                    : "bg-slate-200 hover:bg-yellow-400 border-transparent"
+                    ? "bg-slate-800 text-white hover:bg-slate-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               This Month
@@ -96,12 +94,12 @@ export default function FilterPanel({
               onClick={() =>
                 setFilterType(filterType === "income" ? "all" : "income")
               }
-              className={`px-4 py-2 rounded-xl transition-all border-2 ${
+              className={`app-button px-4 py-2 ${
                 filterType === "income"
-                  ? "bg-green-500 text-white border-green-500 scale-105"
+                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
                   : darkMode
-                    ? "bg-slate-700 hover:bg-green-500 text-white border-transparent"
-                    : "bg-slate-200 hover:bg-green-500 hover:text-white border-transparent"
+                    ? "bg-slate-800 text-white hover:bg-slate-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Income
@@ -113,12 +111,12 @@ export default function FilterPanel({
               onClick={() =>
                 setFilterType(filterType === "expense" ? "all" : "expense")
               }
-              className={`px-4 py-2 rounded-xl transition-all border-2 ${
+              className={`app-button px-4 py-2 ${
                 filterType === "expense"
-                  ? "bg-red-500 text-white border-red-500 scale-105"
+                  ? "app-button-danger"
                   : darkMode
-                    ? "bg-slate-700 hover:bg-red-500 text-white border-transparent"
-                    : "bg-slate-200 hover:bg-red-500 hover:text-white border-transparent"
+                    ? "bg-slate-800 text-white hover:bg-slate-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Expense
@@ -149,10 +147,8 @@ export default function FilterPanel({
                 style={{
                   colorScheme: darkMode ? "dark" : "light",
                 }}
-                className={`w-full mt-2 rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field mt-2 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
                 <option value="all">All Methods</option>
@@ -191,10 +187,8 @@ export default function FilterPanel({
                 style={{
                   colorScheme: darkMode ? "dark" : "light",
                 }}
-                className={`w-full mt-2 rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field mt-2 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
                 <option value="all">All Categories</option>
@@ -230,10 +224,8 @@ export default function FilterPanel({
                 style={{
                   colorScheme: darkMode ? "dark" : "light",
                 }}
-                className={`w-full mt-2 rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-600 text-white"
-                    : "bg-slate-100 border-slate-300 text-black"
+                className={`app-field mt-2 ${
+                  darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
                 <option value="default">Default</option>
@@ -260,7 +252,7 @@ export default function FilterPanel({
 
                 setSortBy("default");
               }}
-              className="bg-red-500 text-white px-6 py-3 rounded-2xl hover:bg-red-600 transition"
+              className="app-button app-button-danger px-6 py-3"
             >
               Reset Filters
             </button>

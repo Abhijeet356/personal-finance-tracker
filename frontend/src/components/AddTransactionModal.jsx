@@ -6,17 +6,26 @@ import { useTheme } from "@/context/ThemeContext";
 import api from "@/lib/api";
 import { PAYMENT_METHODS } from "@/constants/paymentMethods";
 
+const getTodayInputDate = () => {
+  const today = new Date();
+  const timezoneOffset = today.getTimezoneOffset() * 60000;
+
+  return new Date(today.getTime() - timezoneOffset).toISOString().split("T")[0];
+};
+
+const getInitialFormData = () => ({
+  title: "",
+  amount: "",
+  type: "expense",
+  category: "Food",
+  paymentMethod: "upi",
+  notes: "",
+  date: getTodayInputDate(),
+});
+
 export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const { darkMode } = useTheme();
-  const [formData, setFormData] = useState({
-    title: "",
-    amount: "",
-    type: "expense",
-    category: "Food",
-    paymentMethod: "upi",
-    notes: "",
-    date: "",
-  });
+  const [formData, setFormData] = useState(getInitialFormData);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -25,14 +34,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   };
 
   const resetForm = () => {
-    setFormData({
-      amount: "",
-      type: "expense",
-      category: "Food",
-      paymentMethod: "upi",
-      notes: "",
-      date: "",
-    });
+    setFormData(getInitialFormData());
   };
   const handleSubmit = async () => {
     if (
@@ -65,15 +67,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   );
 }
 
-    setFormData({
-      title: "",
-      amount: "",
-      type: "expense",
-      category: "Food",
-      paymentMethod: "upi",
-      notes: "",
-      date: "",
-    });
+    setFormData(getInitialFormData());
   };
 
   return (
@@ -98,10 +92,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
               scale: 0.8,
               opacity: 0,
             }}
-            className={`w-full max-w-2xl backdrop-blur-2xl rounded-[32px] p-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-300 ${
-              darkMode
-                ? "bg-[#1e293b]/95 border border-white/20 text-white"
-                : "bg-white border border-slate-200 text-black"
+            className={`app-surface w-full max-w-2xl p-8 md:p-10 backdrop-blur-2xl ${
+              darkMode ? "app-surface-dark" : "app-surface-light"
             }`}
           >
             <h2
@@ -130,10 +122,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   placeholder="₹0"
                   value={formData.amount}
                   onChange={handleChange}
-                  className={`w-full rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                    darkMode
-                      ? "bg-white/10 border-white/10 text-white placeholder:text-gray-400"
-                      : "bg-slate-100 border-slate-300 text-black placeholder:text-gray-500"
+                  className={`app-field ${
+                    darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 />
               </div>
@@ -149,7 +139,11 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   Type
                 </label>
 
-                <div className="flex bg-white/5 p-1 rounded-2xl w-fit">
+                <div
+                  className={`app-panel flex w-fit p-1 ${
+                    darkMode ? "app-panel-dark" : "app-panel-light"
+                  }`}
+                >
                   <button
                     type="button"
                     onClick={() =>
@@ -158,10 +152,12 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                         type: "expense",
                       }))
                     }
-                    className={`w-28 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`app-button w-28 py-3 ${
                       formData.type === "expense"
-                        ? "bg-gradient-to-r from-violet-600 to-purple-700 text-white shadow-lg"
-                        : "text-gray-400"
+                        ? "app-button-primary"
+                        : darkMode
+                          ? "text-gray-400 hover:text-white"
+                          : "text-slate-500 hover:text-slate-950"
                     }`}
                   >
                     Expense
@@ -175,10 +171,12 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                         type: "income",
                       }))
                     }
-                    className={`w-28 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`app-button w-28 py-3 ${
                       formData.type === "income"
-                        ? "bg-gradient-to-r from-violet-600 to-purple-700 text-white shadow-lg"
-                        : "text-gray-400"
+                        ? "app-button-primary"
+                        : darkMode
+                          ? "text-gray-400 hover:text-white"
+                          : "text-slate-500 hover:text-slate-950"
                     }`}
                   >
                     Income
@@ -201,10 +199,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className={`w-full rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                    darkMode
-                      ? "bg-white/10 border-white/10 text-white"
-                      : "bg-slate-100 border-slate-300 text-black"
+                  className={`app-field ${
+                    darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 >
                   <option
@@ -283,10 +279,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   name="paymentMethod"
                   value={formData.paymentMethod}
                   onChange={handleChange}
-                  className={`w-full rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                    darkMode
-                      ? "bg-white/10 border-white/10 text-white"
-                      : "bg-slate-100 border-slate-300 text-black"
+                  className={`app-field ${
+                    darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 >
                   <option value="upi"
@@ -358,10 +352,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   placeholder="Add description..."
                   value={formData.notes}
                   onChange={handleChange}
-                  className={`w-full rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                    darkMode
-                      ? "bg-white/10 border-white/10 text-white placeholder:text-gray-400"
-                      : "bg-slate-100 border-slate-300 text-black placeholder:text-gray-500"
+                  className={`app-field ${
+                    darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 />
               </div>
@@ -382,10 +374,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
-                  className={`w-full rounded-2xl px-5 py-4 outline-none border-2 transition-all ${
-                    darkMode
-                      ? "bg-white/10 border-white/10 text-white"
-                      : "bg-slate-100 border-slate-300 text-black"
+                  className={`app-field ${
+                    darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 />
               </div>
@@ -397,8 +387,8 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                   resetForm();
                   onClose();
                 }}
-                className={`flex-1 py-4 rounded-2xl ${
-                  darkMode ? "bg-white/10 text-white" : "bg-gray-200 text-black"
+                className={`app-button app-button-secondary flex-1 py-4 ${
+                  darkMode ? "bg-white/10 text-white hover:bg-white/15" : ""
                 }`}
               >
                 Cancel
@@ -406,11 +396,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
 
               <button
                 onClick={handleSubmit}
-                className={`flex-1 py-4 rounded-2xl ${
-                  darkMode
-                    ? "bg-gradient-to-r from-violet-600 to-purple-700 text-white"
-                    : "bg-gradient-to-r from-violet-500 to-purple-600 text-white"
-                }`}
+                className="app-button app-button-primary flex-1 py-4"
               >
                 Save
               </button>

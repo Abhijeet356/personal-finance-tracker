@@ -13,6 +13,10 @@ const sendTokenResponse = (res, statusCode, user) => {
       currentBalance: user.currentBalance,
       monthlySalary: user.monthlySalary,
       monthlyBudget: user.monthlyBudget,
+      avatar: user.avatar,
+      currency: user.currency,
+      financialGoal: user.financialGoal,
+      memberSince: user.createdAt,
       onboardingComplete: user.onboardingComplete,
     },
   });

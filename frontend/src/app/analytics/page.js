@@ -1,16 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import FilterPanel from "@/components/FilterPanel";
 import AddTransactionModal from "@/components/AddTransactionModal";
-
-import TrendChart from "@/components/charts/TrendChart";
-import ExpensePieChart from "@/components/charts/ExpensePieChart";
-import IncomeExpenseBarChart from "@/components/charts/IncomeExpenseBarChart";
-import SavingsGrowthChart from "@/components/charts/SavingsGrowthChart";
 
 import CategoryRanking from "@/components/CategoryRanking";
 import SmartInsights from "@/components/SmartInsights";
@@ -21,6 +17,22 @@ import { useTheme } from "@/context/ThemeContext";
 import { useNotifications } from "@/context/NotificationContext";
 
 import { useTransactions } from "@/context/TransactionContext";
+
+const TrendChart = dynamic(() => import("@/components/charts/TrendChart"), {
+  ssr: false,
+});
+const ExpensePieChart = dynamic(
+  () => import("@/components/charts/ExpensePieChart"),
+  { ssr: false },
+);
+const IncomeExpenseBarChart = dynamic(
+  () => import("@/components/charts/IncomeExpenseBarChart"),
+  { ssr: false },
+);
+const SavingsGrowthChart = dynamic(
+  () => import("@/components/charts/SavingsGrowthChart"),
+  { ssr: false },
+);
 
 export default function AnalyticsPage() {
   const { darkMode } = useTheme();
@@ -43,8 +55,8 @@ export default function AnalyticsPage() {
     filterCategory,
     setFilterCategory,
 
-    paymentMode,
-    setPaymentMode,
+    paymentMethod,
+    setPaymentMethod,
 
     sortBy,
     setSortBy,
@@ -125,8 +137,8 @@ export default function AnalyticsPage() {
                 setFilterType={setFilterType}
                 filterCategory={filterCategory}
                 setFilterCategory={setFilterCategory}
-                paymentMode={paymentMode}
-                setPaymentMode={setPaymentMode}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
                 sortBy={sortBy}
                 setSortBy={setSortBy}
                 showFilters={showFilters}
@@ -137,7 +149,7 @@ export default function AnalyticsPage() {
 
               <div className="mt-8">
                 <TransactionList
-                  transactions={transactions}
+                  transactions={filteredTransactions}
                   setTransactions={setTransactions}
                   balance={savings}
                   setBalance={() => {}}
@@ -182,10 +194,8 @@ export default function AnalyticsPage() {
                     style={{
                       colorScheme: darkMode ? "dark" : "light",
                     }}
-                    className={`px-5 py-3 rounded-2xl border-2 outline-none ${
-                      darkMode
-                        ? "bg-slate-800 border-slate-600 text-white"
-                        : "bg-white border-slate-300 text-black"
+                    className={`app-field px-5 py-3 ${
+                      darkMode ? "app-field-dark" : "app-field-light"
                     }`}
                   />
                 </div>
@@ -208,10 +218,8 @@ export default function AnalyticsPage() {
                     style={{
                       colorScheme: darkMode ? "dark" : "light",
                     }}
-                    className={`px-5 py-3 rounded-2xl border-2 outline-none ${
-                      darkMode
-                        ? "bg-slate-800 border-slate-600 text-white"
-                        : "bg-white border-slate-300 text-black"
+                    className={`app-field px-5 py-3 ${
+                      darkMode ? "app-field-dark" : "app-field-light"
                     }`}
                   />
                 </div>
@@ -224,7 +232,7 @@ export default function AnalyticsPage() {
                       setFromDate("");
                       setToDate("");
                     }}
-                    className="bg-red-500 text-white px-6 py-3 rounded-2xl hover:bg-red-600 transition"
+                    className="app-button app-button-danger px-6 py-3"
                   >
                     Reset
                   </button>
@@ -235,8 +243,8 @@ export default function AnalyticsPage() {
 
               <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-6 mb-10">
                 <div
-                  className={`p-6 rounded-[28px] shadow-xl ${
-                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  className={`app-surface p-6 ${
+                    darkMode ? "app-surface-dark" : "app-surface-light"
                   }`}
                 >
                   <p className="text-lg">Total Income</p>
@@ -247,8 +255,8 @@ export default function AnalyticsPage() {
                 </div>
 
                 <div
-                  className={`p-6 rounded-[28px] shadow-xl ${
-                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  className={`app-surface p-6 ${
+                    darkMode ? "app-surface-dark" : "app-surface-light"
                   }`}
                 >
                   <p className="text-lg">Total Expense</p>
@@ -259,8 +267,8 @@ export default function AnalyticsPage() {
                 </div>
 
                 <div
-                  className={`p-6 rounded-[28px] shadow-xl ${
-                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  className={`app-surface p-6 ${
+                    darkMode ? "app-surface-dark" : "app-surface-light"
                   }`}
                 >
                   <p className="text-lg">Savings</p>

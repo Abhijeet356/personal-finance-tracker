@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Transaction from "../models/transaction.model.js";
+import Category from "../models/category.model.js";
 import createDefaultCategories from "../utils/createDefaultCategories.js";
 import sendTokenResponse from "../utils/sendTokenResponse.js";
 
@@ -13,6 +14,10 @@ const userPayload = (user) => {
     currentBalance: user.currentBalance,
     monthlySalary: user.monthlySalary,
     monthlyBudget,
+    avatar: user.avatar,
+    currency: user.currency,
+    financialGoal: user.financialGoal,
+    memberSince: user.createdAt,
     onboardingComplete: user.onboardingComplete,
   };
 };
@@ -23,7 +28,7 @@ const getMonthKey = (date = new Date()) =>
 const maybeCreditMonthlySalary = async (user) => {
   const now = new Date();
 
-  if (!user.monthlySalary || now.getDate() !== 1) {
+  if (!user.monthlySalary) {
     return user;
   }
 
@@ -165,8 +170,34 @@ export const completeOnboarding = async (req, res, next) => {
 
 export const updateProfile = async (req, res, next) => {
   try {
-    const { currentBalance, monthlySalary, monthlyBudget } = req.body;
+    const {
+      avatar,
+      currency,
+      currentBalance,
+      email,
+      financialGoal,
+      monthlyBudget,
+      monthlySalary,
+      name,
+    } = req.body;
     const user = req.user;
+
+    if (email !== undefined && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: "Email is already registered",
+        });
+      }
+
+      user.email = email;
+    }
+
+    if (name !== undefined) {
+      user.name = name;
+    }
 
     if (currentBalance !== undefined) {
       user.currentBalance = currentBalance;
@@ -178,6 +209,18 @@ export const updateProfile = async (req, res, next) => {
 
     if (monthlyBudget !== undefined) {
       user.monthlyBudget = monthlyBudget;
+    }
+
+    if (avatar !== undefined) {
+      user.avatar = avatar;
+    }
+
+    if (currency !== undefined) {
+      user.currency = currency;
+    }
+
+    if (financialGoal !== undefined) {
+      user.financialGoal = financialGoal;
     }
 
     await user.save();
@@ -194,6 +237,10 @@ export const updateProfile = async (req, res, next) => {
 export const deleteAccount = async (req, res, next) => {
   try {
     await Transaction.deleteMany({
+      user: req.user._id,
+    });
+
+    await Category.deleteMany({
       user: req.user._id,
     });
 
