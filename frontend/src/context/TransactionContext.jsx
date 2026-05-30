@@ -5,12 +5,7 @@ import api from "@/lib/api";
 const TransactionContext = createContext();
 
 export function TransactionProvider({ children }) {
-  const [transactions, setTransactions] = useState(() => {
-    const saved =
-      typeof window !== "undefined" ? localStorage.getItem("transactions") : null;
-
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [transactions, setTransactions] = useState([]);
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -29,9 +24,22 @@ export function TransactionProvider({ children }) {
 
 useEffect(() => {
   const fetchTransactions = async () => {
-    try {
-      const response = await api.get("/transactions");
+    const token = localStorage.getItem("token");
 
+    if (!token) return;
+
+    try {
+      const response = await api.get("/transactions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(
+    "TRANSACTIONS API RESPONSE:",
+    response.data.transactions
+  );
+  
       setTransactions(response.data.transactions);
     } catch (error) {
       console.error("Failed to load transactions", error);
@@ -42,10 +50,6 @@ useEffect(() => {
 }, []);  
 
   // SAVE
-
-  useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
 
   // FILTERS
 

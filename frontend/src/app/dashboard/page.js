@@ -17,15 +17,16 @@ import { useNotifications } from "@/context/NotificationContext";
 import { useTransactions } from "@/context/TransactionContext";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function Dashboard() {
   const { darkMode } = useTheme();
+  const { setUserData } = useUser();
   const { addNotification } = useNotifications();
   const router = useRouter();
   const {
     transactions,
     setTransactions,
-
     filteredTransactions,
 
     showFilters,
@@ -40,8 +41,8 @@ export default function Dashboard() {
     filterCategory,
     setFilterCategory,
 
-    paymentMode,
-    setPaymentMode,
+    paymentMethod,
+    setPaymentMethod,
 
     sortBy,
     setSortBy,
@@ -86,13 +87,12 @@ export default function Dashboard() {
         console.log(response.data);
 
         setUser(response.data.user);
+        setUserData(response.data.user);
         setBalance(response.data.user.currentBalance || 0);
         console.log("Monthly Budget:", response.data.user.monthlyBudget);
       } catch (error) {
         console.log(error);
-
         localStorage.removeItem("token");
-
         router.push("/");
       }
     };
@@ -176,8 +176,8 @@ export default function Dashboard() {
 
   const savings = totalBalance;
 
-  const monthlyBudget = Number(user?.monthlyBudget || user?.monthlySalary || 0);
-  
+  const monthlyBudget = Number(user?.monthlyBudget || 0);
+
   const totalSpent = expenses;
 
   const remainingBudget = monthlyBudget - totalSpent;
@@ -217,6 +217,12 @@ export default function Dashboard() {
     }
   }, [budgetUsage, budgetSettings]);
 
+  //================== TEST=================
+
+  console.log("USER:", user);
+  console.log("TRANSACTIONS:", transactions);
+  //===========================
+
   return (
     <div
       className={`flex min-h-screen transition-all duration-300 ${
@@ -247,8 +253,8 @@ export default function Dashboard() {
                 setFilterType={setFilterType}
                 filterCategory={filterCategory}
                 setFilterCategory={setFilterCategory}
-                paymentMode={paymentMode}
-                setPaymentMode={setPaymentMode}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
                 sortBy={sortBy}
                 setSortBy={setSortBy}
                 showFilters={showFilters}
@@ -494,16 +500,19 @@ export default function Dashboard() {
 
               <div className="mt-6">
                 <TransactionList
-                  transactions={filteredTransactions.slice(0, 5)}
-                  showFilters={showFilters}
-                  setShowFilters={setShowFilters}
-                  setTransactions={setTransactions}
-                  balance={balance}
-                  setBalance={setBalance}
-                  income={income}
-                  expenses={expenses}
-                  savings={savings}
-                />
+  transactions={filteredTransactions.slice(0, 5)}
+  showFilters={showFilters}
+  setShowFilters={setShowFilters}
+  setTransactions={setTransactions}
+  balance={balance}
+  setBalance={setBalance}
+  income={income}
+  expenses={expenses}
+  savings={savings}
+  // setIncome={setIncome}
+  // setExpenses={setExpenses}
+  // setSavings={setSavings}
+/>
               </div>
             </>
           )}

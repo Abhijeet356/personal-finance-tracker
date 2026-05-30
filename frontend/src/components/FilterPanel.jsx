@@ -10,8 +10,8 @@ export default function FilterPanel({
   filterCategory,
   setFilterCategory,
 
-  paymentMode,
-  setPaymentMode,
+  paymentMethod,
+  setPaymentMethod,
 
   sortBy,
   setSortBy,
@@ -139,10 +139,10 @@ export default function FilterPanel({
               </label>
 
               <select
-                value={paymentMode}
+                value={paymentMethod}
                 onChange={(e) =>
-                  setPaymentMode(
-                    paymentMode === e.target.value ? "all" : e.target.value,
+                  setPaymentMethod(
+                    paymentMethod === e.target.value ? "all" : e.target.value,
                   )
                 }
                 style={{
@@ -156,15 +156,16 @@ export default function FilterPanel({
               >
                 <option value="all">All Methods</option>
 
-                <option value="UPI">UPI</option>
+                <option value="upi">UPI</option>
 
-                <option value="Cash">Cash</option>
+                <option value="cash">Cash</option>
 
-                <option value="Credit Card">Credit Card</option>
+                <option value="card">Card</option>
 
-                <option value="Debit Card">Debit Card</option>
+                <option value="bank_transfer">Net Banking</option>
 
-                <option value="Net Banking">Net Banking</option>
+                <option value="other">Other</option>
+
               </select>
             </div>
 

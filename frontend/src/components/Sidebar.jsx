@@ -26,10 +26,14 @@ export default function Sidebar({
   const pathname = usePathname();
   const router = useRouter();
   const handleLogout = () => {
-    localStorage.removeItem("token");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user_setup");
+  localStorage.removeItem("transactions");
+  localStorage.removeItem("budget_settings");
+  localStorage.removeItem("notifications");
 
-    router.push("/");
-  };
+  window.location.href = "/"
+};
 
   return (
     <div

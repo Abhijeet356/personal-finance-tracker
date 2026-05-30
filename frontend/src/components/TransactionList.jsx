@@ -11,6 +11,7 @@ import {
   FaBolt,
   FaGamepad,
 } from "react-icons/fa";
+import api from "@/lib/api";
 
 export default function TransactionList({
   transactions,
@@ -43,72 +44,88 @@ export default function TransactionList({
 
   // DELETE
 
-  const handleDelete = (transaction) => {
-    const updatedTransactions = transactions.filter(
-      (item) => item.id !== transaction.id,
-    );
+  const handleDelete = async (transaction) => {
+    try {
+      const token = localStorage.getItem("token");
 
-    setTransactions(updatedTransactions);
-    localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+      await api.delete(`/transactions/${transaction._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const updatedTransactions = transactions.filter(
+        (item) => item._id !== transaction._id,
+      );
 
-    if (transaction.type === "expense") {
-      setBalance((prev) => prev + transaction.amount);
+      setTransactions(updatedTransactions);
+      localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
 
-      setExpenses((prev) => prev - transaction.amount);
+      if (transaction.type === "expense") {
+        setBalance((prev) => prev + transaction.amount);
 
-      setSavings((prev) => prev + transaction.amount);
-    } else {
-      setBalance((prev) => prev - transaction.amount);
+        // setExpenses((prev) => prev - transaction.amount);
 
-      setIncome((prev) => prev - transaction.amount);
+        // setSavings((prev) => prev + transaction.amount);
+      } else {
+        setBalance((prev) => prev - transaction.amount);
 
-      setSavings((prev) => prev - transaction.amount);
+        // setIncome((prev) => prev - transaction.amount);
+
+        // setSavings((prev) => prev - transaction.amount);
+      }
+      localStorage.setItem(
+        "balance",
+        transaction.type === "expense"
+          ? balance + transaction.amount
+          : balance - transaction.amount,
+      );
+
+      localStorage.setItem(
+        "expenses",
+        transaction.type === "expense"
+          ? expenses - transaction.amount
+          : expenses,
+      );
+
+      localStorage.setItem(
+        "income",
+        transaction.type === "income" ? income - transaction.amount : income,
+      );
+
+      localStorage.setItem(
+        "savings",
+        transaction.type === "expense"
+          ? savings + transaction.amount
+          : savings - transaction.amount,
+      );
+
+      setSelected(null);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete transaction");
     }
-    localStorage.setItem(
-      "balance",
-      transaction.type === "expense"
-        ? balance + transaction.amount
-        : balance - transaction.amount,
-    );
-
-    localStorage.setItem(
-      "expenses",
-      transaction.type === "expense" ? expenses - transaction.amount : expenses,
-    );
-
-    localStorage.setItem(
-      "income",
-      transaction.type === "income" ? income - transaction.amount : income,
-    );
-
-    localStorage.setItem(
-      "savings",
-      transaction.type === "expense"
-        ? savings + transaction.amount
-        : savings - transaction.amount,
-    );
-
-    setSelected(null);
   };
   // SAVE EDIT
 
-  const handleSaveEdit = () => {
-    const oldTransaction = transactions.find((item) => item.id === selected.id);
+  const handleSaveEdit = async () => {
+    const oldTransaction = transactions.find(
+      (item) => item._id === selected._id,
+    );
 
     // REMOVE OLD EFFECT
 
     if (oldTransaction.type === "expense") {
       setBalance((prev) => prev + oldTransaction.amount);
 
-      setExpenses((prev) => prev - oldTransaction.amount);
+      // setExpenses((prev) => prev - oldTransaction.amount);
 
-      setSavings((prev) => prev + oldTransaction.amount);
+      // setSavings((prev) => prev + oldTransaction.amount);
     } else {
       setBalance((prev) => prev - oldTransaction.amount);
 
-      setIncome((prev) => prev - oldTransaction.amount);
+      // setIncome((prev) => prev - oldTransaction.amount);
 
-      setSavings((prev) => prev - oldTransaction.amount);
+      // setSavings((prev) => prev - oldTransaction.amount);
     }
 
     // APPLY NEW EFFECT
@@ -116,21 +133,49 @@ export default function TransactionList({
     if (selected.type === "expense") {
       setBalance((prev) => prev - selected.amount);
 
-      setExpenses((prev) => prev + selected.amount);
+      // setExpenses((prev) => prev + selected.amount);
 
-      setSavings((prev) => prev - selected.amount);
+      // setSavings((prev) => prev - selected.amount);
     } else {
       setBalance((prev) => prev + selected.amount);
 
-      setIncome((prev) => prev + selected.amount);
+      // setIncome((prev) => prev + selected.amount);
 
-      setSavings((prev) => prev + selected.amount);
+      // setSavings((prev) => prev + selected.amount);
     }
 
+    try {
+      const token = localStorage.getItem("token");
+      console.log("SELECTED TRANSACTION:", selected);
+      const response = await api.put(
+        `/transactions/${selected._id}`,
+        {
+          title: selected.title,
+          amount: selected.amount,
+          category: selected.category,
+          paymentMethod: selected.paymentMethod,
+          description: selected.description,
+          type: selected.type,
+          date: selected.date,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log("UPDATED:", response.data);
+    } catch (error) {
+      console.error(error.response?.data);
+
+      alert(JSON.stringify(error.response?.data, null, 2));
+      return;
+    }
     // UPDATE TRANSACTION
 
     const updatedTransactions = transactions.map((item) =>
-      item.id === selected.id ? selected : item,
+      item._id === selected._id ? selected : item,
     );
 
     setTransactions(updatedTransactions);
@@ -366,11 +411,11 @@ export default function TransactionList({
                         : "bg-blue-50 border-blue-400 text-black"
                     }`}
                   >
-                    <option>UPI</option>
-                    <option>Cash</option>
-                    <option>Credit Card</option>
-                    <option>Debit Card</option>
-                    <option>Net Banking</option>
+                    <option value="upi">UPI</option>
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                    <option value="bank_transfer">Net Banking</option>
+                    <option value="other">Other</option>
                   </select>
                 ) : (
                   <span className="font-semibold">
@@ -421,11 +466,11 @@ export default function TransactionList({
                 {isEditing ? (
                   <textarea
                     rows={4}
-                    value={selected.notes}
+                    value={selected.description}
                     onChange={(e) =>
                       setSelected({
                         ...selected,
-                        notes: e.target.value,
+                        description: e.target.value,
                       })
                     }
                     className={`w-full p-4 rounded-2xl outline-none resize-none border-2 ${
@@ -440,7 +485,7 @@ export default function TransactionList({
                       darkMode ? "bg-slate-700" : "bg-slate-100"
                     }`}
                   >
-                    {selected.notes || "No notes added"}
+                    {selected.description || "No description added"}
                   </div>
                 )}
               </div>

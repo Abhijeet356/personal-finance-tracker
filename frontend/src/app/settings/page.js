@@ -74,7 +74,7 @@ export default function SettingsPage() {
     },
 
     {
-      title: "Budget Settings",
+      title: "Financial Settings",
 
       description: "Set monthly limits and financial goals",
 
@@ -201,7 +201,7 @@ export default function SettingsPage() {
                         setShowSecurityModal(true);
                       }
 
-                      if (card.title === "Budget Settings") {
+                      if (card.title === "Financial Settings") {
                         setShowBudgetModal(true);
                       }
 
@@ -230,7 +230,7 @@ export default function SettingsPage() {
         ? "border-violet-600 text-violet-600 hover:bg-violet-50"
         : card.title === "Notifications"
           ? "border-orange-500 text-orange-500 hover:bg-orange-50"
-          : card.title === "Budget Settings"
+          : card.title === "Financial Settings"
             ? "border-green-500 text-green-500 hover:bg-green-50"
             : card.title === "Privacy & Security"
               ? "border-blue-500 text-blue-500 hover:bg-blue-50"

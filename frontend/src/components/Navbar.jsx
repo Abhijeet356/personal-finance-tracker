@@ -14,7 +14,7 @@ import { useTransactions } from "@/context/TransactionContext";
 import Link from "next/link";
 
 export default function Navbar() {
-  const { userData } = useUser();
+  const { userData, loading } = useUser();
 
   const { darkMode, setDarkMode } = useTheme();
   const { searchQuery, setSearchQuery } = useTransactions();
@@ -29,6 +29,12 @@ export default function Navbar() {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div
@@ -87,7 +93,7 @@ export default function Navbar() {
           >
             <FaBell className="text-xl" />
 
-            {unreadCount > 0 && (
+            {mounted && unreadCount > 0 && (
               <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
                 {unreadCount}
               </div>
@@ -102,56 +108,38 @@ export default function Navbar() {
 
         {/* USER PROFILE */}
 
-        <Link href="/settings">
-          <div
-            className={`flex items-center gap-3 cursor-pointer p-2 rounded-2xl transition ${
-              darkMode ? "hover:bg-slate-800" : "hover:bg-slate-100"
-            }`}
-          >
-            {userData?.avatar ? (
-              <img
-                src={userData.avatar}
-                className="
-      w-12 h-12
-      rounded-full
-      object-cover
-    "
-              />
-            ) : (
-              <div
-                className="
-      w-12 h-12
-      rounded-full
-      bg-gradient-to-br
-      from-violet-500
-      to-purple-600
+        {!loading && (
+          <Link href="/settings">
+            <div
+              className={`flex items-center gap-3 cursor-pointer p-2 rounded-2xl transition ${
+                darkMode ? "hover:bg-slate-800" : "hover:bg-slate-100"
+              }`}
+            >
+              {userData?.avatar ? (
+                <img
+                  src={userData.avatar}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                  {userData?.name ? userData.name[0] : "U"}
+                </div>
+              )}
 
-      flex
-      items-center
-      justify-center
+              <div>
+                <h2
+                  className={`font-semibold ${
+                    darkMode ? "text-white" : "text-black"
+                  }`}
+                >
+                  {userData?.name || "User"}
+                </h2>
 
-      text-white
-      font-bold
-      text-lg
-    "
-              >
-                {userData?.name ? userData.name[0] : "U"}
+                <p className="text-sm text-gray-500">View Profile</p>
               </div>
-            )}
-
-            <div>
-              <h2
-                className={`font-semibold ${
-                  darkMode ? "text-white" : "text-black"
-                }`}
-              >
-                {userData?.name || "User"}
-              </h2>
-
-              <p className="text-sm text-gray-500">View Profile</p>
             </div>
-          </div>
-        </Link>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import api from "@/lib/api";
+import { PAYMENT_METHODS } from "@/constants/paymentMethods";
 
 export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const { darkMode } = useTheme();
@@ -12,7 +13,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
     amount: "",
     type: "expense",
     category: "Food",
-    paymentMethod: "UPI",
+    paymentMethod: "upi",
     notes: "",
     date: "",
   });
@@ -28,7 +29,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
       amount: "",
       type: "expense",
       category: "Food",
-      paymentMethod: "UPI",
+      paymentMethod: "upi",
       notes: "",
       date: "",
     });
@@ -45,28 +46,25 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
     }
 
     try {
+      console.log("FORM DATA:", formData);
   const response = await api.post("/transactions", {
     amount: Number(formData.amount),
     type: formData.type,
     category: formData.category,
     description: formData.notes,
     date: formData.date,
-    paymentMethod:
-      formData.paymentMethod === "UPI"
-        ? "upi"
-        : formData.paymentMethod === "Cash"
-        ? "cash"
-        : formData.paymentMethod === "Net Banking"
-        ? "bank_transfer"
-        : "card",
+    paymentMethod: formData.paymentMethod,
   });
 
   console.log(response.data);
   onSave(response.data.transaction);
   onClose();
 } catch (error) {
-  console.error(error);
-  alert("Failed to save transaction");
+  console.error(error.response?.data);
+
+  alert(
+    JSON.stringify(error.response?.data, null, 2)
+  );
 }
 
     setFormData({
@@ -74,7 +72,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
       amount: "",
       type: "expense",
       category: "Food",
-      paymentMethod: "UPI",
+      paymentMethod: "upi",
       notes: "",
       date: "",
     });
@@ -293,7 +291,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                       : "bg-slate-100 border-slate-300 text-black"
                   }`}
                 >
-                  <option
+                  <option value="upi"
                     className={
                       darkMode
                         ? "bg-slate-800 text-white"
@@ -303,7 +301,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                     UPI
                   </option>
 
-                  <option
+                  <option value="cash"
                     className={
                       darkMode
                         ? "bg-slate-800 text-white"
@@ -313,27 +311,17 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                     Cash
                   </option>
 
-                  <option
+                  <option value="card"
                     className={
                       darkMode
                         ? "bg-slate-800 text-white"
                         : "bg-white text-black"
                     }
                   >
-                    Credit Card
+                    Card
                   </option>
 
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Debit Card
-                  </option>
-
-                  <option
+                  <option value="bank_transfer"
                     className={
                       darkMode
                         ? "bg-slate-800 text-white"
@@ -341,6 +329,16 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                     }
                   >
                     Net Banking
+                  </option>
+
+                  <option value="other"
+                    className={
+                      darkMode
+                        ? "bg-slate-800 text-white"
+                        : "bg-white text-black"
+                    }
+                  >
+                    Other
                   </option>
                 </select>
               </div>

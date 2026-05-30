@@ -5,12 +5,22 @@ import { createContext, useContext, useEffect, useState } from "react";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [userData, setUserData] = useState(() => {
-    const savedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user_setup") : null;
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  // LOAD USER
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user_setup");
+    // ========test===========
+    console.log("LOADED USER:", savedUser);
+    // =========================
+    if (savedUser) {
+      setUserData(JSON.parse(savedUser));
+    }
+
+    setLoading(false);
+  }, []);
 
   // SAVE USER
 
@@ -18,8 +28,7 @@ export function UserProvider({ children }) {
     if (userData) {
       localStorage.setItem(
         "user_setup",
-
-        JSON.stringify(userData),
+        JSON.stringify(userData)
       );
     }
   }, [userData]);
@@ -28,8 +37,8 @@ export function UserProvider({ children }) {
     <UserContext.Provider
       value={{
         userData,
-
         setUserData,
+        loading,
       }}
     >
       {children}

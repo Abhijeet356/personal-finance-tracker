@@ -5,12 +5,15 @@ import { createContext, useContext, useEffect, useState } from "react";
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState(() => {
-    const saved =
-      typeof window !== "undefined" ? localStorage.getItem("notifications") : null;
+  const [notifications, setNotifications] = useState([]);
 
-    return saved ? JSON.parse(saved) : [];
-  });
+  useEffect(() => {
+    const saved = localStorage.getItem("notifications");
+
+    if (saved) {
+      setNotifications(JSON.parse(saved));
+    }
+  }, []);
 
   // SAVE
 
