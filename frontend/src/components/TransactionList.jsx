@@ -16,11 +16,7 @@ import api from "@/lib/api";
 export default function TransactionList({
   transactions,
   setTransactions,
-  balance,
   setBalance,
-  income,
-  expenses,
-  savings,
   setShowFilters,
   showFilters,
 }) {
@@ -32,13 +28,9 @@ export default function TransactionList({
 
   const categoryIcons = {
     Food: <FaUtensils />,
-
     Shopping: <FaShoppingBag />,
-
     Travel: <FaPlane />,
-
     Bills: <FaBolt />,
-
     Entertainment: <FaGamepad />,
   };
 
@@ -58,51 +50,17 @@ export default function TransactionList({
       );
 
       setTransactions(updatedTransactions);
-      localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
 
-      if (transaction.type === "expense") {
-        setBalance((prev) => prev + transaction.amount);
-
-        // setExpenses((prev) => prev - transaction.amount);
-
-        // setSavings((prev) => prev + transaction.amount);
-      } else {
-        setBalance((prev) => prev - transaction.amount);
-
-        // setIncome((prev) => prev - transaction.amount);
-
-        // setSavings((prev) => prev - transaction.amount);
-      }
-      localStorage.setItem(
-        "balance",
-        transaction.type === "expense"
-          ? balance + transaction.amount
-          : balance - transaction.amount,
-      );
-
-      localStorage.setItem(
-        "expenses",
-        transaction.type === "expense"
-          ? expenses - transaction.amount
-          : expenses,
-      );
-
-      localStorage.setItem(
-        "income",
-        transaction.type === "income" ? income - transaction.amount : income,
-      );
-
-      localStorage.setItem(
-        "savings",
-        transaction.type === "expense"
-          ? savings + transaction.amount
-          : savings - transaction.amount,
-      );
+      // if (transaction.type === "expense") {
+      //   setBalance((prev) => prev + transaction.amount);
+      // } else {
+      //   setBalance((prev) => prev - transaction.amount);
+      // }
 
       setSelected(null);
     } catch (error) {
       console.error(error);
-      alert("Failed to delete transaction");
+      console.error("Failed to delete transaction");
     }
   };
   // SAVE EDIT
@@ -112,41 +70,22 @@ export default function TransactionList({
       (item) => item._id === selected._id,
     );
 
-    // REMOVE OLD EFFECT
-
-    if (oldTransaction.type === "expense") {
-      setBalance((prev) => prev + oldTransaction.amount);
-
-      // setExpenses((prev) => prev - oldTransaction.amount);
-
-      // setSavings((prev) => prev + oldTransaction.amount);
-    } else {
-      setBalance((prev) => prev - oldTransaction.amount);
-
-      // setIncome((prev) => prev - oldTransaction.amount);
-
-      // setSavings((prev) => prev - oldTransaction.amount);
-    }
+    // if (oldTransaction.type === "expense") {
+    //   setBalance((prev) => prev + oldTransaction.amount);
+    // } else {
+    //   setBalance((prev) => prev - oldTransaction.amount);
+    // }
 
     // APPLY NEW EFFECT
 
-    if (selected.type === "expense") {
-      setBalance((prev) => prev - selected.amount);
-
-      // setExpenses((prev) => prev + selected.amount);
-
-      // setSavings((prev) => prev - selected.amount);
-    } else {
-      setBalance((prev) => prev + selected.amount);
-
-      // setIncome((prev) => prev + selected.amount);
-
-      // setSavings((prev) => prev + selected.amount);
-    }
+    // if (selected.type === "expense") {
+    //   setBalance((prev) => prev - selected.amount);
+    // } else {
+    //   setBalance((prev) => prev + selected.amount);
+    // }
 
     try {
       const token = localStorage.getItem("token");
-      console.log("SELECTED TRANSACTION:", selected);
       const response = await api.put(
         `/transactions/${selected._id}`,
         {
@@ -164,12 +103,8 @@ export default function TransactionList({
           },
         },
       );
-
-      console.log("UPDATED:", response.data);
     } catch (error) {
       console.error(error.response?.data);
-
-      alert(JSON.stringify(error.response?.data, null, 2));
       return;
     }
     // UPDATE TRANSACTION
@@ -179,15 +114,6 @@ export default function TransactionList({
     );
 
     setTransactions(updatedTransactions);
-    localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
-
-    localStorage.setItem("balance", balance);
-
-    localStorage.setItem("income", income);
-
-    localStorage.setItem("expenses", expenses);
-
-    localStorage.setItem("savings", savings);
 
     setIsEditing(false);
   };

@@ -56,7 +56,7 @@ export default function Navbar() {
 
           <input
             type="text"
-            placeholder="Search by title, category or payment method..."
+            placeholder="Search by category or payment method..."
             value={searchQuery}
             onChange={handleSearch}
             className={`bg-transparent outline-none w-full ${

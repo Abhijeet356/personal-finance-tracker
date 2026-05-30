@@ -46,7 +46,6 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
     }
 
     try {
-      console.log("FORM DATA:", formData);
   const response = await api.post("/transactions", {
     amount: Number(formData.amount),
     type: formData.type,
@@ -56,8 +55,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
     paymentMethod: formData.paymentMethod,
   });
 
-  console.log(response.data);
-  onSave(response.data.transaction);
+  onSave(response.data.transaction, response.data.currentBalance);
   onClose();
 } catch (error) {
   console.error(error.response?.data);

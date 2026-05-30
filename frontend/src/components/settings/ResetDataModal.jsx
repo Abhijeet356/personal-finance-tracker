@@ -1,16 +1,15 @@
 "use client";
 
 import { FaTimes, FaTrash, FaExclamationTriangle } from "react-icons/fa";
-
 import { useState } from "react";
-
 import { useTheme } from "@/context/ThemeContext";
-
+import api from "@/lib/api";
+import { useRouter } from "next/navigation";
 import { useNotifications } from "@/context/NotificationContext";
 
 export default function ResetDataModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
-
+  const router = useRouter();
   const { addNotification } = useNotifications();
 
   const [password, setPassword] = useState("");
@@ -19,42 +18,29 @@ export default function ResetDataModal({ isOpen, closeModal }) {
 
   // RESET
 
-  const handleReset = () => {
-    if (password !== "1234") {
-      alert("Incorrect password");
-
-      return;
-    }
-
+  const handleReset = async () => {
     if (confirmation !== "DELETE MY DATA") {
       alert("Confirmation text incorrect");
-
       return;
     }
 
-    // CLEAR STORAGE
+    try {
+      const token = localStorage.getItem("token");
 
-    localStorage.removeItem("transactions");
+      await api.delete("/auth/account", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    localStorage.removeItem("notifications");
+      localStorage.clear();
+      alert("Account deleted successfully");
+      window.location.href = "/";
+    } catch (error) {
+      console.error(error);
 
-    localStorage.removeItem("profile_name");
-
-    localStorage.removeItem("profile_email");
-
-    localStorage.removeItem("notification_settings");
-
-    localStorage.removeItem("security_settings");
-
-    addNotification({
-      title: "Application Reset",
-
-      message: "All application data was permanently deleted.",
-    });
-
-    alert("Application data reset successfully");
-
-    window.location.reload();
+      alert("Failed to delete account");
+    }
   };
 
   if (!isOpen) return null;

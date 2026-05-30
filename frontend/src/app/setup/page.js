@@ -55,8 +55,6 @@ export default function SetupPage() {
         },
       );
 
-      console.log(response.data);
-
       // OPTIONAL LOCAL STORAGE
 
       const userData = {
@@ -72,7 +70,7 @@ export default function SetupPage() {
 
       router.push("/dashboard");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       alert("Setup failed");
     }
   };

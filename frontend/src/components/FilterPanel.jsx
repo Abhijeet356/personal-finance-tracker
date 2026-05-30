@@ -2,6 +2,7 @@
 
 import { FaFilter } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
+import { useState, useEffect } from "react";
 
 export default function FilterPanel({
   filterType,

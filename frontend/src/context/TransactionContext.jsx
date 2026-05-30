@@ -34,12 +34,6 @@ useEffect(() => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(
-    "TRANSACTIONS API RESPONSE:",
-    response.data.transactions
-  );
-  
       setTransactions(response.data.transactions);
     } catch (error) {
       console.error("Failed to load transactions", error);

@@ -12,14 +12,15 @@ export default function AnalyticsSection({ transactions }) {
 
   // FILTER CURRENT MONTH TRANSACTIONS
 
-  const monthlyTransactions = transactions.filter((item) => {
-    const transactionDate = new Date(item.date);
+ const monthlyTransactions = transactions.filter((item) => {
+  const transactionDate = new Date(item.date);
 
-    return (
-      transactionDate.getMonth() === currentMonth &&
-      transactionDate.getFullYear() === currentYear
-    );
-  });
+  return (
+    item.type === "expense" &&
+    transactionDate.getMonth() === currentMonth &&
+    transactionDate.getFullYear() === currentYear
+  );
+});
 
   return (
     <div className="mt-8">

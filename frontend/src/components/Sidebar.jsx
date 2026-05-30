@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTheme } from "@/context/ThemeContext";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useTransactions } from "@/context/TransactionContext";
 
 import {
   FaHome,
@@ -22,17 +23,29 @@ export default function Sidebar({
   showFilters,
   setShowFilters,
 }) {
+  const {
+  setFilterCategory,
+  setFilterType,
+  setPaymentMethod,
+  setSortBy,
+} = useTransactions();
   const { darkMode } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const handleLogout = () => {
   localStorage.removeItem("token");
-  localStorage.removeItem("user_setup");
   localStorage.removeItem("transactions");
   localStorage.removeItem("budget_settings");
   localStorage.removeItem("notifications");
 
   window.location.href = "/"
+};
+
+const resetFilters = () => {
+  setFilterCategory("all");
+  setFilterType("all");
+  setPaymentMethod("all");
+  setSortBy("newest");
 };
 
   return (
@@ -49,11 +62,12 @@ export default function Sidebar({
           />
         </div>
 
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
           <Link href="/dashboard">
             <div
               onClick={() => {
                 if (showFilters) {
+                  resetFilters();
                   toggleFilters();
                 }
               }}
@@ -63,7 +77,7 @@ export default function Sidebar({
                   : "text-white hover:bg-slate-800"
               }`}
             >
-              <FaHome />
+              <FaHome className="text-lg"/>
 
               <span>Dashboard</span>
             </div>
@@ -73,9 +87,9 @@ export default function Sidebar({
             onClick={() => {
               openTransactionModal?.();
             }}
-            className="flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer text-white hover:bg-slate-800"
+            className=" flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer text-white hover:bg-slate-800"
           >
-            <FaPlusCircle />
+            <FaPlusCircle className="text-lg"/>
 
             <span>New Transaction</span>
           </div>
@@ -90,7 +104,7 @@ export default function Sidebar({
                 : "text-white hover:bg-slate-800"
             }`}
           >
-            <FaFilter />
+            <FaFilter className="text-lg" />
 
             <span>Sort & Filter</span>
           </div>
@@ -99,24 +113,31 @@ export default function Sidebar({
             href="/analytics"
             onClick={() => {
               if (showFilters) {
+                resetFilters();
                 setShowFilters(false);
               }
             }}
           >
             <div
-              className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer ${
+              className={` flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer ${
                 pathname === "/analytics" && !showFilters
                   ? "bg-gradient-to-r from-violet-600 to-purple-700 text-white shadow-lg"
                   : "text-white hover:bg-slate-800"
               }`}
             >
-              <FaChartPie />
+              <FaChartPie className="text-lg" />
 
               <span>Analytics</span>
             </div>
           </Link>
 
-          <Link href="/export">
+          <Link href="/export"
+          onClick={() => {
+              if (showFilters) {
+                resetFilters();
+                setShowFilters(false);
+              }
+            }}>
             <div
               className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer ${
                 pathname === "/export"
@@ -124,13 +145,19 @@ export default function Sidebar({
                   : "text-white hover:bg-slate-800"
               }`}
             >
-              <FaFileExport />
+              <FaFileExport className="text-lg" />
 
               <span>Export</span>
             </div>
           </Link>
 
-          <Link href="/settings">
+          <Link href="/settings"
+          onClick={() => {
+              if (showFilters) {
+                resetFilters();
+                setShowFilters(false);
+              }
+            }}>
             <div
               className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 cursor-pointer ${
                 pathname === "/settings"
@@ -138,7 +165,7 @@ export default function Sidebar({
                   : "text-white hover:bg-slate-800"
               }`}
             >
-              <FaCog />
+              <FaCog className="text-lg" />
 
               <span>Settings</span>
             </div>

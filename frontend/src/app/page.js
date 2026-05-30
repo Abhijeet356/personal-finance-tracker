@@ -29,12 +29,12 @@ export default function Home() {
       localStorage.setItem("token", response.data.token);
 
       if (response.data.user.onboardingComplete) {
-        router.push("/dashboard");
+       window.location.href = "/dashboard";
       } else {
         router.push("/setup");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       alert("Invalid email or password");
     }

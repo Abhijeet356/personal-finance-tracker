@@ -60,7 +60,8 @@ export default function AnalyticsPage() {
 
   // DATE FILTERED DATA
 
-  const analyticsTransactions = filteredTransactions.filter((item) => {
+  const analyticsTransactions = transactions.filter((item) => {
+    
     const transactionDate = new Date(item.date);
 
     if (fromDate && transactionDate < new Date(fromDate)) {
@@ -73,6 +74,10 @@ export default function AnalyticsPage() {
 
     return true;
   });
+
+  const expenseTransactions = analyticsTransactions.filter(
+  (item) => item.type === "expense"
+);
 
   // TOTALS
 
@@ -132,7 +137,7 @@ export default function AnalyticsPage() {
 
               <div className="mt-8">
                 <TransactionList
-                  transactions={filteredTransactions}
+                  transactions={transactions}
                   setTransactions={setTransactions}
                   balance={savings}
                   setBalance={() => {}}
@@ -269,9 +274,9 @@ export default function AnalyticsPage() {
               {/* CHARTS */}
 
               <div className="grid xl:grid-cols-2 gap-8 mb-10">
-                <TrendChart transactions={analyticsTransactions} />
+                <TrendChart transactions={expenseTransactions} />
 
-                <ExpensePieChart transactions={analyticsTransactions} />
+                <ExpensePieChart transactions={expenseTransactions} />
               </div>
 
               <div className="mt-8">

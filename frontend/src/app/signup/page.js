@@ -32,7 +32,6 @@ export default function Signup() {
         password,
       });
 
-      console.log(response.data);
       localStorage.setItem("token", response.data.token);
 
       if (response.data.user.onboardingComplete) {

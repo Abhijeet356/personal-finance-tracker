@@ -1,5 +1,5 @@
 "use client";
-
+import api from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
@@ -11,27 +11,31 @@ export function UserProvider({ children }) {
   // LOAD USER
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user_setup");
-    // ========test===========
-    console.log("LOADED USER:", savedUser);
-    // =========================
-    if (savedUser) {
-      setUserData(JSON.parse(savedUser));
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await api.get("/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserData(response.data.user);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    setLoading(false);
-  }, []);
-
-  // SAVE USER
-
-  useEffect(() => {
-    if (userData) {
-      localStorage.setItem(
-        "user_setup",
-        JSON.stringify(userData)
-      );
-    }
-  }, [userData]);
+  fetchUser();
+}, []);
 
   return (
     <UserContext.Provider

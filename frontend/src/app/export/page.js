@@ -2,29 +2,27 @@
 
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { exportPDF, exportCSV, exportExcel } from "@/utils/exportUtils";
-
+import { exportPDF, exportCSV, exportExcel, exportAnalyticsReport } from "@/utils/exportUtils";
 import { useNotifications } from "@/context/NotificationContext";
-
 import { FaFilePdf, FaFileCsv, FaFileExcel, FaChartPie } from "react-icons/fa";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useTransactions } from "@/context/TransactionContext";
-
+import { useUser } from "@/context/UserContext";
 export default function ExportPage() {
   const { darkMode } = useTheme();
 
   const { addNotification } = useNotifications();
 
   const {
+    transactions,
     filteredTransactions,
     showFilters,
     setShowFilters,
-
     isModalOpen,
     setIsModalOpen,
   } = useTransactions();
+
+  const { userData } = useUser();
 
   const exportCards = [
     {
@@ -37,7 +35,7 @@ export default function ExportPage() {
       gradient: "from-red-500 to-pink-600",
 
       action: () => {
-        exportPDF(filteredTransactions);
+        exportPDF(transactions, userData?.currentBalance || 0);
 
         addNotification({
           title: "PDF Exported",
@@ -57,7 +55,7 @@ export default function ExportPage() {
       gradient: "from-green-500 to-emerald-600",
 
       action: () => {
-        exportCSV(filteredTransactions);
+        exportCSV(transactions);
         addNotification({
           title: "CSV Exported",
           message: "Transactions exported as CSV successfully.",
@@ -75,7 +73,7 @@ export default function ExportPage() {
       gradient: "from-blue-500 to-cyan-600",
 
       action: () => {
-        exportExcel(filteredTransactions);
+        exportExcel(transactions);
 
         addNotification({
           title: "Excel Exported",
@@ -95,12 +93,11 @@ export default function ExportPage() {
       gradient: "from-violet-600 to-purple-700",
 
       action: () => {
-        exportPDF(filteredTransactions);
+        exportAnalyticsReport(transactions, userData?.currentBalance || 0, userData?.monthlyBudget || 0);
 
         addNotification({
-          title: "PDF Exported",
-
-          message: "Financial PDF report downloaded successfully.",
+          title: "Analytics Report Exported",
+          message: "Analytics report downloaded successfully.",
         });
       },
     },
@@ -168,7 +165,7 @@ export default function ExportPage() {
                   darkMode ? "text-white" : "text-black"
                 }`}
               >
-                {filteredTransactions.length}
+                {transactions.length}
               </h1>
             </div>
 

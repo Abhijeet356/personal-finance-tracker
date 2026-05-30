@@ -9,7 +9,6 @@ import TransactionList from "@/components/TransactionList";
 import AnalyticsSection from "@/components/AnalyticsSection";
 import ExportButtons from "@/components/ExportButtons";
 import { useTheme } from "@/context/ThemeContext";
-import BalanceModal from "@/components/BalanceModal";
 import { useState, useEffect } from "react";
 import AddTransactionModal from "@/components/AddTransactionModal";
 import FloatingButton from "@/components/FloatingButton";
@@ -84,14 +83,12 @@ export default function Dashboard() {
           },
         );
 
-        console.log(response.data);
-
         setUser(response.data.user);
         setUserData(response.data.user);
         setBalance(response.data.user.currentBalance || 0);
-        console.log("Monthly Budget:", response.data.user.monthlyBudget);
+      
       } catch (error) {
-        console.log(error);
+        console.error(error);
         localStorage.removeItem("token");
         router.push("/");
       }
@@ -99,16 +96,6 @@ export default function Dashboard() {
 
     checkAuth();
   }, []);
-
-  // useEffect(() => {
-  //   const savedBalance = localStorage.getItem("balance");
-
-  //   if (savedBalance) {
-  //     setBalance(Number(savedBalance));
-  //   } else {
-  //     setShowBalanceModal(true);
-  //   }
-  // }, []);
 
   // TOTALS
 
@@ -134,7 +121,7 @@ export default function Dashboard() {
 
   // ONLY CURRENT MONTH EXPENSES
 
-  const expenses = filteredTransactions
+  const expenses = transactions
 
     .filter((t) => {
       const transactionDate = new Date(t.date);
@@ -150,7 +137,7 @@ export default function Dashboard() {
 
   // LIFETIME INCOME
 
-  const totalIncome = filteredTransactions
+  const totalIncome = transactions
 
     .filter((t) => t.type === "income")
 
@@ -158,7 +145,7 @@ export default function Dashboard() {
 
   // LIFETIME EXPENSES
 
-  const totalExpenses = filteredTransactions
+  const totalExpenses = transactions
 
     .filter((t) => t.type === "expense")
 
@@ -166,15 +153,15 @@ export default function Dashboard() {
 
   // LIFETIME BALANCE
 
-  const lifetimeBalance = balance - totalExpenses + totalIncome;
+  const lifetimeBalance = balance;
 
   // LIFETIME SAVINGS
 
-  const lifetimeSavings = lifetimeBalance;
+  const lifetimeSavings = balance;
 
-  const totalBalance = balance - expenses + income;
+  const totalBalance = balance;
 
-  const savings = totalBalance;
+  const savings = balance;
 
   const monthlyBudget = Number(user?.monthlyBudget || 0);
 
@@ -216,12 +203,6 @@ export default function Dashboard() {
       localStorage.removeItem("budget_warning_sent");
     }
   }, [budgetUsage, budgetSettings]);
-
-  //================== TEST=================
-
-  console.log("USER:", user);
-  console.log("TRANSACTIONS:", transactions);
-  //===========================
 
   return (
     <div
@@ -282,17 +263,15 @@ export default function Dashboard() {
               {/* SUMMARY */}
 
               <SummaryCards
-                balance={lifetimeBalance}
+                balance={balance}
                 income={totalIncome}
                 expenses={totalExpenses}
-                savings={lifetimeSavings}
+                savings={balance}
               />
 
               {/* BUDGET CARD */}
 
               {/* ================= MONTHLY EXPENSE SECTION ================= */}
-
-              {/* MONTHLY BUDGET */}
 
               {/* MONTHLY BUDGET */}
 
@@ -493,48 +472,143 @@ export default function Dashboard() {
               {/* ANALYTICS */}
 
               <div className="mt-6">
-                <AnalyticsSection transactions={filteredTransactions} />
+                <AnalyticsSection transactions={transactions} />
               </div>
 
               {/* TRANSACTIONS */}
 
+              {/* TRANSACTIONS */}
+
               <div className="mt-6">
-                <TransactionList
-  transactions={filteredTransactions.slice(0, 5)}
-  showFilters={showFilters}
-  setShowFilters={setShowFilters}
-  setTransactions={setTransactions}
-  balance={balance}
-  setBalance={setBalance}
-  income={income}
-  expenses={expenses}
-  savings={savings}
-  // setIncome={setIncome}
-  // setExpenses={setExpenses}
-  // setSavings={setSavings}
-/>
+                {transactions.length === 0 ? (
+                  <div
+                    className={`rounded-[36px] border shadow-xl p-6 transition-all duration-300 ${
+                      darkMode
+                        ? "bg-[#0f172a] border-white/10"
+                        : "bg-white border-gray-100"
+                    }`}
+                  >
+                    {/* Header */}
+
+                    <div className="text-center">
+                      <h2
+                        className={`text-4xl font-bold mt-4 ${
+                          darkMode ? "text-white" : "text-[#0f172a]"
+                        }`}
+                      >
+                        Welcome to Finance Tracker
+                      </h2>
+
+                      <p
+                        className={`mt-4 max-w-2xl mx-auto ${
+                          darkMode ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        Add your first transaction to unlock analytics,
+                        budgeting, spending insights and financial reports.
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+
+<div className="my-7 border-t-2 border-gray-600 dark:border-gray-500/50"></div>
+                    {/* Feature Cards */}
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                      <div
+                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                          darkMode
+                            ? "bg-white/[0.03] border-white/5"
+                            : "bg-[#faf7ef] border-transparent"
+                        }`}
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-[#fff3d6] dark:bg-yellow-500/10 flex items-center justify-center shadow-sm">
+                          <span className="text-3xl">📊</span>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 text-base">
+                            View
+                          </p>
+
+                          <h3 className="text-2xl font-bold text-orange-500 mt-1">
+                            Analytics
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                          darkMode
+                            ? "bg-green-500/5 border-green-500/10"
+                            : "bg-[#eefbf2]"
+                        }`}
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-[#dff7e6] dark:bg-green-500/10 flex items-center justify-center shadow-sm">
+                          <span className="text-3xl">💰</span>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 text-base">
+                            Manage
+                          </p>
+
+                          <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
+                            Budget
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`rounded-3xl p-4 flex items-center gap-5 border ${
+                          darkMode
+                            ? "bg-blue-500/5 border-blue-500/10"
+                            : "bg-[#eef4ff] border-transparent"
+                        }`}
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-[#dbe8ff] dark:bg-blue-500/10 flex items-center justify-center shadow-sm">
+                          <span className="text-3xl">📈</span>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 text-base">
+                            Generate
+                          </p>
+
+                          <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                            Reports
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <TransactionList
+                    transactions={filteredTransactions.slice(0, 5)}
+                    showFilters={showFilters}
+                    setShowFilters={setShowFilters}
+                    setTransactions={setTransactions}
+                    balance={balance}
+                    setBalance={setBalance}
+                    income={income}
+                    expenses={expenses}
+                    savings={savings}
+                  />
+                )}
               </div>
             </>
           )}
         </div>
       </div>
 
-      {/* BALANCE MODAL */}
-
-      {/* {showBalanceModal && (
-        <BalanceModal
-          setBalance={setBalance}
-          closeModal={() => setShowBalanceModal(false)}
-        />
-      )} */}
-
       {/* ADD TRANSACTION MODAL */}
 
       <AddTransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={(transaction) => {
+        onSave={(transaction, currentBalance) => {
           addTransaction(transaction);
+          setBalance(currentBalance);
 
           addNotification({
             title: "Transaction Added",
