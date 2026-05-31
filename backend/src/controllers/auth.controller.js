@@ -1,7 +1,9 @@
 import User from "../models/user.model.js";
 import Transaction from "../models/transaction.model.js";
 import Category from "../models/category.model.js";
+import RecurringRule from "../models/recurringRule.model.js";
 import createDefaultCategories from "../utils/createDefaultCategories.js";
+import processRecurringRules from "../utils/processRecurringRules.js";
 import sendTokenResponse from "../utils/sendTokenResponse.js";
 
 const userPayload = (user) => {
@@ -113,7 +115,8 @@ export const login = async (req, res, next) => {
 
 export const getMe = async (req, res, next) => {
   try {
-    const user = await maybeCreditMonthlySalary(req.user);
+    let user = await maybeCreditMonthlySalary(req.user);
+    await processRecurringRules(user);
 
     res.status(200).json({
       success: true,
@@ -126,13 +129,37 @@ export const getMe = async (req, res, next) => {
 
 export const completeOnboarding = async (req, res, next) => {
   try {
-    const { currentBalance, monthlySalary, monthlyBudget } = req.body;
+    const {
+      avatar,
+      currency,
+      currentBalance,
+      financialGoal,
+      monthlyBudget,
+      monthlySalary,
+      name,
+    } = req.body;
     const user = req.user;
     const budget = monthlyBudget ?? monthlySalary ?? 0;
     const hasSeparateSalary = monthlyBudget !== undefined;
 
     user.currentBalance = currentBalance;
     user.monthlyBudget = budget;
+
+    if (name !== undefined) {
+      user.name = name;
+    }
+
+    if (avatar !== undefined) {
+      user.avatar = avatar;
+    }
+
+    if (currency !== undefined) {
+      user.currency = currency;
+    }
+
+    if (financialGoal !== undefined) {
+      user.financialGoal = financialGoal;
+    }
 
     if (monthlySalary !== undefined && hasSeparateSalary) {
       user.monthlySalary = monthlySalary;
@@ -241,6 +268,10 @@ export const deleteAccount = async (req, res, next) => {
     });
 
     await Category.deleteMany({
+      user: req.user._id,
+    });
+
+    await RecurringRule.deleteMany({
       user: req.user._id,
     });
 

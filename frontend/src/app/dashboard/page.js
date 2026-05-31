@@ -17,6 +17,13 @@ import { useTransactions } from "@/context/TransactionContext";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import {
+  FaCalendarAlt,
+  FaChartLine,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaWallet,
+} from "react-icons/fa";
 
 export default function Dashboard() {
   const { darkMode } = useTheme();
@@ -107,13 +114,24 @@ export default function Dashboard() {
 
   // CURRENT MONTH + YEAR
 
-  const currentMonth = new Date().getMonth();
+  const today = new Date();
 
-  const currentYear = new Date().getFullYear();
+  const currentMonth = today.getMonth();
+
+  const currentYear = today.getFullYear();
+
+  const budgetMonthLabel = today.toLocaleDateString("en-IN", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const budgetPeriodLabel = `${today.toLocaleDateString("en-IN", {
+    month: "short",
+  })} 1 - ${today.toLocaleDateString("en-IN", {
+    month: "short",
+  })} ${new Date(currentYear, currentMonth + 1, 0).getDate()}`;
 
   // DAYS LEFT
-
-  const today = new Date();
 
   const daysLeft =
     new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() -
@@ -168,13 +186,72 @@ export default function Dashboard() {
   const totalSpent = expenses;
 
   const remainingBudget = monthlyBudget - totalSpent;
+  const overBudgetAmount = Math.max(totalSpent - monthlyBudget, 0);
+  const isBudgetExceeded = monthlyBudget > 0 && overBudgetAmount > 0;
 
-  const currentDay = new Date().getDate();
+  const currentDay = today.getDate();
+  const daysInMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    0,
+  ).getDate();
+  const expectedSpendToDate = (monthlyBudget / daysInMonth) * currentDay;
+  const underPaceAmount = Math.max(expectedSpendToDate - totalSpent, 0);
+  const isBudgetOnTrack =
+    monthlyBudget > 0 && !isBudgetExceeded && underPaceAmount > 0;
 
   const dailyAverage = totalSpent / currentDay;
 
-  const budgetUsage =
-    monthlyBudget > 0 ? Math.min((totalSpent / monthlyBudget) * 100, 100) : 0;
+  const budgetUsagePercent =
+    monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
+
+  const budgetUsage = Math.min(budgetUsagePercent, 100);
+
+  const budgetState = isBudgetExceeded
+    ? "exceeded"
+    : isBudgetOnTrack
+      ? "under"
+      : "normal";
+
+  const budgetTone = {
+    exceeded: {
+      icon: <FaExclamationTriangle />,
+      label: "Budget Exceeded",
+      title: `Over by Rs ${overBudgetAmount.toLocaleString()}`,
+      description: `You have spent Rs ${totalSpent.toLocaleString()} against a monthly budget of Rs ${monthlyBudget.toLocaleString()}.`,
+      shell: darkMode
+        ? "bg-red-950/50 border-red-500/30 text-white"
+        : "bg-red-50 border-red-200 text-slate-950",
+      header: "bg-red-600",
+      progress: "bg-red-600",
+      accent: "text-red-500",
+    },
+    under: {
+      icon: <FaCheckCircle />,
+      label: "Good Work",
+      title: `Rs ${Math.round(underPaceAmount).toLocaleString()} under pace`,
+      description:
+        "You are spending slower than planned for this point in the month. Keep this up.",
+      shell: darkMode
+        ? "bg-emerald-950/50 border-emerald-500/30 text-white"
+        : "bg-emerald-50 border-emerald-200 text-slate-950",
+      header: "bg-emerald-600",
+      progress: "bg-emerald-600",
+      accent: "text-emerald-600",
+    },
+    normal: {
+      icon: <FaWallet />,
+      label: "Steady Progress",
+      title: `Rs ${remainingBudget.toLocaleString()} left`,
+      description: `You have spent Rs ${totalSpent.toLocaleString()} from your Rs ${monthlyBudget.toLocaleString()} monthly budget.`,
+      shell: darkMode
+        ? "bg-sky-950/50 border-sky-500/30 text-white"
+        : "bg-sky-50 border-sky-200 text-slate-950",
+      header: "bg-sky-600",
+      progress: "bg-sky-600",
+      accent: "text-sky-600",
+    },
+  }[budgetState];
 
   useEffect(() => {
     if (!budgetSettings) return;
@@ -277,197 +354,144 @@ export default function Dashboard() {
 
               {monthlyBudget > 0 && (
                 <div
-                  className={`app-surface mt-6 p-5 md:p-6 ${
-                    darkMode ? "app-surface-dark" : "app-surface-light"
-                  }`}
+                  className={`app-surface mt-6 overflow-hidden ${budgetTone.shell}`}
                 >
-                  {/* TOP */}
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
-                    {/* LEFT */}
-                    <div className="flex-1">
-                      <p className="uppercase tracking-[3px] text-xs md:text-sm text-gray-500 dark:text-gray-500 font-bold">
-                        Monthly Budget
-                      </p>
+                  <div className={`${budgetTone.header} p-5 text-white md:p-7`}>
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl">
+                          {budgetTone.icon}
+                        </div>
 
-                      <h2
-                        className={`text-5xl md:text-6xl font-bold mt-3 ${
-                          darkMode ? "text-white" : "text-[#0f172a]"
-                        }`}
-                      >
-                        {" "}
-                        ₹{monthlyBudget.toLocaleString()}
-                      </h2>
-
-                      <p className="text-gray-500 dark:text-gray-500 mt-4 text-base md:text-lg">
-                        ₹{remainingBudget.toLocaleString()} remaining from this
-                        month&apos;s budget
-                      </p>
-                    </div>
-
-                    {/* RIGHT CIRCLE */}
-                    <div className="flex flex-col items-center justify-center mx-auto lg:mx-0">
-                      <div className="relative w-36 h-36">
-                        <svg
-                          className="w-full h-full -rotate-90"
-                          viewBox="0 0 100 100"
-                        >
-                          {/* Background Circle */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="42"
-                            strokeWidth="10"
-                            className="stroke-gray-200 dark:stroke-white/10 fill-none"
-                          />
-
-                          {/* Progress Circle */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="42"
-                            strokeWidth="10"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeDasharray={264}
-                            strokeDashoffset={264 - (264 * budgetUsage) / 100}
-                            stroke="url(#gradient)"
-                            className="transition-all duration-700"
-                          />
-
-                          {/* Gradient */}
-                          <defs>
-                            <linearGradient
-                              id="gradient"
-                              x1="0%"
-                              y1="0%"
-                              x2="100%"
-                              y2="0%"
-                            >
-                              <stop offset="0%" stopColor="#facc15" />
-
-                              <stop offset="50%" stopColor="#fb923c" />
-
-                              <stop offset="100%" stopColor="#ef4444" />
-                            </linearGradient>
-                          </defs>
-                        </svg>
-
-                        {/* CENTER TEXT */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span
-                            className={`text-3xl font-bold ${
-                              darkMode ? "text-white" : "text-[#0f172a]"
-                            }`}
-                          >
-                            {" "}
-                            {Math.round(budgetUsage)}%
-                          </span>
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-[3px] text-white/80">
+                            {budgetTone.label}
+                          </p>
+                          <p className="mt-2 text-sm font-semibold text-white/80">
+                            {budgetMonthLabel} Budget - Tracking {budgetPeriodLabel}
+                          </p>
+                          <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
+                            {budgetTone.title}
+                          </h2>
+                          <p className="mt-3 max-w-2xl text-base text-white/85 md:text-lg">
+                            {budgetTone.description}
+                          </p>
                         </div>
                       </div>
 
-                      <p className="mt-4 text-gray-500 dark:text-gray-400 font-medium text-lg">
-                        Budget Used
-                      </p>
+                      <div className="rounded-3xl bg-white px-6 py-5 text-center shadow-xl">
+                        <p className={`text-sm font-bold uppercase tracking-[2px] ${budgetTone.accent}`}>
+                          Used
+                        </p>
+                        <p className={`mt-1 text-4xl font-black ${budgetTone.accent}`}>
+                          {Math.round(budgetUsagePercent)}%
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  {/* SPENT */}
-                  <div className="mt-6">
-                    <p className="text-gray-500 dark:text-gray-400 mb-4 text-lg font-bold">
-                      Spent ₹{totalSpent.toLocaleString()}
-                    </p>
-
-                    {/* Progress Bar */}
+                  <div className="p-5 md:p-6">
                     <div
-                      className={`w-full h-4 rounded-full overflow-hidden border ${
+                      className={`rounded-2xl border p-4 ${
                         darkMode
-                          ? "bg-white/10 border-white/10"
-                          : "bg-gray-200 border-gray-300"
+                          ? "border-white/10 bg-black/20"
+                          : "border-white bg-white/80"
                       }`}
                     >
+                      <div className={`mb-3 flex flex-col gap-1 text-sm font-bold uppercase tracking-[2px] sm:flex-row sm:items-center sm:justify-between ${budgetTone.accent}`}>
+                        <span>
+                          {budgetState === "exceeded"
+                            ? "Monthly Budget Limit Crossed"
+                            : budgetState === "under"
+                              ? "Ahead Of Budget Pace"
+                              : "Budget Progress"}
+                        </span>
+                        <span>
+                          {budgetState === "exceeded"
+                            ? `Rs ${overBudgetAmount.toLocaleString()} extra spent`
+                            : budgetState === "under"
+                              ? `Planned till today: Rs ${Math.round(expectedSpendToDate).toLocaleString()}`
+                              : `Spent Rs ${totalSpent.toLocaleString()}`}
+                        </span>
+                      </div>
+
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 transition-all duration-700"
-                        style={{ width: `${budgetUsage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="my-5 border-t border-gray-100 dark:border-white/10"></div>
-
-                  {/* STATS */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {/* Daily Average */}
-                    <div
-                      className={`app-panel p-4 flex items-center gap-5 ${
-                        darkMode
-                          ? "app-panel-dark"
-                          : "app-panel-light"
-                      }`}
-                    >
-                      <div className="w-16 h-16 rounded-2xl bg-[#fff3d6] dark:bg-yellow-500/10 flex items-center justify-center shadow-sm">
-                        <span className="text-3xl">📈</span>
-                      </div>
-
-                      <div>
-                        <p className="text-gray-500 dark:text-gray-400 text-base">
-                          Daily Average
-                        </p>
-
-                        <h3 className="text-3xl font-bold text-orange-500 mt-1">
-                          ₹{Math.round(dailyAverage)}{" "}
-                        </h3>
+                        className={`h-4 overflow-hidden rounded-full border ${
+                          darkMode
+                            ? "border-white/10 bg-white/10"
+                            : "border-slate-100 bg-slate-100"
+                        }`}
+                      >
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${budgetTone.progress}`}
+                          style={{ width: `${budgetUsage}%` }}
+                        ></div>
                       </div>
                     </div>
 
-                    {/* Remaining */}
-                    <div
-                      className={`app-panel p-4 flex items-center gap-5 ${
-                        darkMode
-                          ? "app-panel-dark"
-                          : "app-panel-light"
-                      }`}
-                    >
-                      <div className="w-16 h-16 rounded-2xl bg-[#dff7e6] dark:bg-green-500/10 flex items-center justify-center shadow-sm">
-                        <span className="text-3xl">💰</span>
+                    <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
+                      <div
+                        className={`app-panel flex items-center gap-4 p-4 ${
+                          darkMode ? "app-panel-dark" : "app-panel-light"
+                        }`}
+                      >
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-2xl text-orange-500 dark:bg-orange-500/10">
+                          <FaChartLine />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Daily Average
+                          </p>
+                          <h3 className="mt-1 text-2xl font-bold text-orange-500">
+                            Rs {Math.round(dailyAverage)}
+                          </h3>
+                        </div>
                       </div>
 
-                      <div>
-                        <p className="text-gray-500 dark:text-gray-400 text-base">
-                          Remaining
-                        </p>
-
-                        <h3 className="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">
-                          ₹{remainingBudget.toLocaleString()}
-                        </h3>
+                      <div
+                        className={`app-panel flex items-center gap-4 p-4 ${
+                          darkMode ? "app-panel-dark" : "app-panel-light"
+                        }`}
+                      >
+                        <div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-2xl dark:bg-white/10 ${
+                          budgetState === "exceeded"
+                            ? "bg-red-100 text-red-500"
+                            : "bg-emerald-100 text-emerald-600"
+                        }`}>
+                          <FaWallet />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {budgetState === "exceeded" ? "Overspent" : "Remaining"}
+                          </p>
+                          <h3 className={`mt-1 text-2xl font-bold ${budgetTone.accent}`}>
+                            Rs {(budgetState === "exceeded" ? overBudgetAmount : remainingBudget).toLocaleString()}
+                          </h3>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Days Left */}
-                    <div
-                      className={`app-panel p-4 flex items-center gap-5 ${
-                        darkMode
-                          ? "app-panel-dark"
-                          : "app-panel-light"
-                      }`}
-                    >
-                      <div className="w-16 h-16 rounded-2xl bg-[#dbe8ff] dark:bg-blue-500/10 flex items-center justify-center shadow-sm">
-                        <span className="text-3xl">📅</span>
-                      </div>
-
-                      <div>
-                        <p className="text-gray-500 dark:text-gray-400 text-base">
-                          Days Left
-                        </p>
-
-                        <h3 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
-                          {daysLeft} Days
-                        </h3>
+                      <div
+                        className={`app-panel flex items-center gap-4 p-4 ${
+                          darkMode ? "app-panel-dark" : "app-panel-light"
+                        }`}
+                      >
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-2xl text-blue-500 dark:bg-blue-500/10">
+                          <FaCalendarAlt />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Days Left
+                          </p>
+                          <h3 className="mt-1 text-2xl font-bold text-blue-500">
+                            {daysLeft} Days
+                          </h3>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
+
               {/* ANALYTICS */}
 
               <div className="mt-6">

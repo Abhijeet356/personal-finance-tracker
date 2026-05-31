@@ -13,6 +13,7 @@ import {
   FaTrash,
   FaShieldAlt,
   FaCog,
+  FaRedoAlt,
 } from "react-icons/fa";
 
 import SecurityModal from "@/components/settings/SecurityModal";
@@ -27,6 +28,7 @@ import ProfileModal from "@/components/settings/ProfileModal";
 import { useTransactions } from "@/context/TransactionContext";
 
 import NotificationSettingsModal from "@/components/settings/NotificationSettingsModal";
+import RecurringModal from "@/components/settings/RecurringModal";
 
 export default function SettingsPage() {
   const { darkMode, setDarkMode } = useTheme();
@@ -40,6 +42,7 @@ export default function SettingsPage() {
   const [showBudgetModal, setShowBudgetModal] = useState(false);
 
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showRecurringModal, setShowRecurringModal] = useState(false);
 
   const {
     showFilters,
@@ -86,6 +89,18 @@ export default function SettingsPage() {
       gradient: "from-green-500 to-emerald-600",
       accent: "text-emerald-600 border-emerald-600 hover:bg-emerald-50",
       iconBg: "bg-emerald-600",
+    },
+
+    {
+      title: "Recurring Transactions",
+
+      description: "Automate rent, bills, subscriptions, and monthly income",
+
+      icon: <FaRedoAlt />,
+
+      gradient: "from-indigo-600 to-blue-600",
+      accent: "text-indigo-600 border-indigo-600 hover:bg-indigo-50",
+      iconBg: "bg-indigo-600",
     },
 
     {
@@ -198,6 +213,10 @@ export default function SettingsPage() {
                         setShowBudgetModal(true);
                       }
 
+                      if (card.title === "Recurring Transactions") {
+                        setShowRecurringModal(true);
+                      }
+
                       if (card.title === "Danger Zone") {
                         setShowResetModal(true);
                       }
@@ -281,6 +300,11 @@ export default function SettingsPage() {
       <BudgetModal
         isOpen={showBudgetModal}
         closeModal={() => setShowBudgetModal(false)}
+      />
+
+      <RecurringModal
+        isOpen={showRecurringModal}
+        closeModal={() => setShowRecurringModal(false)}
       />
 
       <ResetDataModal

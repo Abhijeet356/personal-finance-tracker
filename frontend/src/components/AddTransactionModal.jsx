@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import api from "@/lib/api";
 import { PAYMENT_METHODS } from "@/constants/paymentMethods";
+import useCategories from "@/hooks/useCategories";
 
 const getTodayInputDate = () => {
   const today = new Date();
@@ -25,8 +26,26 @@ const getInitialFormData = () => ({
 
 export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const { darkMode } = useTheme();
+  const { expenseCategories, incomeCategories, refreshCategories } =
+    useCategories();
   const [formData, setFormData] = useState(getInitialFormData);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryColor, setNewCategoryColor] = useState("#F97316");
+  const categoriesForType =
+    formData.type === "income" ? incomeCategories : expenseCategories;
+  const selectedCategory = categoriesForType.some(
+    (category) => category.name === formData.category,
+  )
+    ? formData.category
+    : categoriesForType[0]?.name || formData.category;
+
   const handleChange = (e) => {
+    if (e.target.name === "category" && e.target.value === "__add_category__") {
+      setShowCategoryForm(true);
+      return;
+    }
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -35,10 +54,41 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
 
   const resetForm = () => {
     setFormData(getInitialFormData());
+    setShowCategoryForm(false);
+    setNewCategoryName("");
+    setNewCategoryColor("#F97316");
   };
+
+  const handleCreateCategory = async () => {
+    const categoryName = newCategoryName.trim();
+
+    if (!categoryName) {
+      alert("Please enter a category name");
+      return;
+    }
+
+    try {
+      await api.post("/categories", {
+        name: categoryName,
+        type: formData.type,
+        color: newCategoryColor,
+      });
+
+      await refreshCategories();
+      setFormData((prev) => ({
+        ...prev,
+        category: categoryName,
+      }));
+      setNewCategoryName("");
+      setShowCategoryForm(false);
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to create category");
+    }
+  };
+
   const handleSubmit = async () => {
     if (
-      !formData.category ||
+      !selectedCategory ||
       !formData.amount ||
       !formData.date ||
       !formData.paymentMethod
@@ -51,7 +101,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const response = await api.post("/transactions", {
     amount: Number(formData.amount),
     type: formData.type,
-    category: formData.category,
+    category: selectedCategory,
     description: formData.notes,
     date: formData.date,
     paymentMethod: formData.paymentMethod,
@@ -150,6 +200,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                       setFormData((prev) => ({
                         ...prev,
                         type: "expense",
+                        category: expenseCategories[0]?.name || "Food",
                       }))
                     }
                     className={`app-button w-28 py-3 ${
@@ -169,6 +220,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
                       setFormData((prev) => ({
                         ...prev,
                         type: "income",
+                        category: incomeCategories[0]?.name || "Salary",
                       }))
                     }
                     className={`app-button w-28 py-3 ${
@@ -197,71 +249,78 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
 
                 <select
                   name="category"
-                  value={formData.category}
+                  value={selectedCategory}
                   onChange={handleChange}
                   className={`app-field ${
                     darkMode ? "app-field-dark" : "app-field-light"
                   }`}
                 >
+                  {categoriesForType.map((category) => (
+                    <option
+                      key={category._id || `${category.type}-${category.name}`}
+                      value={category.name}
+                      className={
+                        darkMode
+                          ? "bg-slate-800 text-white"
+                          : "bg-white text-black"
+                      }
+                    >
+                      {category.name}
+                    </option>
+                  ))}
                   <option
+                    value="__add_category__"
                     className={
                       darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
+                        ? "bg-slate-800 text-violet-300"
+                        : "bg-white text-violet-600"
                     }
                   >
-                    Food
-                  </option>
-
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Shopping
-                  </option>
-
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Bills
-                  </option>
-
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Entertainment
-                  </option>
-
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Travel
-                  </option>
-                  <option
-                    className={
-                      darkMode
-                        ? "bg-slate-800 text-white"
-                        : "bg-white text-black"
-                    }
-                  >
-                    Other
+                    + Add new category...
                   </option>
                 </select>
+
+                {showCategoryForm && (
+                  <div
+                    className={`app-panel mt-3 p-3 ${
+                      darkMode ? "app-panel-dark" : "app-panel-light"
+                    }`}
+                  >
+                    <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:items-center">
+                      <input
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        placeholder={`New ${formData.type} category`}
+                        className={`app-field py-3 ${
+                          darkMode ? "app-field-dark" : "app-field-light"
+                        }`}
+                      />
+
+                      <input
+                        type="color"
+                        value={newCategoryColor}
+                        onChange={(e) => setNewCategoryColor(e.target.value)}
+                        className="h-12 w-full cursor-pointer rounded-2xl border border-slate-300 bg-transparent p-1 sm:w-14"
+                        aria-label="Category color"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={handleCreateCategory}
+                        className="app-button app-button-primary h-12 px-4"
+                      >
+                        Create
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowCategoryForm(false)}
+                      className="mt-3 text-sm font-semibold text-slate-500 hover:text-violet-500"
+                    >
+                      Cancel new category
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* PAYMENT MODE */}

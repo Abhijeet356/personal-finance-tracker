@@ -43,6 +43,10 @@ export default function SetupPage() {
         "/auth/onboarding",
 
         {
+          name,
+          avatar: avatar || "",
+          currency,
+          financialGoal,
           currentBalance: Number(balance),
           monthlySalary: Number(salary),
           monthlyBudget: Number(budget),
@@ -55,14 +59,7 @@ export default function SetupPage() {
         },
       );
 
-      // OPTIONAL LOCAL STORAGE
-
-      const userData = {
-        ...response.data.user,
-        avatar,
-        currency,
-        financialGoal,
-      };
+      const userData = response.data.user;
 
       localStorage.setItem("user_setup", JSON.stringify(userData));
 

@@ -22,6 +22,21 @@ export const onboardingSchema = z.object({
     .number()
     .min(0, "Monthly budget cannot be negative")
     .optional(),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .optional(),
+  avatar: z
+    .string()
+    .max(2500000, "Profile image is too large")
+    .refine(
+      (value) => value === "" || value.startsWith("data:image/"),
+      "Profile image must be an image data URL",
+    )
+    .optional(),
+  currency: z.enum(["INR", "USD", "EUR", "GBP"]).optional(),
+  financialGoal: z.string().trim().min(1).max(80).optional(),
 });
 
 export const profileSchema = z
