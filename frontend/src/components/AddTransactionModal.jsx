@@ -127,7 +127,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 px-4 py-4 backdrop-blur-sm sm:items-center"
         >
           <motion.div
             initial={{
@@ -142,7 +142,7 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
               scale: 0.8,
               opacity: 0,
             }}
-            className={`app-surface w-full max-w-2xl p-8 md:p-10 backdrop-blur-2xl ${
+            className={`app-surface my-auto w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto p-5 backdrop-blur-2xl sm:p-8 md:p-10 ${
               darkMode ? "app-surface-dark" : "app-surface-light"
             }`}
           >

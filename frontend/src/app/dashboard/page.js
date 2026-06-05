@@ -298,7 +298,7 @@ export default function Dashboard() {
 
       {/* MAIN */}
 
-      <div className="flex-1 min-w-0 ml-[260px]">
+      <div className="flex-1 min-w-0 ml-[320px]">
         <Navbar />
 
         <div className="p-6 md:p-8">
