@@ -53,7 +53,6 @@ export function UserProvider({ children }) {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const mergedUser = mergeUserProfile(response.data.user, getStoredProfile());
 
       setUserData(mergedUser);

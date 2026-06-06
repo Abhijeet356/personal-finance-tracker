@@ -17,6 +17,9 @@ export default function FilterPanel({
 
   showFilters,
   setShowFilters,
+
+  dateFilter,
+setDateFilter,
 }) {
   const { darkMode } = useTheme();
 
@@ -41,10 +44,10 @@ export default function FilterPanel({
 
             <button
               onClick={() =>
-                setSortBy(sortBy === "newest" ? "default" : "newest")
-              }
+  setDateFilter(dateFilter === "today" ? "all" : "today")
+}
               className={`app-button px-4 py-2 ${
-                sortBy === "newest"
+                dateFilter === "today"
                   ? "app-button-primary"
                   : darkMode
                     ? "bg-slate-800 text-white hover:bg-slate-700"
@@ -58,11 +61,11 @@ export default function FilterPanel({
 
             <button
               onClick={() =>
-                setSortBy(sortBy === "oldest" ? "default" : "oldest")
+                setDateFilter(dateFilter === "week" ? "all" : "week")
               }
               className={`app-button px-4 py-2 ${
-                sortBy === "oldest"
-                  ? "bg-sky-600 text-white hover:bg-sky-700"
+                dateFilter === "week"
+                  ? "app-button-primary"
                   : darkMode
                     ? "bg-slate-800 text-white hover:bg-slate-700"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -75,10 +78,10 @@ export default function FilterPanel({
 
             <button
               onClick={() =>
-                setSortBy(sortBy === "highest" ? "default" : "highest")
+                setDateFilter(dateFilter === "month" ? "all" : "month")
               }
               className={`app-button px-4 py-2 ${
-                sortBy === "highest"
+                dateFilter === "month"
                   ? "bg-amber-500 text-slate-950 hover:bg-amber-400"
                   : darkMode
                     ? "bg-slate-800 text-white hover:bg-slate-700"
@@ -151,18 +154,59 @@ export default function FilterPanel({
                   darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
-                <option value="all">All Methods</option>
+                <option
+                  value="all"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  All Methods
+                </option>
 
-                <option value="upi">UPI</option>
+                <option
+                  value="upi"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  UPI
+                </option>
 
-                <option value="cash">Cash</option>
+                <option
+                  value="cash"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Cash
+                </option>
 
-                <option value="card">Card</option>
+                <option
+                  value="card"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Card
+                </option>
 
-                <option value="bank_transfer">Net Banking</option>
+                <option
+                  value="bank_transfer"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Net Banking
+                </option>
 
-                <option value="other">Other</option>
-
+                <option
+                  value="other"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Other
+                </option>
               </select>
             </div>
 
@@ -191,19 +235,68 @@ export default function FilterPanel({
                   darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
-                <option value="all">All Categories</option>
+                <option
+                  value="all"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  All Categories
+                </option>
 
-                <option value="Food">Food</option>
+                <option
+                  value="Food"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Food
+                </option>
 
-                <option value="Shopping">Shopping</option>
+                <option
+                  value="Shopping"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Shopping
+                </option>
 
-                <option value="Travel">Travel</option>
+                <option
+                  value="Travel"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Travel
+                </option>
 
-                <option value="Bills">Bills</option>
+                <option
+                  value="Bills"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Bills
+                </option>
 
-                <option value="Entertainment">Entertainment</option>
+                <option
+                  value="Entertainment"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Entertainment
+                </option>
 
-                <option value="Other">Other</option>
+                <option
+                  value="Other"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Other
+                </option>
               </select>
             </div>
 
@@ -228,15 +321,50 @@ export default function FilterPanel({
                   darkMode ? "app-field-dark" : "app-field-light"
                 }`}
               >
-                <option value="default">Default</option>
+                <option
+                  value="default"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Default
+                </option>
 
-                <option value="newest">Newest First</option>
+                <option
+                  value="newest"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Newest First
+                </option>
 
-                <option value="oldest">Oldest First</option>
+                <option
+                  value="oldest"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Oldest First
+                </option>
 
-                <option value="highest">Highest Amount</option>
+                <option
+                  value="highest"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Highest Amount
+                </option>
 
-                <option value="lowest">Lowest Amount</option>
+                <option
+                  value="lowest"
+                  className={
+                    darkMode ? "bg-slate-800 text-white" : "bg-white text-black"
+                  }
+                >
+                  Lowest Amount
+                </option>
               </select>
             </div>
           </div>
@@ -247,10 +375,10 @@ export default function FilterPanel({
             <button
               onClick={() => {
                 setFilterType("all");
-
+                setPaymentMethod("all");
                 setFilterCategory("all");
-
                 setSortBy("default");
+                setDateFilter("all");
               }}
               className="app-button app-button-danger px-6 py-3"
             >

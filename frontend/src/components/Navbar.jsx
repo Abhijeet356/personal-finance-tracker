@@ -27,8 +27,8 @@ export default function Navbar() {
   // SEARCH FUNCTION
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  setSearchQuery(e.target.value);
+};
 
   return (
     <div
@@ -50,6 +50,7 @@ export default function Navbar() {
 
           <input
             type="text"
+            autoComplete="off"
             placeholder="Search by category or payment method..."
             value={searchQuery}
             onChange={handleSearch}

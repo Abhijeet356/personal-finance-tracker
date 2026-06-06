@@ -14,6 +14,7 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
+import AddTransactionModal from "@/components/AddTransactionModal";
 export default function ExportPage() {
   const { darkMode } = useTheme();
 
@@ -26,6 +27,7 @@ export default function ExportPage() {
     setShowFilters,
     isModalOpen,
     setIsModalOpen,
+    addTransaction,
   } = useTransactions();
 
   const { userData } = useUser();
@@ -283,6 +285,20 @@ export default function ExportPage() {
           </div>
         </div>
       </div>
+      <AddTransactionModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSave={(transaction, currentBalance) => {
+                addTransaction(transaction);
+                addNotification({
+                  title: "Transaction Added",
+                  message: `${transaction.category} transaction of ₹${transaction.amount} added successfully.`,
+                  type: "transaction",
+                });
+      
+                setIsModalOpen(false);
+              }}
+            />
     </div>
   );
 }

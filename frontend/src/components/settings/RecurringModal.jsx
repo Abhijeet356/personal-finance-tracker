@@ -148,7 +148,11 @@ function RecurringModalContent({ closeModal }) {
             >
               Recurring Transactions
             </h1>
-            <p className={darkMode ? "mt-2 text-slate-400" : "mt-2 text-slate-600"}>
+            <p
+              className={
+                darkMode ? "mt-2 text-slate-400" : "mt-2 text-slate-600"
+              }
+            >
               Monthly bills and income are added automatically when due.
             </p>
           </div>
@@ -156,7 +160,9 @@ function RecurringModalContent({ closeModal }) {
 
         <div
           className={`mt-8 rounded-2xl border p-4 ${
-            darkMode ? "border-white/10 bg-white/5" : "border-slate-200 bg-slate-50"
+            darkMode
+              ? "border-white/10 bg-white/5"
+              : "border-slate-200 bg-slate-50"
           }`}
         >
           <div className="grid gap-4 md:grid-cols-3">
@@ -166,7 +172,11 @@ function RecurringModalContent({ closeModal }) {
                 setForm((prev) => ({ ...prev, title: e.target.value }))
               }
               placeholder="Name, e.g. Rent"
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             />
             <input
               type="number"
@@ -175,7 +185,11 @@ function RecurringModalContent({ closeModal }) {
                 setForm((prev) => ({ ...prev, amount: e.target.value }))
               }
               placeholder="Amount"
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             />
             <input
               type="date"
@@ -183,7 +197,11 @@ function RecurringModalContent({ closeModal }) {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, nextRunDate: e.target.value }))
               }
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             />
             <select
               value={form.type}
@@ -197,7 +215,11 @@ function RecurringModalContent({ closeModal }) {
                       : expenseCategories[0]?.name || "Rent",
                 }))
               }
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             >
               <option value="expense">Expense</option>
               <option value="income">Income</option>
@@ -207,7 +229,11 @@ function RecurringModalContent({ closeModal }) {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, category: e.target.value }))
               }
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             >
               {categoriesForType.map((category) => (
                 <option
@@ -223,7 +249,11 @@ function RecurringModalContent({ closeModal }) {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, paymentMethod: e.target.value }))
               }
-              className={`app-field ${darkMode ? "app-field-dark" : "app-field-light"}`}
+              className={`app-field ${
+                darkMode
+                  ? "app-field-dark bg-slate-800 text-white"
+                  : "app-field-light bg-white text-black"
+              }`}
             >
               <option value="upi">UPI</option>
               <option value="cash">Cash</option>
@@ -240,7 +270,11 @@ function RecurringModalContent({ closeModal }) {
             }
             placeholder="Description"
             rows={3}
-            className={`app-field mt-4 ${darkMode ? "app-field-dark" : "app-field-light"}`}
+            className={`app-field mt-4 ${
+              darkMode
+                ? "app-field-dark bg-slate-800 text-white"
+                : "app-field-light bg-white text-black"
+            }`}
           />
 
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -286,7 +320,8 @@ function RecurringModalContent({ closeModal }) {
                     {rule.title || rule.category}
                   </h2>
                   <p className="mt-1 text-sm text-slate-500">
-                    {rule.type} - {rule.category} - Rs {rule.amount.toLocaleString()}
+                    {rule.type} - {rule.category} - Rs{" "}
+                    {rule.amount.toLocaleString()}
                   </p>
                   <p className="mt-2 flex items-center gap-2 text-sm text-slate-500">
                     <FaCalendarAlt />

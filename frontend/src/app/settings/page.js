@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa";
 
 import SecurityModal from "@/components/settings/SecurityModal";
-
+import AddTransactionModal from "@/components/AddTransactionModal";
 import ResetDataModal from "@/components/settings/ResetDataModal";
 
 import BudgetModal from "@/components/settings/BudgetModal";
@@ -26,7 +26,7 @@ import { useTheme } from "@/context/ThemeContext";
 import ProfileModal from "@/components/settings/ProfileModal";
 
 import { useTransactions } from "@/context/TransactionContext";
-
+import { useNotifications } from "@/context/NotificationContext";
 import NotificationSettingsModal from "@/components/settings/NotificationSettingsModal";
 import RecurringModal from "@/components/settings/RecurringModal";
 
@@ -40,7 +40,7 @@ export default function SettingsPage() {
   const [showResetModal, setShowResetModal] = useState(false);
 
   const [showBudgetModal, setShowBudgetModal] = useState(false);
-
+  const { addNotification } = useNotifications();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showRecurringModal, setShowRecurringModal] = useState(false);
 
@@ -50,6 +50,7 @@ export default function SettingsPage() {
 
     isModalOpen,
     setIsModalOpen,
+    addTransaction,
   } = useTransactions();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
@@ -310,6 +311,21 @@ export default function SettingsPage() {
       <ResetDataModal
         isOpen={showResetModal}
         closeModal={() => setShowResetModal(false)}
+      />
+
+      <AddTransactionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={(transaction, currentBalance) => {
+          addTransaction(transaction);
+          addNotification({
+            title: "Transaction Added",
+            message: `${transaction.category} transaction of ₹${transaction.amount} added successfully.`,
+            type: "transaction",
+          });
+
+          setIsModalOpen(false);
+        }}
       />
     </div>
   );

@@ -6,42 +6,35 @@ const TransactionContext = createContext();
 
 export function TransactionProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
-
   const [showFilters, setShowFilters] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [filterType, setFilterType] = useState("all");
-
   const [filterCategory, setFilterCategory] = useState("all");
-
+  const [dateFilter, setDateFilter] = useState("all");
   const [paymentMethod, setPaymentMethod] = useState("all");
-
-  const [sortBy, setSortBy] = useState("newest");
-
+  const [sortBy, setSortBy] = useState("default");
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const token = localStorage.getItem("token");
 
-useEffect(() => {
-  const fetchTransactions = async () => {
-    const token = localStorage.getItem("token");
+      if (!token) return;
 
-    if (!token) return;
+      try {
+        const response = await api.get("/transactions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTransactions(response.data.transactions);
+      } catch (error) {
+        console.error("Failed to load transactions", error);
+      }
+    };
 
-    try {
-      const response = await api.get("/transactions", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTransactions(response.data.transactions);
-    } catch (error) {
-      console.error("Failed to load transactions", error);
-    }
-  };
-
-  fetchTransactions();
-}, []);  
+    fetchTransactions();
+  }, []);
 
   // SAVE
 
@@ -56,7 +49,42 @@ useEffect(() => {
       (item) => item.type === filterType,
     );
   }
+  // DATE FILTER
 
+  const today = new Date();
+
+  if (dateFilter === "today") {
+    filteredTransactions = filteredTransactions.filter((item) => {
+      const date = new Date(item.date);
+
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    });
+  }
+
+  if (dateFilter === "week") {
+    const weekStart = new Date(today);
+
+    weekStart.setDate(today.getDate() - today.getDay());
+
+    filteredTransactions = filteredTransactions.filter((item) => {
+      return new Date(item.date) >= weekStart;
+    });
+  }
+
+  if (dateFilter === "month") {
+    filteredTransactions = filteredTransactions.filter((item) => {
+      const date = new Date(item.date);
+
+      return (
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    });
+  }
   // CATEGORY
 
   if (filterCategory !== "all") {
@@ -138,6 +166,9 @@ useEffect(() => {
         setSearchQuery,
 
         addTransaction,
+
+        dateFilter,
+        setDateFilter,
       }}
     >
       {children}

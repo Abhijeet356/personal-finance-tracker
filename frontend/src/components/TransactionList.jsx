@@ -38,24 +38,22 @@ export default function TransactionList({
 
   const handleDelete = async (transaction) => {
     try {
+      // const response= ko hata dena ============
       const token = localStorage.getItem("token");
 
-      await api.delete(`/transactions/${transaction._id}`, {
+      const response = await api.delete(`/transactions/${transaction._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      setBalance(response.data.currentBalance);
+
       const updatedTransactions = transactions.filter(
         (item) => item._id !== transaction._id,
       );
 
       setTransactions(updatedTransactions);
-
-      // if (transaction.type === "expense") {
-      //   setBalance((prev) => prev + transaction.amount);
-      // } else {
-      //   setBalance((prev) => prev - transaction.amount);
-      // }
 
       setSelected(null);
     } catch (error) {
@@ -69,20 +67,6 @@ export default function TransactionList({
     const oldTransaction = transactions.find(
       (item) => item._id === selected._id,
     );
-
-    // if (oldTransaction.type === "expense") {
-    //   setBalance((prev) => prev + oldTransaction.amount);
-    // } else {
-    //   setBalance((prev) => prev - oldTransaction.amount);
-    // }
-
-    // APPLY NEW EFFECT
-
-    // if (selected.type === "expense") {
-    //   setBalance((prev) => prev - selected.amount);
-    // } else {
-    //   setBalance((prev) => prev + selected.amount);
-    // }
 
     try {
       const token = localStorage.getItem("token");
@@ -103,6 +87,7 @@ export default function TransactionList({
           },
         },
       );
+      setBalance(response.data.currentBalance);
     } catch (error) {
       console.error(error.response?.data);
       return;
@@ -174,7 +159,9 @@ export default function TransactionList({
             className={`app-panel flex justify-between items-center p-5 border-l-4 cursor-pointer ${
               item.type === "expense" ? "border-red-500" : "border-green-500"
             } ${
-              darkMode ? "app-panel-dark hover:bg-slate-700" : "app-panel-light hover:bg-slate-100"
+              darkMode
+                ? "app-panel-dark hover:bg-slate-700"
+                : "app-panel-light hover:bg-slate-100"
             }`}
           >
             {/* LEFT */}
@@ -288,8 +275,8 @@ export default function TransactionList({
                     }
                     className={`app-field w-36 px-4 py-2 text-right ${
                       darkMode
-                        ? "app-field-dark"
-                        : "app-field-light"
+                        ? "bg-slate-800 text-white"
+                        : "bg-white text-black"
                     }`}
                   />
                 ) : (
@@ -330,7 +317,9 @@ export default function TransactionList({
                       })
                     }
                     className={`app-field w-auto px-4 py-2 ${
-                      darkMode ? "app-field-dark" : "app-field-light"
+                      darkMode
+                        ? "bg-slate-800 text-white"
+                        : "bg-white text-black"
                     }`}
                   >
                     <option value="upi">UPI</option>
@@ -361,7 +350,9 @@ export default function TransactionList({
                       })
                     }
                     className={`app-field w-auto px-4 py-2 ${
-                      darkMode ? "app-field-dark" : "app-field-light"
+                      darkMode
+                        ? "bg-slate-800 text-white"
+                        : "bg-white text-black"
                     }`}
                   >
                     <option>Food</option>
@@ -394,7 +385,9 @@ export default function TransactionList({
                       })
                     }
                     className={`app-field resize-none ${
-                      darkMode ? "app-field-dark" : "app-field-light"
+                      darkMode
+                        ? "bg-slate-800 text-white"
+                        : "bg-white text-black"
                     }`}
                   />
                 ) : (

@@ -13,7 +13,8 @@ import {
 } from "react-icons/fa";
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 export default function Sidebar({
   openTransactionModal,
   toggleFilters,
@@ -26,10 +27,17 @@ export default function Sidebar({
     setFilterType,
     setPaymentMethod,
     setSortBy,
+    setSearchQuery,
   } = useTransactions();
   const { userData } = useUser();
   const pathname = usePathname();
-
+  const router = useRouter();
+  useEffect(() => {
+    if (pathname !== "/dashboard" && showFilters) {
+      resetFilters();
+      setShowFilters(false);
+    }
+  }, [pathname]);
   const resetFilters = () => {
     setFilterCategory("all");
     setFilterType("all");
@@ -38,10 +46,7 @@ export default function Sidebar({
   };
 
   const closeFilters = () => {
-    if (showFilters) {
-      resetFilters();
-      setShowFilters(false);
-    }
+    setSearchQuery("");
   };
 
   const handleDashboardClick = () => {
@@ -113,8 +118,14 @@ export default function Sidebar({
         {
           label: "Sort & Filter",
           icon: FaFilter,
-          active: showFilters,
-          onClick: () => toggleFilters?.(),
+          active: pathname === "/dashboard" && showFilters,
+          onClick: () => {
+            setShowFilters(true);
+            if (pathname !== "/dashboard") {
+              router.push("/dashboard");
+              return;
+            }
+          },
         },
       ],
     },
@@ -205,7 +216,9 @@ export default function Sidebar({
               <p className="mb-3 px-4 text-[11px] font-black uppercase tracking-[2px] text-violet-300/70">
                 {section.label}
               </p>
-              <div className="space-y-2">{section.items.map(renderNavItem)}</div>
+              <div className="space-y-2">
+                {section.items.map(renderNavItem)}
+              </div>
             </div>
           ))}
         </nav>
@@ -259,7 +272,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-4 rounded-2xl border border-red-400/20 bg-red-500/5 px-5 py-3.5 text-sm font-bold text-red-300 shadow-[0_14px_34px_rgba(127,29,29,0.16)] transition-all duration-300 hover:translate-x-1 hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-200"
+            className="flex w-full items-center gap-4 rounded-2xl border border-red-400/20 bg-red-500/5 px-5 py-3.5 text-sm font-bold text-red-500 shadow-[0_14px_34px_rgba(127,29,29,0.16)] transition-all duration-300 hover:translate-x-1 hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-200"
           >
             <FaSignOutAlt className="h-4 w-4" />
             <span>Logout</span>

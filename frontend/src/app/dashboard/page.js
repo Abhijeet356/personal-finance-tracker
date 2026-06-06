@@ -53,6 +53,9 @@ export default function Dashboard() {
     sortBy,
     setSortBy,
 
+    dateFilter,
+    setDateFilter,
+
     addTransaction,
   } = useTransactions();
 
@@ -91,9 +94,12 @@ export default function Dashboard() {
         );
 
         setUser(response.data.user);
-        setUserData(response.data.user);
+        setUserData((prev) => ({
+  ...prev,
+  ...response.data.user,
+  avatar: response.data.user.avatar || prev?.avatar || "",
+}));
         setBalance(response.data.user.currentBalance || 0);
-      
       } catch (error) {
         console.error(error);
         localStorage.removeItem("token");
@@ -114,6 +120,7 @@ export default function Dashboard() {
 
   // CURRENT MONTH + YEAR
 
+  const [searchQuery, setSearchQuery] = useState("");
   const today = new Date();
 
   const currentMonth = today.getMonth();
@@ -254,6 +261,10 @@ export default function Dashboard() {
   }[budgetState];
 
   useEffect(() => {
+    setSearchQuery("");
+  }, []);
+
+  useEffect(() => {
     if (!budgetSettings) return;
 
     const threshold = Number(budgetSettings?.warningThreshold || 80);
@@ -309,6 +320,8 @@ export default function Dashboard() {
               <FilterPanel
                 filterType={filterType}
                 setFilterType={setFilterType}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
                 filterCategory={filterCategory}
                 setFilterCategory={setFilterCategory}
                 paymentMethod={paymentMethod}
@@ -368,7 +381,8 @@ export default function Dashboard() {
                             {budgetTone.label}
                           </p>
                           <p className="mt-2 text-sm font-semibold text-white/80">
-                            {budgetMonthLabel} Budget - Tracking {budgetPeriodLabel}
+                            {budgetMonthLabel} Budget - Tracking{" "}
+                            {budgetPeriodLabel}
                           </p>
                           <h2 className="mt-3 text-4xl font-black leading-tight md:text-6xl">
                             {budgetTone.title}
@@ -380,10 +394,14 @@ export default function Dashboard() {
                       </div>
 
                       <div className="rounded-3xl bg-white px-6 py-5 text-center shadow-xl">
-                        <p className={`text-sm font-bold uppercase tracking-[2px] ${budgetTone.accent}`}>
+                        <p
+                          className={`text-sm font-bold uppercase tracking-[2px] ${budgetTone.accent}`}
+                        >
                           Used
                         </p>
-                        <p className={`mt-1 text-4xl font-black ${budgetTone.accent}`}>
+                        <p
+                          className={`mt-1 text-4xl font-black ${budgetTone.accent}`}
+                        >
                           {Math.round(budgetUsagePercent)}%
                         </p>
                       </div>
@@ -398,7 +416,9 @@ export default function Dashboard() {
                           : "border-white bg-white/80"
                       }`}
                     >
-                      <div className={`mb-3 flex flex-col gap-1 text-sm font-bold uppercase tracking-[2px] sm:flex-row sm:items-center sm:justify-between ${budgetTone.accent}`}>
+                      <div
+                        className={`mb-3 flex flex-col gap-1 text-sm font-bold uppercase tracking-[2px] sm:flex-row sm:items-center sm:justify-between ${budgetTone.accent}`}
+                      >
                         <span>
                           {budgetState === "exceeded"
                             ? "Monthly Budget Limit Crossed"
@@ -453,19 +473,29 @@ export default function Dashboard() {
                           darkMode ? "app-panel-dark" : "app-panel-light"
                         }`}
                       >
-                        <div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-2xl dark:bg-white/10 ${
-                          budgetState === "exceeded"
-                            ? "bg-red-100 text-red-500"
-                            : "bg-emerald-100 text-emerald-600"
-                        }`}>
+                        <div
+                          className={`flex h-14 w-14 items-center justify-center rounded-2xl text-2xl dark:bg-white/10 ${
+                            budgetState === "exceeded"
+                              ? "bg-red-100 text-red-500"
+                              : "bg-emerald-100 text-emerald-600"
+                          }`}
+                        >
                           <FaWallet />
                         </div>
                         <div>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {budgetState === "exceeded" ? "Overspent" : "Remaining"}
+                            {budgetState === "exceeded"
+                              ? "Overspent"
+                              : "Remaining"}
                           </p>
-                          <h3 className={`mt-1 text-2xl font-bold ${budgetTone.accent}`}>
-                            Rs {(budgetState === "exceeded" ? overBudgetAmount : remainingBudget).toLocaleString()}
+                          <h3
+                            className={`mt-1 text-2xl font-bold ${budgetTone.accent}`}
+                          >
+                            Rs{" "}
+                            {(budgetState === "exceeded"
+                              ? overBudgetAmount
+                              : remainingBudget
+                            ).toLocaleString()}
                           </h3>
                         </div>
                       </div>
@@ -532,15 +562,13 @@ export default function Dashboard() {
 
                     {/* Divider */}
 
-<div className="my-7 border-t-2 border-gray-600 dark:border-gray-500/50"></div>
+                    <div className="my-7 border-t-2 border-gray-600 dark:border-gray-500/50"></div>
                     {/* Feature Cards */}
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                       <div
                         className={`app-panel p-4 flex items-center gap-5 ${
-                          darkMode
-                            ? "app-panel-dark"
-                            : "app-panel-light"
+                          darkMode ? "app-panel-dark" : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#fff3d6] dark:bg-yellow-500/10 flex items-center justify-center shadow-sm">
@@ -560,9 +588,7 @@ export default function Dashboard() {
 
                       <div
                         className={`app-panel p-4 flex items-center gap-5 ${
-                          darkMode
-                            ? "app-panel-dark"
-                            : "app-panel-light"
+                          darkMode ? "app-panel-dark" : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#dff7e6] dark:bg-green-500/10 flex items-center justify-center shadow-sm">
@@ -582,9 +608,7 @@ export default function Dashboard() {
 
                       <div
                         className={`app-panel p-4 flex items-center gap-5 ${
-                          darkMode
-                            ? "app-panel-dark"
-                            : "app-panel-light"
+                          darkMode ? "app-panel-dark" : "app-panel-light"
                         }`}
                       >
                         <div className="w-16 h-16 rounded-2xl bg-[#dbe8ff] dark:bg-blue-500/10 flex items-center justify-center shadow-sm">

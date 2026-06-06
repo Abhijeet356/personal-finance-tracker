@@ -151,6 +151,7 @@ export default function SecurityModal({ isOpen, closeModal }) {
 
                 <input
                   type="password"
+                  autoComplete="new-password"
                   value={item.value}
                   onChange={(e) => item.setter(e.target.value)}
                   placeholder={item.label}
