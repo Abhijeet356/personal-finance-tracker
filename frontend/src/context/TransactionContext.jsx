@@ -4,6 +4,31 @@ import { createContext, useContext, useEffect, useState } from "react";
 import api from "@/lib/api";
 const TransactionContext = createContext();
 
+const getTimestamp = (value) => {
+  const time = value ? new Date(value).getTime() : 0;
+
+  return Number.isNaN(time) ? 0 : time;
+};
+
+const compareTransactionsNewestFirst = (a, b) => {
+  const dateDiff = getTimestamp(b.date) - getTimestamp(a.date);
+
+  if (dateDiff !== 0) {
+    return dateDiff;
+  }
+
+  const createdAtDiff = getTimestamp(b.createdAt) - getTimestamp(a.createdAt);
+
+  if (createdAtDiff !== 0) {
+    return createdAtDiff;
+  }
+
+  return String(b._id || b.id || "").localeCompare(String(a._id || a.id || ""));
+};
+
+const sortTransactionsNewestFirst = (items) =>
+  [...items].sort(compareTransactionsNewestFirst);
+
 export function TransactionProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -27,7 +52,7 @@ export function TransactionProvider({ children }) {
             Authorization: `Bearer ${token}`,
           },
         });
-        setTransactions(response.data.transactions);
+        setTransactions(sortTransactionsNewestFirst(response.data.transactions));
       } catch (error) {
         console.error("Failed to load transactions", error);
       }
@@ -40,7 +65,7 @@ export function TransactionProvider({ children }) {
 
   // FILTERS
 
-  let filteredTransactions = [...transactions];
+  let filteredTransactions = sortTransactionsNewestFirst(transactions);
 
   // TYPE
 
@@ -115,7 +140,7 @@ export function TransactionProvider({ children }) {
   // SORT
 
   if (sortBy === "newest") {
-    filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    filteredTransactions.sort(compareTransactionsNewestFirst);
   }
 
   if (sortBy === "oldest") {
@@ -133,7 +158,7 @@ export function TransactionProvider({ children }) {
   // ADD TRANSACTION
 
   const addTransaction = (transaction) => {
-    setTransactions((prev) => [transaction, ...prev]);
+    setTransactions((prev) => sortTransactionsNewestFirst([transaction, ...prev]));
   };
 
   return (

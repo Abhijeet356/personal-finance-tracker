@@ -120,7 +120,6 @@ export default function Dashboard() {
 
   // CURRENT MONTH + YEAR
 
-  const [searchQuery, setSearchQuery] = useState("");
   const today = new Date();
 
   const currentMonth = today.getMonth();
@@ -259,10 +258,6 @@ export default function Dashboard() {
       accent: "text-sky-600",
     },
   }[budgetState];
-
-  useEffect(() => {
-    setSearchQuery("");
-  }, []);
 
   useEffect(() => {
     if (!budgetSettings) return;

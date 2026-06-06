@@ -3,17 +3,16 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
-import { useUser } from "@/context/UserContext";
+import { motion } from "framer-motion";
 
 import {
   FaUser,
-  FaMoon,
   FaBell,
   FaWallet,
   FaTrash,
   FaShieldAlt,
-  FaCog,
   FaRedoAlt,
+  FaChevronRight,
 } from "react-icons/fa";
 
 import SecurityModal from "@/components/settings/SecurityModal";
@@ -31,9 +30,7 @@ import NotificationSettingsModal from "@/components/settings/NotificationSetting
 import RecurringModal from "@/components/settings/RecurringModal";
 
 export default function SettingsPage() {
-  const { darkMode, setDarkMode } = useTheme();
-
-  const { userData } = useUser();
+  const { darkMode } = useTheme();
 
   const [showSecurityModal, setShowSecurityModal] = useState(false);
 
@@ -59,63 +56,96 @@ export default function SettingsPage() {
     {
       title: "Profile",
 
-      description: "Manage your account details and profile",
+      description: "Manage your account details and profile information",
 
       icon: <FaUser />,
 
-      gradient: "from-violet-600 to-purple-700",
-      accent: "text-violet-600 border-violet-600 hover:bg-violet-50",
-      iconBg: "bg-violet-600",
+      action: "profile",
+      accent: "violet",
+      iconBg: "from-violet-600 to-purple-700",
+      leftBorder: "border-l-violet-500",
+      button:
+        "bg-violet-500/10 text-violet-600 hover:bg-violet-600 hover:text-white hover:shadow-[0_12px_28px_rgba(124,58,237,0.28)]",
     },
 
     {
       title: "Notifications",
 
-      description: "Manage reminders and notifications",
+      description: "Manage your notification preferences and reminders",
 
       icon: <FaBell />,
 
-      gradient: "from-orange-500 to-amber-500",
-      accent: "text-orange-500 border-orange-500 hover:bg-orange-50",
-      iconBg: "bg-orange-500",
+      action: "notifications",
+      iconBg: "from-orange-500 to-amber-500",
+      leftBorder: "border-l-orange-500",
+      button:
+        "bg-orange-500/10 text-orange-600 hover:bg-orange-500 hover:text-white hover:shadow-[0_12px_28px_rgba(249,115,22,0.28)]",
     },
 
     {
       title: "Financial Settings",
 
-      description: "Set monthly limits and financial goals",
+      description: "Set monthly limits, budget goals and financial preferences",
 
       icon: <FaWallet />,
 
-      gradient: "from-green-500 to-emerald-600",
-      accent: "text-emerald-600 border-emerald-600 hover:bg-emerald-50",
-      iconBg: "bg-emerald-600",
+      action: "financial",
+      iconBg: "from-emerald-500 to-green-600",
+      leftBorder: "border-l-emerald-500",
+      button:
+        "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:shadow-[0_12px_28px_rgba(16,185,129,0.28)]",
     },
 
     {
       title: "Recurring Transactions",
 
-      description: "Automate rent, bills, subscriptions, and monthly income",
+      description: "Manage subscriptions, bills and recurring payments",
 
       icon: <FaRedoAlt />,
 
-      gradient: "from-indigo-600 to-blue-600",
-      accent: "text-indigo-600 border-indigo-600 hover:bg-indigo-50",
-      iconBg: "bg-indigo-600",
+      action: "recurring",
+      iconBg: "from-indigo-600 to-violet-600",
+      leftBorder: "border-l-indigo-500",
+      button:
+        "bg-indigo-500/10 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:shadow-[0_12px_28px_rgba(79,70,229,0.28)]",
     },
 
     {
       title: "Privacy & Security",
 
-      description: "Control app privacy and security settings",
+      description: "Control app privacy settings, password and security preferences",
 
       icon: <FaShieldAlt />,
 
-      gradient: "from-blue-500 to-cyan-600",
-      accent: "text-sky-600 border-sky-600 hover:bg-sky-50",
-      iconBg: "bg-sky-600",
+      action: "security",
+      iconBg: "from-sky-500 to-blue-600",
+      leftBorder: "border-l-sky-500",
+      button:
+        "bg-sky-500/10 text-sky-600 hover:bg-sky-500 hover:text-white hover:shadow-[0_12px_28px_rgba(14,165,233,0.28)]",
     },
   ];
+
+  const openSettingsCard = (action) => {
+    if (action === "profile") {
+      setShowProfileModal(true);
+    }
+
+    if (action === "notifications") {
+      setShowNotificationModal(true);
+    }
+
+    if (action === "security") {
+      setShowSecurityModal(true);
+    }
+
+    if (action === "financial") {
+      setShowBudgetModal(true);
+    }
+
+    if (action === "recurring") {
+      setShowRecurringModal(true);
+    }
+  };
 
   return (
     <div
@@ -137,12 +167,17 @@ export default function SettingsPage() {
       <div className="flex-1 min-w-0 ml-[320px]">
         <Navbar />
 
-        <div className="p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="p-6 md:p-8"
+        >
           {/* HEADER */}
 
-          <div className="mb-10">
+          <div className="mb-8 md:mb-10">
             <h1
-              className={`text-5xl font-bold ${
+              className={`text-4xl font-black tracking-tight md:text-5xl ${
                 darkMode ? "text-white" : "text-black"
               }`}
             >
@@ -154,92 +189,55 @@ export default function SettingsPage() {
                 darkMode ? "text-slate-400" : "text-slate-600"
               }`}
             >
-              Manage your account, appearance, and preferences
+              Manage your account, preferences, and application settings.
             </p>
           </div>
 
           {/* SETTINGS GRID */}
 
-          <div className="grid xl:grid-cols-2 gap-8">
+          <div className="grid gap-6 xl:grid-cols-2 xl:gap-8">
             {settingsCards.map((card, index) => (
               <div
                 key={index}
-                className={`app-surface relative overflow-hidden p-8 ${
-                  darkMode ? "app-surface-dark" : "app-surface-light"
+                className={`group relative overflow-hidden rounded-[22px] border border-l-4 ${card.leftBorder} p-6 shadow-[0_18px_45px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(15,23,42,0.14)] md:p-7 ${
+                  darkMode
+                    ? "border-white/10 bg-white/[0.06] text-white backdrop-blur-xl"
+                    : "border-slate-200 bg-white text-slate-950"
                 }`}
               >
-                {/* ICON */}
+                <div className="grid min-h-[120px] grid-cols-[auto_1fr] gap-5 pr-0 sm:pr-36">
+                  <div
+                    className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${card.iconBg} text-2xl text-white shadow-lg`}
+                  >
+                    {card.icon}
+                  </div>
 
-                <div
-                  className={`w-20 h-20 rounded-3xl ${card.iconBg} text-white text-4xl flex items-center justify-center shadow-lg`}
-                >
-                  {card.icon}
+                  <div>
+                    <h2
+                      className={`text-2xl font-black ${
+                        darkMode ? "text-white" : "text-slate-950"
+                      }`}
+                    >
+                      {card.title}
+                    </h2>
+
+                    <p
+                      className={`mt-3 max-w-md text-base leading-7 ${
+                        darkMode ? "text-slate-400" : "text-slate-600"
+                      }`}
+                    >
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
 
-                {/* TEXT */}
-
-                <h2
-                  className={`mt-8 text-3xl font-bold ${
-                    darkMode ? "text-white" : "text-black"
-                  }`}
-                >
-                  {card.title}
-                </h2>
-
-                <p
-                  className={`mt-4 text-lg leading-relaxed ${
-                    darkMode ? "text-slate-400" : "text-slate-600"
-                  }`}
-                >
-                  {card.description}
-                </p>
-
-                {/* BUTTON */}
-                <div className="absolute top-8 right-8">
+                <div className="mt-6 flex justify-end sm:absolute sm:right-7 sm:top-1/2 sm:mt-0 sm:-translate-y-1/2">
                   <button
-                    onClick={() => {
-                      if (card.title === "Profile") {
-                        setShowProfileModal(true);
-                      }
-
-                      if (card.title === "Notifications") {
-                        setShowNotificationModal(true);
-                      }
-
-                      if (card.title === "Privacy & Security") {
-                        setShowSecurityModal(true);
-                      }
-
-                      if (card.title === "Financial Settings") {
-                        setShowBudgetModal(true);
-                      }
-
-                      if (card.title === "Recurring Transactions") {
-                        setShowRecurringModal(true);
-                      }
-
-                      if (card.title === "Danger Zone") {
-                        setShowResetModal(true);
-                      }
-                    }}
-                    className={`
-      w-24 h-24
-      border-2
-      flex
-      flex-col
-      items-center
-      justify-center
-      gap-3
-
-      transition-all
-      duration-300
-
-      ${card.accent}
-   `}
+                    onClick={() => openSettingsCard(card.action)}
+                    className={`inline-flex items-center justify-center gap-3 rounded-full px-6 py-3 text-sm font-black transition-all duration-300 ${card.button}`}
                   >
-                    <FaCog className="text-2xl" />
-
-                    <span className="font-bold text-lg">Open</span>
+                    <span>Open</span>
+                    <FaChevronRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
                 </div>
               </div>
@@ -249,38 +247,41 @@ export default function SettingsPage() {
           {/* DANGER ZONE */}
 
           <div
-            className={`app-surface mt-12 p-8 ${
+            className={`mt-12 rounded-[22px] border p-6 shadow-[0_20px_50px_rgba(127,29,29,0.08)] md:p-8 ${
               darkMode
-                ? "bg-red-500/10 border-red-500/20"
-                : "bg-red-50 border-red-200"
+                ? "border-red-500/25 bg-red-500/10"
+                : "border-red-200 bg-gradient-to-br from-red-50 to-white"
             }`}
           >
-            <div className="flex items-center gap-5">
-              <div className="w-20 h-20 rounded-3xl bg-red-500 text-white text-4xl flex items-center justify-center">
+            <div className="grid gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-red-500 to-rose-600 text-4xl text-white shadow-[0_18px_34px_rgba(239,68,68,0.32)]">
                 <FaTrash />
               </div>
 
               <div>
-                <h1 className="text-3xl font-bold text-red-500">Danger Zone</h1>
+                <h1 className="text-3xl font-black text-red-500">
+                  Danger Zone
+                </h1>
 
                 <p
-                  className={`mt-2 ${
+                  className={`mt-3 max-w-3xl text-base leading-7 ${
                     darkMode ? "text-slate-300" : "text-slate-700"
                   }`}
                 >
-                  Reset all app data and transactions permanently
+                  Permanently delete your account and all your data. This action
+                  cannot be undone.
                 </p>
               </div>
-            </div>
 
-            <button
-              onClick={() => setShowResetModal(true)}
-              className="app-button app-button-danger mt-8 px-8 py-4 text-lg"
-            >
-              Reset Application Data
-            </button>
+              <button
+                onClick={() => setShowResetModal(true)}
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-rose-600 px-8 py-4 text-base font-black text-white shadow-[0_14px_34px_rgba(220,38,38,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_42px_rgba(220,38,38,0.34)]"
+              >
+                Reset Application Data
+              </button>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <ProfileModal

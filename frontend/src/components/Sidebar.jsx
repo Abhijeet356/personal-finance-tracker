@@ -14,7 +14,7 @@ import {
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 export default function Sidebar({
   openTransactionModal,
   toggleFilters,
@@ -32,18 +32,20 @@ export default function Sidebar({
   const { userData } = useUser();
   const pathname = usePathname();
   const router = useRouter();
+
+  const resetFilters = useCallback(() => {
+    setFilterCategory("all");
+    setFilterType("all");
+    setPaymentMethod("all");
+    setSortBy("newest");
+  }, [setFilterCategory, setFilterType, setPaymentMethod, setSortBy]);
+
   useEffect(() => {
     if (pathname !== "/dashboard" && showFilters) {
       resetFilters();
       setShowFilters(false);
     }
-  }, [pathname]);
-  const resetFilters = () => {
-    setFilterCategory("all");
-    setFilterType("all");
-    setPaymentMethod("all");
-    setSortBy("newest");
-  };
+  }, [pathname, resetFilters, setShowFilters, showFilters]);
 
   const closeFilters = () => {
     setSearchQuery("");

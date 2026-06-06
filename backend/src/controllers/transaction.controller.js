@@ -64,7 +64,11 @@ export const createTransaction = async (req, res, next) => {
 export const getTransactions = async (req, res, next) => {
   try {
     const filter = buildTransactionQuery(req.user._id, req.query);
-    const transactions = await Transaction.find(filter).sort({ date: -1 });
+    const transactions = await Transaction.find(filter).sort({
+      date: -1,
+      createdAt: -1,
+      _id: -1,
+    });
 
     res.status(200).json({
       success: true,
