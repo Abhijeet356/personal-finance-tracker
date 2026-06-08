@@ -1,48 +1,36 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-
 const NotificationContext = createContext();
-
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState(() => {
     if (typeof window === "undefined") return [];
-
     const saved = localStorage.getItem("notifications");
     return saved ? JSON.parse(saved) : [];
   });
 
   // SAVE
-
   useEffect(() => {
     localStorage.setItem(
       "notifications",
-
       JSON.stringify(notifications),
     );
   }, [notifications]);
 
   // ADD
-
   const addNotification = ({ title, message, type = "general" }) => {
     // LOAD SETTINGS
-
     const savedSettings = localStorage.getItem("notification_settings");
-
     const settings = savedSettings
       ? JSON.parse(savedSettings)
       : {
           transactions: true,
-
           exports: true,
-
           email: false,
-
           push: true,
         };
 
     // BLOCK IF DISABLED
-
     if (type === "transaction" && !settings.transactions) {
       return;
     }
@@ -53,18 +41,12 @@ export const NotificationProvider = ({ children }) => {
 
     const newNotification = {
       id: Date.now(),
-
       title,
-
       message,
-
       type,
-
       read: false,
-
       time: new Date().toLocaleString(),
     };
-
     setNotifications((prev) => [newNotification, ...prev]);
   };
 
@@ -84,7 +66,6 @@ export const NotificationProvider = ({ children }) => {
   };
 
   // CLEAR
-
   const clearNotifications = () => {
     setNotifications([]);
   };

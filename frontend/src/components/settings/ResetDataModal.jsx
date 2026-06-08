@@ -11,13 +11,10 @@ export default function ResetDataModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
   const router = useRouter();
   const { addNotification } = useNotifications();
-
   const [password, setPassword] = useState("");
-
   const [confirmation, setConfirmation] = useState("");
 
   // RESET
-
   const handleReset = async () => {
     if (confirmation !== "DELETE MY DATA") {
       alert("Confirmation text incorrect");
@@ -26,7 +23,6 @@ export default function ResetDataModal({ isOpen, closeModal }) {
 
     try {
       const token = localStorage.getItem("token");
-
       await api.delete("/auth/account", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,7 +34,6 @@ export default function ResetDataModal({ isOpen, closeModal }) {
       window.location.href = "/";
     } catch (error) {
       console.error(error);
-
       alert("Failed to delete account");
     }
   };
@@ -84,7 +79,6 @@ export default function ResetDataModal({ isOpen, closeModal }) {
         </div>
 
         {/* WARNING */}
-
         <div
           className={`app-panel mt-8 p-6 flex gap-4 ${
             darkMode
@@ -96,7 +90,6 @@ export default function ResetDataModal({ isOpen, closeModal }) {
 
           <div>
             <h2 className="text-xl font-bold text-red-500">Warning</h2>
-
             <p
               className={`mt-2 ${
                 darkMode ? "text-slate-300" : "text-slate-700"

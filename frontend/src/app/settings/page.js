@@ -4,26 +4,13 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useState } from "react";
 import { motion } from "framer-motion";
-
-import {
-  FaUser,
-  FaBell,
-  FaWallet,
-  FaTrash,
-  FaShieldAlt,
-  FaRedoAlt,
-  FaChevronRight,
-} from "react-icons/fa";
-
+import {FaUser,FaBell,FaWallet,FaTrash,FaShieldAlt,FaRedoAlt,FaChevronRight,} from "react-icons/fa";
 import SecurityModal from "@/components/settings/SecurityModal";
 import AddTransactionModal from "@/components/AddTransactionModal";
 import ResetDataModal from "@/components/settings/ResetDataModal";
-
 import BudgetModal from "@/components/settings/BudgetModal";
-
 import { useTheme } from "@/context/ThemeContext";
 import ProfileModal from "@/components/settings/ProfileModal";
-
 import { useTransactions } from "@/context/TransactionContext";
 import { useNotifications } from "@/context/NotificationContext";
 import NotificationSettingsModal from "@/components/settings/NotificationSettingsModal";
@@ -31,11 +18,8 @@ import RecurringModal from "@/components/settings/RecurringModal";
 
 export default function SettingsPage() {
   const { darkMode } = useTheme();
-
   const [showSecurityModal, setShowSecurityModal] = useState(false);
-
   const [showResetModal, setShowResetModal] = useState(false);
-
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const { addNotification } = useNotifications();
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -44,84 +28,62 @@ export default function SettingsPage() {
   const {
     showFilters,
     setShowFilters,
-
     isModalOpen,
     setIsModalOpen,
     addTransaction,
   } = useTransactions();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
-
   const settingsCards = [
     {
       title: "Profile",
-
       description: "Manage your account details and profile information",
-
       icon: <FaUser />,
-
       action: "profile",
       accent: "violet",
       iconBg: "from-violet-600 to-purple-700",
       leftBorder: "border-l-violet-500",
-      button:
-        "bg-violet-500/10 text-violet-600 hover:bg-violet-600 hover:text-white hover:shadow-[0_12px_28px_rgba(124,58,237,0.28)]",
+      button: "bg-violet-500/10 text-violet-600 hover:bg-violet-600 hover:text-white hover:shadow-[0_12px_28px_rgba(124,58,237,0.28)]",
     },
 
     {
       title: "Notifications",
-
       description: "Manage your notification preferences and reminders",
-
       icon: <FaBell />,
-
       action: "notifications",
       iconBg: "from-orange-500 to-amber-500",
       leftBorder: "border-l-orange-500",
-      button:
-        "bg-orange-500/10 text-orange-600 hover:bg-orange-500 hover:text-white hover:shadow-[0_12px_28px_rgba(249,115,22,0.28)]",
+      button: "bg-orange-500/10 text-orange-600 hover:bg-orange-500 hover:text-white hover:shadow-[0_12px_28px_rgba(249,115,22,0.28)]",
     },
 
     {
       title: "Financial Settings",
-
       description: "Set monthly limits, budget goals and financial preferences",
-
       icon: <FaWallet />,
-
       action: "financial",
       iconBg: "from-emerald-500 to-green-600",
       leftBorder: "border-l-emerald-500",
-      button:
-        "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:shadow-[0_12px_28px_rgba(16,185,129,0.28)]",
+      button:"bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:shadow-[0_12px_28px_rgba(16,185,129,0.28)]",
     },
 
     {
       title: "Recurring Transactions",
-
       description: "Manage subscriptions, bills and recurring payments",
-
       icon: <FaRedoAlt />,
-
       action: "recurring",
       iconBg: "from-indigo-600 to-violet-600",
       leftBorder: "border-l-indigo-500",
-      button:
-        "bg-indigo-500/10 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:shadow-[0_12px_28px_rgba(79,70,229,0.28)]",
+      button: "bg-indigo-500/10 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:shadow-[0_12px_28px_rgba(79,70,229,0.28)]",
     },
 
     {
       title: "Privacy & Security",
-
       description: "Control app privacy settings, password and security preferences",
-
       icon: <FaShieldAlt />,
-
       action: "security",
       iconBg: "from-sky-500 to-blue-600",
       leftBorder: "border-l-sky-500",
-      button:
-        "bg-sky-500/10 text-sky-600 hover:bg-sky-500 hover:text-white hover:shadow-[0_12px_28px_rgba(14,165,233,0.28)]",
+      button: "bg-sky-500/10 text-sky-600 hover:bg-sky-500 hover:text-white hover:shadow-[0_12px_28px_rgba(14,165,233,0.28)]",
     },
   ];
 

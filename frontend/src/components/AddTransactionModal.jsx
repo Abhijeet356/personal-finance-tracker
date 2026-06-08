@@ -10,7 +10,6 @@ import useCategories from "@/hooks/useCategories";
 const getTodayInputDate = () => {
   const today = new Date();
   const timezoneOffset = today.getTimezoneOffset() * 60000;
-
   return new Date(today.getTime() - timezoneOffset).toISOString().split("T")[0];
 };
 
@@ -26,14 +25,12 @@ const getInitialFormData = () => ({
 
 export default function AddTransactionModal({ isOpen, onClose, onSave }) {
   const { darkMode } = useTheme();
-  const { expenseCategories, incomeCategories, refreshCategories } =
-    useCategories();
+  const { expenseCategories, incomeCategories, refreshCategories } = useCategories();
   const [formData, setFormData] = useState(getInitialFormData);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryColor, setNewCategoryColor] = useState("#F97316");
-  const categoriesForType =
-    formData.type === "income" ? incomeCategories : expenseCategories;
+  const categoriesForType = formData.type === "income" ? incomeCategories : expenseCategories;
   const selectedCategory = categoriesForType.some(
     (category) => category.name === formData.category,
   )
@@ -116,7 +113,6 @@ export default function AddTransactionModal({ isOpen, onClose, onSave }) {
     JSON.stringify(error.response?.data, null, 2)
   );
 }
-
     setFormData(getInitialFormData());
   };
 

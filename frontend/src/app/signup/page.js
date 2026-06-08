@@ -103,7 +103,6 @@ export default function Signup() {
           </div>
 
           {/* EMAIL */}
-
           <div className="flex items-center border border-gray-300 shadow-sm rounded-2xl px-5 py-4 mb-5">
             <FaEnvelope className="text-gray-400 text-lg mr-4" />
 
@@ -117,7 +116,6 @@ export default function Signup() {
           </div>
 
           {/* PASSWORD */}
-
           <div className="flex items-center border border-gray-300 shadow-sm rounded-2xl px-5 py-4 mb-5">
             <FaLock className="text-gray-400 text-lg mr-4" />
 
@@ -131,7 +129,6 @@ export default function Signup() {
           </div>
 
           {/* CONFIRM PASSWORD */}
-
           <div className="flex items-center border border-gray-300 shadow-sm rounded-2xl px-5 py-4 mb-6">
             <FaLock className="text-gray-400 text-lg mr-4" />
 
@@ -145,7 +142,6 @@ export default function Signup() {
           </div>
 
           {/* TERMS */}
-
           <div className="flex items-center gap-3 mb-7">
             <input
               type="checkbox"
@@ -158,21 +154,13 @@ export default function Signup() {
               I agree to Terms & Conditions
             </span>
           </div>
-
           {/* SIGNUP BUTTON */}
 
           <button
             onClick={handleSignup}
-            className="
-      w-full py-4 rounded-2xl
-      bg-gradient-to-r from-fuchsia-600 via-purple-600 to-violet-500
-      text-white text-xl font-semibold
-      flex items-center justify-center gap-3
-      shadow-[0_10px_30px_rgba(168,85,247,0.45)]
-      hover:scale-[1.02]
-      hover:shadow-[0_15px_40px_rgba(168,85,247,0.6)]
-      transition-all duration-300
-    "
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-violet-500 text-white text-xl 
+            font-semibold flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(168,85,247,0.45)] 
+            hover:scale-[1.02] hover:shadow-[0_15px_40px_rgba(168,85,247,0.6)]transition-all duration-300"
           >
             Sign Up
           </button>
@@ -181,9 +169,7 @@ export default function Signup() {
 
           <div className="flex items-center my-7">
             <div className="flex-1 h-px bg-gray-300"></div>
-
             <span className="px-4 text-gray-500">or</span>
-
             <div className="flex-1 h-px bg-gray-300"></div>
           </div>
 
@@ -191,7 +177,6 @@ export default function Signup() {
 
           <button className="w-full border border-gray-300 bg-white rounded-2xl py-4 flex items-center justify-center gap-4 mb-4 hover:bg-gray-200 transition shadow-sm">
             <FaGoogle className="text-red-500 text-xl" />
-
             <span className="font-medium text-gray-700">
               Continue with Google
             </span>
@@ -201,7 +186,6 @@ export default function Signup() {
 
           <button className="w-full border border-gray-300 bg-white rounded-2xl py-4 flex items-center justify-center gap-4 hover:bg-gray-200 transition shadow-sm">
             <FaApple className="text-black text-xl" />
-
             <span className="font-medium text-gray-700">
               Continue with Apple
             </span>

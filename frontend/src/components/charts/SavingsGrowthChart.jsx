@@ -1,21 +1,12 @@
 "use client";
 
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
-
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, } from "recharts";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function SavingsGrowthChart({ transactions }) {
   const { darkMode } = useTheme();
 
   // SORT BY DATE
-
   const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
@@ -26,7 +17,6 @@ export default function SavingsGrowthChart({ transactions }) {
       item.type === "income"
         ? previousBalance + item.amount
         : previousBalance - item.amount;
-
     data.push({
       date: new Date(item.date).toLocaleDateString("en-IN", {
         day: "numeric",
@@ -56,20 +46,16 @@ export default function SavingsGrowthChart({ transactions }) {
       </div>
 
       {/* CHART */}
-
       <div className="h-[350px]">
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <LineChart data={chartData}>
             <XAxis dataKey="date" stroke={darkMode ? "#94a3b8" : "#475569"} />
-
             <YAxis stroke={darkMode ? "#94a3b8" : "#475569"} />
 
             <Tooltip
               contentStyle={{
                 backgroundColor: darkMode ? "#1e293b" : "#ffffff",
-
                 border: "none",
-
                 borderRadius: "16px",
               }}
             />

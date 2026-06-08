@@ -1,4 +1,3 @@
-// Sample transactions data later on we will fetch this from backend or local storage
 
 const transactions = [
   {

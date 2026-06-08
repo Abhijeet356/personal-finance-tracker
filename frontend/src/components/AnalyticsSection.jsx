@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-
 const TrendChart = dynamic(() => import("./charts/TrendChart"), {
   ssr: false,
 });
@@ -11,14 +10,10 @@ const ExpensePieChart = dynamic(() => import("./charts/ExpensePieChart"), {
 
 export default function AnalyticsSection({ transactions }) {
   // CURRENT MONTH
-
   const currentMonth = new Date().getMonth();
-
   const currentYear = new Date().getFullYear();
-
   // FILTER CURRENT MONTH TRANSACTIONS
-
- const monthlyTransactions = transactions.filter((item) => {
+  const monthlyTransactions = transactions.filter((item) => {
   const transactionDate = new Date(item.date);
 
   return (
@@ -31,14 +26,10 @@ export default function AnalyticsSection({ transactions }) {
   return (
     <div className="mt-8">
       {/* CHARTS */}
-
       <div className="grid xl:grid-cols-2 gap-8 mb-10">
         {/* TREND GRAPH */}
-
         <TrendChart transactions={monthlyTransactions} isDashboard={true} />
-
         {/* PIE CHART */}
-
         <ExpensePieChart
           transactions={monthlyTransactions}
           isDashboard={true}

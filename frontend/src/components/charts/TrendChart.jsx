@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-} from "recharts";
-
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip,} from "recharts";
 import { useTheme } from "@/context/ThemeContext";
-
 export default function TrendChart({ transactions, isDashboard = false }) {
   const { darkMode } = useTheme();
 
@@ -18,11 +9,8 @@ export default function TrendChart({ transactions, isDashboard = false }) {
   const chartTransactions = isDashboard
     ? transactions.filter((item) => {
         const transactionDate = new Date(item.date);
-
         const currentMonth = new Date().getMonth();
-
         const currentYear = new Date().getFullYear();
-
         return (
           transactionDate.getMonth() === currentMonth &&
           transactionDate.getFullYear() === currentYear
@@ -33,12 +21,9 @@ export default function TrendChart({ transactions, isDashboard = false }) {
   // GRAPH DATA
 
   const chartData = [...chartTransactions]
-
     .sort((a, b) => new Date(a.date) - new Date(b.date))
-
     .map((item) => ({
       day: new Date(item.date).getDate(),
-
       amount: item.amount,
     }));
 
@@ -52,7 +37,6 @@ export default function TrendChart({ transactions, isDashboard = false }) {
 
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Monthly Spending Trend</h1>
-
         <p className={`mt-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
           Current month expenses overview
         </p>
@@ -66,7 +50,6 @@ export default function TrendChart({ transactions, isDashboard = false }) {
             <defs>
               <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
-
                 <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
               </linearGradient>
             </defs>
@@ -78,11 +61,8 @@ export default function TrendChart({ transactions, isDashboard = false }) {
             <Tooltip
               contentStyle={{
                 backgroundColor: darkMode ? "#1e293b" : "#ffffff",
-
                 border: "none",
-
                 borderRadius: "16px",
-
                 color: darkMode ? "white" : "black",
               }}
             />

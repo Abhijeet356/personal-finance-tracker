@@ -17,13 +17,8 @@ import { useTransactions } from "@/context/TransactionContext";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import {
-  FaCalendarAlt,
-  FaChartLine,
-  FaCheckCircle,
-  FaExclamationTriangle,
-  FaWallet,
-} from "react-icons/fa";
+import {FaCalendarAlt,FaChartLine,FaCheckCircle,FaExclamationTriangle,FaWallet,} from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const { darkMode } = useTheme();
@@ -34,39 +29,29 @@ export default function Dashboard() {
     transactions,
     setTransactions,
     filteredTransactions,
-
     showFilters,
     setShowFilters,
-
     isModalOpen,
     setIsModalOpen,
-
     filterType,
     setFilterType,
-
     filterCategory,
     setFilterCategory,
-
     paymentMethod,
     setPaymentMethod,
-
     sortBy,
     setSortBy,
-
     dateFilter,
     setDateFilter,
-
     addTransaction,
   } = useTransactions();
 
   const [balance, setBalance] = useState(0);
-  // const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [budgetSettings] = useState(() => {
     const savedBudget =
       typeof window !== "undefined"
         ? localStorage.getItem("budget_settings")
         : null;
-
     return savedBudget ? JSON.parse(savedBudget) : null;
   });
   const [user, setUser] = useState(null);
@@ -76,29 +61,25 @@ export default function Dashboard() {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem("token");
-
         if (!token) {
           router.push("/");
-
           return;
         }
 
         const response = await api.get(
           "/auth/me",
-
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           },
         );
-
         setUser(response.data.user);
         setUserData((prev) => ({
-  ...prev,
-  ...response.data.user,
-  avatar: response.data.user.avatar || prev?.avatar || "",
-}));
+          ...prev,
+          ...response.data.user,
+          avatar: response.data.user.avatar || prev?.avatar || "",
+        }));
         setBalance(response.data.user.currentBalance || 0);
       } catch (error) {
         console.error(error);
@@ -113,17 +94,13 @@ export default function Dashboard() {
   // TOTALS
 
   const income = filteredTransactions
-
     .filter((t) => t.type === "income")
-
     .reduce((acc, curr) => acc + curr.amount, 0);
 
   // CURRENT MONTH + YEAR
 
   const today = new Date();
-
   const currentMonth = today.getMonth();
-
   const currentYear = today.getFullYear();
 
   const budgetMonthLabel = today.toLocaleDateString("en-IN", {
@@ -138,7 +115,6 @@ export default function Dashboard() {
   })} ${new Date(currentYear, currentMonth + 1, 0).getDate()}`;
 
   // DAYS LEFT
-
   const daysLeft =
     new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() -
     today.getDate();
@@ -146,55 +122,40 @@ export default function Dashboard() {
   // ONLY CURRENT MONTH EXPENSES
 
   const expenses = transactions
-
     .filter((t) => {
       const transactionDate = new Date(t.date);
-
       return (
         t.type === "expense" &&
         transactionDate.getMonth() === currentMonth &&
         transactionDate.getFullYear() === currentYear
       );
     })
-
     .reduce((acc, curr) => acc + curr.amount, 0);
 
   // LIFETIME INCOME
 
   const totalIncome = transactions
-
     .filter((t) => t.type === "income")
-
     .reduce((acc, curr) => acc + curr.amount, 0);
 
   // LIFETIME EXPENSES
 
   const totalExpenses = transactions
-
     .filter((t) => t.type === "expense")
-
     .reduce((acc, curr) => acc + curr.amount, 0);
-
+    
   // LIFETIME BALANCE
 
   const lifetimeBalance = balance;
-
   // LIFETIME SAVINGS
-
   const lifetimeSavings = balance;
-
   const totalBalance = balance;
-
   const savings = balance;
-
   const monthlyBudget = Number(user?.monthlyBudget || 0);
-
   const totalSpent = expenses;
-
   const remainingBudget = monthlyBudget - totalSpent;
   const overBudgetAmount = Math.max(totalSpent - monthlyBudget, 0);
   const isBudgetExceeded = monthlyBudget > 0 && overBudgetAmount > 0;
-
   const currentDay = today.getDate();
   const daysInMonth = new Date(
     today.getFullYear(),
@@ -203,16 +164,10 @@ export default function Dashboard() {
   ).getDate();
   const expectedSpendToDate = (monthlyBudget / daysInMonth) * currentDay;
   const underPaceAmount = Math.max(expectedSpendToDate - totalSpent, 0);
-  const isBudgetOnTrack =
-    monthlyBudget > 0 && !isBudgetExceeded && underPaceAmount > 0;
-
+  const isBudgetOnTrack = monthlyBudget > 0 && !isBudgetExceeded && underPaceAmount > 0;
   const dailyAverage = totalSpent / currentDay;
-
-  const budgetUsagePercent =
-    monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
-
+  const budgetUsagePercent = monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 0;
   const budgetUsage = Math.min(budgetUsagePercent, 100);
-
   const budgetState = isBudgetExceeded
     ? "exceeded"
     : isBudgetOnTrack
@@ -261,32 +216,25 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!budgetSettings) return;
-
     const threshold = Number(budgetSettings?.warningThreshold || 80);
-
     const alreadyWarned = localStorage.getItem("budget_warning_sent");
 
     if (budgetUsage >= threshold && !alreadyWarned) {
       addNotification({
         title: "Budget Warning",
-
         message: `You have used ${Math.round(
           budgetUsage,
         )}% of your monthly budget.`,
-
         type: "transaction",
       });
-
       localStorage.setItem("budget_warning_sent", "true");
     }
 
     // RESET WHEN BELOW THRESHOLD
-
     if (budgetUsage < threshold) {
       localStorage.removeItem("budget_warning_sent");
     }
   }, [addNotification, budgetUsage, budgetSettings]);
-
   return (
     <div
       className={`flex min-h-screen transition-all duration-300 ${
@@ -301,7 +249,6 @@ export default function Dashboard() {
         showFilters={showFilters}
         setShowFilters={setShowFilters}
       />
-
       {/* MAIN */}
 
       <div className="flex-1 min-w-0 ml-[320px]">
@@ -309,9 +256,12 @@ export default function Dashboard() {
 
         <div className="p-6 md:p-8">
           {/* FILTER PAGE */}
-
           {showFilters ? (
-            <div className="mt-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               <FilterPanel
                 filterType={filterType}
                 setFilterType={setFilterType}
@@ -328,7 +278,6 @@ export default function Dashboard() {
               />
 
               {/* FILTERED TRANSACTIONS */}
-
               <div className="mt-8">
                 <TransactionList
                   transactions={filteredTransactions}
@@ -342,7 +291,7 @@ export default function Dashboard() {
                   savings={savings}
                 />
               </div>
-            </div>
+            </motion.div>
           ) : (
             <>
               {/* SUMMARY */}
@@ -353,11 +302,7 @@ export default function Dashboard() {
                 expenses={totalExpenses}
                 savings={balance}
               />
-
-              {/* BUDGET CARD */}
-
               {/* ================= MONTHLY EXPENSE SECTION ================= */}
-
               {/* MONTHLY BUDGET */}
 
               {monthlyBudget > 0 && (
@@ -525,8 +470,6 @@ export default function Dashboard() {
 
               {/* TRANSACTIONS */}
 
-              {/* TRANSACTIONS */}
-
               <div className="mt-6">
                 {transactions.length === 0 ? (
                   <div
@@ -652,16 +595,12 @@ export default function Dashboard() {
 
           addNotification({
             title: "Transaction Added",
-
             message: `${transaction.category} transaction of ₹${transaction.amount} added successfully.`,
-
             type: "transaction",
           });
-
           setIsModalOpen(false);
         }}
       />
-
       <FloatingButton onClick={() => setIsModalOpen(true)} />
     </div>
   );

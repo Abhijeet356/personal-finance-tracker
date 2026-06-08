@@ -1,14 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  FaCalendarAlt,
-  FaEdit,
-  FaPlus,
-  FaRedoAlt,
-  FaTimes,
-  FaTrash,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaEdit, FaPlus, FaRedoAlt, FaTimes, FaTrash, } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import api from "@/lib/api";
 import useCategories from "@/hooks/useCategories";
@@ -16,7 +9,6 @@ import useCategories from "@/hooks/useCategories";
 const getTodayInputDate = () => {
   const today = new Date();
   const timezoneOffset = today.getTimezoneOffset() * 60000;
-
   return new Date(today.getTime() - timezoneOffset).toISOString().split("T")[0];
 };
 
@@ -32,7 +24,6 @@ const initialForm = {
 
 export default function RecurringModal({ isOpen, closeModal }) {
   if (!isOpen) return null;
-
   return <RecurringModalContent closeModal={closeModal} />;
 }
 
@@ -92,7 +83,6 @@ function RecurringModalContent({ closeModal }) {
       } else {
         await api.post("/recurring-rules", payload);
       }
-
       resetForm();
       loadRules();
     } catch (error) {

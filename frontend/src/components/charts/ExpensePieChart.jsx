@@ -1,32 +1,19 @@
 "use client";
 
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-
 import { useTheme } from "@/context/ThemeContext";
 
-const CATEGORY_COLORS = [
-  "#ec4899",
-  "#2563eb",
-  "#7c3aed",
-  "#f59e0b",
-  "#14b8a6",
-  "#ef4444",
-  "#8b5cf6",
-];
+const CATEGORY_COLORS = [ "#ec4899", "#2563eb", "#7c3aed", "#f59e0b", "#14b8a6", "#ef4444", "#8b5cf6",];
 
 export default function ExpensePieChart({ transactions, isDashboard = false }) {
   const { darkMode } = useTheme();
 
   // CURRENT MONTH FILTER
-
   const chartTransactions = isDashboard
     ? transactions.filter((item) => {
         const transactionDate = new Date(item.date);
-
         const currentMonth = new Date().getMonth();
-
         const currentYear = new Date().getFullYear();
-
         return (
           transactionDate.getMonth() === currentMonth &&
           transactionDate.getFullYear() === currentYear &&
@@ -38,17 +25,14 @@ export default function ExpensePieChart({ transactions, isDashboard = false }) {
   // CATEGORY TOTALS
 
   const categoryTotals = {};
-
   chartTransactions.forEach((item) => {
     if (!categoryTotals[item.category]) {
       categoryTotals[item.category] = 0;
     }
-
     categoryTotals[item.category] += item.amount;
   });
 
   // PIE DATA
-
   const pieData = Object.keys(categoryTotals)
     .map((category) => ({
       name: category,
@@ -82,7 +66,6 @@ export default function ExpensePieChart({ transactions, isDashboard = false }) {
       </div>
 
       {/* PIE CHART */}
-
       <div className="grid min-h-[320px] items-center gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         {pieData.length > 0 ? (
           <div className="h-[280px] min-w-0">

@@ -5,25 +5,14 @@ import Sidebar from "@/components/Sidebar";
 import { exportPDF, exportCSV, exportExcel, exportAnalyticsReport } from "@/utils/exportUtils";
 import { useNotifications } from "@/context/NotificationContext";
 import { motion } from "framer-motion";
-import {
-  FaFilePdf,
-  FaFileCsv,
-  FaFileExcel,
-  FaChartPie,
-  FaDownload,
-  FaChevronRight,
-  FaCheckCircle,
-  FaLayerGroup,
-} from "react-icons/fa";
+import {FaFilePdf,FaFileCsv,FaFileExcel,FaChartPie,FaDownload,FaChevronRight,FaCheckCircle,FaLayerGroup,} from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
 import AddTransactionModal from "@/components/AddTransactionModal";
 export default function ExportPage() {
   const { darkMode } = useTheme();
-
   const { addNotification } = useNotifications();
-
   const {
     transactions,
     filteredTransactions,
@@ -35,26 +24,18 @@ export default function ExportPage() {
   } = useTransactions();
 
   const { userData } = useUser();
-
   const exportCards = [
     {
       title: "Export PDF",
-
       description: "Download financial report as PDF",
-
       icon: <FaFilePdf />,
-
       iconBg: "from-red-500 to-rose-600",
       leftBorder: "border-l-red-500",
-      button:
-        "bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white hover:shadow-[0_12px_28px_rgba(239,68,68,0.28)]",
-
+      button: "bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white hover:shadow-[0_12px_28px_rgba(239,68,68,0.28)]",
       action: () => {
         exportPDF(transactions, userData?.currentBalance || 0);
-
         addNotification({
           title: "PDF Exported",
-
           message: "Financial PDF report downloaded successfully.",
         });
       },
@@ -62,16 +43,11 @@ export default function ExportPage() {
 
     {
       title: "Export CSV",
-
       description: "Export transactions as CSV spreadsheet",
-
       icon: <FaFileCsv />,
-
       iconBg: "from-emerald-500 to-green-600",
       leftBorder: "border-l-emerald-500",
-      button:
-        "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:shadow-[0_12px_28px_rgba(16,185,129,0.28)]",
-
+      button: "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:shadow-[0_12px_28px_rgba(16,185,129,0.28)]",
       action: () => {
         exportCSV(transactions);
         addNotification({
@@ -83,22 +59,15 @@ export default function ExportPage() {
 
     {
       title: "Export Excel",
-
       description: "Download Excel workbook with analytics",
-
       icon: <FaFileExcel />,
-
       iconBg: "from-sky-500 to-blue-600",
       leftBorder: "border-l-sky-500",
-      button:
-        "bg-sky-500/10 text-sky-600 hover:bg-sky-500 hover:text-white hover:shadow-[0_12px_28px_rgba(14,165,233,0.28)]",
-
+      button: "bg-sky-500/10 text-sky-600 hover:bg-sky-500 hover:text-white hover:shadow-[0_12px_28px_rgba(14,165,233,0.28)]",
       action: () => {
         exportExcel(transactions);
-
         addNotification({
           title: "Excel Exported",
-
           message: "Financial Excel report downloaded successfully.",
         });
       },
@@ -106,19 +75,13 @@ export default function ExportPage() {
 
     {
       title: "Analytics Report",
-
       description: "Export complete analytics summary report",
-
       icon: <FaChartPie />,
-
       iconBg: "from-violet-600 to-purple-700",
       leftBorder: "border-l-violet-500",
-      button:
-        "bg-violet-500/10 text-violet-600 hover:bg-violet-600 hover:text-white hover:shadow-[0_12px_28px_rgba(124,58,237,0.28)]",
-
+      button: "bg-violet-500/10 text-violet-600 hover:bg-violet-600 hover:text-white hover:shadow-[0_12px_28px_rgba(124,58,237,0.28)]",
       action: () => {
         exportAnalyticsReport(transactions, userData?.currentBalance || 0, userData?.monthlyBudget || 0);
-
         addNotification({
           title: "Analytics Report Exported",
           message: "Analytics report downloaded successfully.",
@@ -172,7 +135,6 @@ export default function ExportPage() {
       />
 
       {/* MAIN */}
-
       <div className="flex-1 min-w-0 ml-[320px]">
         <Navbar />
 
@@ -244,7 +206,6 @@ export default function ExportPage() {
           </div>
 
           {/* EXPORT GRID */}
-
           <div className="grid gap-6 xl:grid-cols-2 xl:gap-8">
             {exportCards.map((card, index) => (
               <div
@@ -306,7 +267,6 @@ export default function ExportPage() {
                   message: `${transaction.category} transaction of ₹${transaction.amount} added successfully.`,
                   type: "transaction",
                 });
-      
                 setIsModalOpen(false);
               }}
             />

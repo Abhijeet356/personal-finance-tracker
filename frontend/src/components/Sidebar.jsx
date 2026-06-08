@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  FaChartPie,
-  FaCog,
-  FaFileExport,
-  FaFilter,
-  FaHome,
-  FaPlusCircle,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaChartPie, FaCog, FaFileExport, FaFilter, FaHome, FaPlusCircle, FaSignOutAlt, } from "react-icons/fa";
 import { useTransactions } from "@/context/TransactionContext";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
@@ -41,15 +33,15 @@ export default function Sidebar({
   }, [setFilterCategory, setFilterType, setPaymentMethod, setSortBy]);
 
   useEffect(() => {
-    if (pathname !== "/dashboard" && showFilters) {
-      resetFilters();
-      setShowFilters(false);
-    }
-  }, [pathname, resetFilters, setShowFilters, showFilters]);
+  if (pathname !== "/dashboard") {
+    setShowFilters(false);
+    resetFilters();
+  }
+}, [pathname, resetFilters, setShowFilters]);
 
   const closeFilters = () => {
-    setSearchQuery("");
-  };
+  setSearchQuery("");
+};
 
   const handleDashboardClick = () => {
     if (showFilters) {
@@ -63,14 +55,13 @@ export default function Sidebar({
     localStorage.removeItem("transactions");
     localStorage.removeItem("budget_settings");
     localStorage.removeItem("notifications");
-
+    localStorage.removeItem("user_setup");
     window.location.href = "/";
   };
 
   const now = new Date();
   const currentMonthTransactions = transactions.filter((item) => {
     const transactionDate = new Date(item.date);
-
     return (
       transactionDate.getMonth() === now.getMonth() &&
       transactionDate.getFullYear() === now.getFullYear()
@@ -79,16 +70,16 @@ export default function Sidebar({
   const monthIncome = currentMonthTransactions
     .filter((item) => item.type === "income")
     .reduce((sum, item) => sum + item.amount, 0);
+
   const monthExpense = currentMonthTransactions
     .filter((item) => item.type === "expense")
     .reduce((sum, item) => sum + item.amount, 0);
+
   const monthSavings = monthIncome - monthExpense;
   const monthlyBudget = Number(userData?.monthlyBudget || 0);
-  const budgetUsed =
-    monthlyBudget > 0 ? Math.min((monthExpense / monthlyBudget) * 100, 100) : 0;
-
+  const budgetUsed = monthlyBudget > 0 ? Math.min((monthExpense / monthlyBudget) * 100, 100) : 0;
   const formatAmount = (value) => `\u20b9${Math.round(value).toLocaleString()}`;
-
+  
   const sections = [
     {
       label: "Overview",

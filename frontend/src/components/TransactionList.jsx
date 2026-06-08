@@ -21,11 +21,8 @@ export default function TransactionList({
   showFilters,
 }) {
   const { darkMode } = useTheme();
-
   const [selected, setSelected] = useState(null);
-
   const [isEditing, setIsEditing] = useState(false);
-
   const categoryIcons = {
     Food: <FaUtensils />,
     Shopping: <FaShoppingBag />,
@@ -35,12 +32,10 @@ export default function TransactionList({
   };
 
   // DELETE
-
   const handleDelete = async (transaction) => {
     try {
       // const response= ko hata dena ============
       const token = localStorage.getItem("token");
-
       const response = await api.delete(`/transactions/${transaction._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,13 +43,11 @@ export default function TransactionList({
       });
 
       setBalance(response.data.currentBalance);
-
       const updatedTransactions = transactions.filter(
         (item) => item._id !== transaction._id,
       );
 
       setTransactions(updatedTransactions);
-
       setSelected(null);
     } catch (error) {
       console.error(error);
@@ -97,9 +90,7 @@ export default function TransactionList({
     const updatedTransactions = transactions.map((item) =>
       item._id === selected._id ? selected : item,
     );
-
     setTransactions(updatedTransactions);
-
     setIsEditing(false);
   };
 
@@ -123,11 +114,7 @@ export default function TransactionList({
         {!showFilters && (
           <button
             onClick={() => setShowFilters(true)}
-            className="text-yellow-600 font-semibold text-lg transition-all
-      duration-300
-
-      hover:text-orange-600
-      hover:translate-x-1"
+            className="text-yellow-600 font-semibold text-lg transition-all duration-300 hover:text-orange-600 hover:translate-x-1"
           >
             View All
           </button>
@@ -135,7 +122,6 @@ export default function TransactionList({
       </div>
 
       {/* EMPTY STATE */}
-
       {transactions.length === 0 && (
         <div
           className={`app-panel text-center py-16 ${
@@ -147,7 +133,6 @@ export default function TransactionList({
       )}
 
       {/* LIST */}
-
       <div className="space-y-4">
         {transactions.map((item) => (
           <div
@@ -165,7 +150,6 @@ export default function TransactionList({
             }`}
           >
             {/* LEFT */}
-
             <div>
               <h2
                 className={`text-2xl font-bold ${
@@ -189,7 +173,6 @@ export default function TransactionList({
             </div>
 
             {/* RIGHT */}
-
             <div className="text-right">
               <h1
                 className={`text-3xl font-bold ${
@@ -212,7 +195,6 @@ export default function TransactionList({
       </div>
 
       {/* POPUP */}
-
       {selected && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div
@@ -256,13 +238,10 @@ export default function TransactionList({
             </div>
 
             {/* DETAILS */}
-
             <div className="relative z-10 mt-8 space-y-6">
               {/* AMOUNT */}
-
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Amount</span>
-
                 {isEditing ? (
                   <input
                     type="number"
@@ -293,20 +272,16 @@ export default function TransactionList({
               </div>
 
               {/* TYPE */}
-
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Type</span>
-
                 <span className="font-semibold capitalize">
                   {selected.type}
                 </span>
               </div>
 
               {/* PAYMENT */}
-
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Payment</span>
-
                 {isEditing ? (
                   <select
                     value={selected.paymentMethod}
@@ -336,10 +311,8 @@ export default function TransactionList({
               </div>
 
               {/* CATEGORY */}
-
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Category</span>
-
                 {isEditing ? (
                   <select
                     value={selected.category}
@@ -370,10 +343,8 @@ export default function TransactionList({
               </div>
 
               {/* NOTES */}
-
               <div>
                 <p className="opacity-70 mb-2">Notes</p>
-
                 {isEditing ? (
                   <textarea
                     rows={4}
@@ -403,7 +374,6 @@ export default function TransactionList({
             </div>
 
             {/* BUTTONS */}
-
             <div className="relative z-10 flex gap-4 mt-8">
               {isEditing ? (
                 <button

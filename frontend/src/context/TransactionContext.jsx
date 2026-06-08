@@ -2,27 +2,23 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "@/lib/api";
+
 const TransactionContext = createContext();
 
 const getTimestamp = (value) => {
   const time = value ? new Date(value).getTime() : 0;
-
   return Number.isNaN(time) ? 0 : time;
 };
 
 const compareTransactionsNewestFirst = (a, b) => {
   const dateDiff = getTimestamp(b.date) - getTimestamp(a.date);
-
   if (dateDiff !== 0) {
     return dateDiff;
   }
-
   const createdAtDiff = getTimestamp(b.createdAt) - getTimestamp(a.createdAt);
-
   if (createdAtDiff !== 0) {
     return createdAtDiff;
   }
-
   return String(b._id || b.id || "").localeCompare(String(a._id || a.id || ""));
 };
 
@@ -43,9 +39,7 @@ export function TransactionProvider({ children }) {
   useEffect(() => {
     const fetchTransactions = async () => {
       const token = localStorage.getItem("token");
-
       if (!token) return;
-
       try {
         const response = await api.get("/transactions", {
           headers: {
@@ -57,31 +51,22 @@ export function TransactionProvider({ children }) {
         console.error("Failed to load transactions", error);
       }
     };
-
     fetchTransactions();
   }, []);
 
-  // SAVE
-
   // FILTERS
-
   let filteredTransactions = sortTransactionsNewestFirst(transactions);
-
   // TYPE
-
   if (filterType !== "all") {
     filteredTransactions = filteredTransactions.filter(
       (item) => item.type === filterType,
     );
   }
   // DATE FILTER
-
   const today = new Date();
-
   if (dateFilter === "today") {
     filteredTransactions = filteredTransactions.filter((item) => {
       const date = new Date(item.date);
-
       return (
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
@@ -92,9 +77,7 @@ export function TransactionProvider({ children }) {
 
   if (dateFilter === "week") {
     const weekStart = new Date(today);
-
     weekStart.setDate(today.getDate() - today.getDay());
-
     filteredTransactions = filteredTransactions.filter((item) => {
       return new Date(item.date) >= weekStart;
     });
@@ -103,7 +86,6 @@ export function TransactionProvider({ children }) {
   if (dateFilter === "month") {
     filteredTransactions = filteredTransactions.filter((item) => {
       const date = new Date(item.date);
-
       return (
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear()
@@ -119,7 +101,6 @@ export function TransactionProvider({ children }) {
   }
 
   // PAYMENT METHOD
-
   if (paymentMethod !== "all") {
     filteredTransactions = filteredTransactions.filter(
       (item) => item.paymentMethod === paymentMethod,
@@ -127,7 +108,6 @@ export function TransactionProvider({ children }) {
   }
 
   // SEARCH
-
   if (searchQuery.trim() !== "") {
     filteredTransactions = filteredTransactions.filter(
       (item) =>
@@ -138,7 +118,6 @@ export function TransactionProvider({ children }) {
   }
 
   // SORT
-
   if (sortBy === "newest") {
     filteredTransactions.sort(compareTransactionsNewestFirst);
   }
@@ -156,7 +135,6 @@ export function TransactionProvider({ children }) {
   }
 
   // ADD TRANSACTION
-
   const addTransaction = (transaction) => {
     setTransactions((prev) => sortTransactionsNewestFirst([transaction, ...prev]));
   };
@@ -166,32 +144,22 @@ export function TransactionProvider({ children }) {
       value={{
         transactions,
         setTransactions,
-
         filteredTransactions,
-
         showFilters,
         setShowFilters,
-
         isModalOpen,
         setIsModalOpen,
-
         filterType,
         setFilterType,
-
         filterCategory,
         setFilterCategory,
-
         paymentMethod,
         setPaymentMethod,
-
         sortBy,
         setSortBy,
-
         searchQuery,
         setSearchQuery,
-
         addTransaction,
-
         dateFilter,
         setDateFilter,
       }}

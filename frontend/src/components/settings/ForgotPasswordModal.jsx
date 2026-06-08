@@ -1,47 +1,33 @@
 "use client";
 
 import { FaTimes, FaEnvelope, FaKey } from "react-icons/fa";
-
 import { useState } from "react";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useNotifications } from "@/context/NotificationContext";
 
 export default function ForgotPasswordModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
-
   const { addNotification } = useNotifications();
-
   const [email, setEmail] = useState("");
-
   const [newPassword, setNewPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
-
   // RESET
 
   const handleReset = () => {
     if (!email) {
       alert("Please enter email");
-
       return;
     }
-
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match");
-
       return;
     }
 
     addNotification({
       title: "Password Reset Requested",
-
       message: `Password reset initiated for ${email}.`,
     });
-
     alert("Password reset successful (demo mode)");
-
     closeModal();
   };
 
@@ -107,7 +93,6 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
           </div>
 
           {/* NEW PASSWORD */}
-
           <div>
             <label
               className={`font-semibold ${
@@ -133,7 +118,6 @@ export default function ForgotPasswordModal({ isOpen, closeModal }) {
           </div>
 
           {/* CONFIRM PASSWORD */}
-
           <div>
             <label
               className={`font-semibold ${

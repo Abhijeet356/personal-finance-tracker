@@ -1,25 +1,15 @@
 "use client";
 
 import { FaUser, FaMoon, FaLock, FaSave } from "react-icons/fa";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useUser } from "@/context/UserContext";
 
 export default function SettingsPanel() {
   const { darkMode, setDarkMode } = useTheme();
-
   const { userData } = useUser();
-
   return (
     <div
-      className={`
-        rounded-3xl
-        shadow-xl
-        p-8
-        transition-all
-        duration-300
-
+      className={` rounded-3xl shadow-xl p-8 transition-all duration-300
         ${darkMode ? "bg-slate-900 text-white" : "bg-white text-black"}
       `}
     >
@@ -32,10 +22,7 @@ export default function SettingsPanel() {
 
         <div>
           <h1
-            className={`
-              text-4xl
-              font-bold
-
+            className={` text-4xl font-bold
               ${darkMode ? "text-white" : "text-black"}
             `}
           >
@@ -51,17 +38,7 @@ export default function SettingsPanel() {
       {/* USER PROFILE */}
 
       <div
-        className={`
-          mb-10
-          rounded-3xl
-          p-6
-          flex
-          items-center
-          gap-5
-          border
-          transition-all
-          duration-300
-
+        className={` mb-10 rounded-3xl p-6 flex items-center gap-5 border transition-all duration-300
           ${
             darkMode
               ? "bg-slate-800 border-white/10"
@@ -75,54 +52,28 @@ export default function SettingsPanel() {
           <img
             src={userData.avatar}
             alt="avatar"
-            className="
-              w-24
-              h-24
-              rounded-full
-              object-cover
-              shadow-lg
-            "
+            className=" w-24 h-24 rounded-full object-cover shadow-lg"
           />
         ) : (
           <div
-            className="
-              w-24
-              h-24
-              rounded-full
-
-              bg-gradient-to-br
-              from-violet-500
-              to-purple-600
-
-              flex
-              items-center
-              justify-center
-
-              text-white
-              text-4xl
-              font-bold
-
-              shadow-lg
-            "
+            className=" w-24 h-24 rounded-full bg-gradient-to-br from-violet-500 to-purple-600
+              flex items-center justify-center text-white text-4xl font-bold shadow-lg"
           >
             {userData?.name ? userData.name[0] : "U"}
           </div>
         )}
 
         {/* USER INFO */}
-
         <div>
           <h2
             className={`
               text-3xl
               font-bold
-
               ${darkMode ? "text-white" : "text-black"}
             `}
           >
             {userData?.name || "User"}
           </h2>
-
           <p className="text-gray-500 mt-2">Personal Finance Tracker User</p>
         </div>
       </div>
@@ -136,7 +87,6 @@ export default function SettingsPanel() {
           <label
             className={`
               font-semibold
-
               ${darkMode ? "text-white" : "text-black"}
             `}
           >
@@ -147,16 +97,7 @@ export default function SettingsPanel() {
             type="text"
             value={userData?.name || ""}
             readOnly
-            className={`
-              w-full
-              mt-2
-              px-5
-              py-4
-              rounded-2xl
-              outline-none
-              border
-              transition-all
-
+            className={` w-full mt-2 px-5 py-4 rounded-2xl outline-none border transition-all
               ${
                 darkMode
                   ? "bg-slate-800 border-white/10 text-white"
@@ -182,16 +123,7 @@ export default function SettingsPanel() {
           <input
             type="email"
             placeholder="john@gmail.com"
-            className={`
-              w-full
-              mt-2
-              px-5
-              py-4
-              rounded-2xl
-              outline-none
-              border
-              transition-all
-
+            className={` w-full mt-2 px-5 py-4 rounded-2xl outline-none border transition-all
               ${
                 darkMode
                   ? "bg-slate-800 border-white/10 text-white placeholder:text-gray-400"
@@ -206,14 +138,7 @@ export default function SettingsPanel() {
 
       <div className="mt-10">
         <h2
-          className={`
-            text-2xl
-            font-bold
-            flex
-            items-center
-            gap-3
-            mb-5
-
+          className={` text-2xl font-bold flex items-center gap-3 mb-5
             ${darkMode ? "text-white" : "text-black"}
           `}
         >
@@ -225,15 +150,7 @@ export default function SettingsPanel() {
           <input
             type="password"
             placeholder="New Password"
-            className={`
-              w-full
-              px-5
-              py-4
-              rounded-2xl
-              outline-none
-              border
-              transition-all
-
+            className={` w-full px-5 py-4 rounded-2xl outline-none border transition-all
               ${
                 darkMode
                   ? "bg-slate-800 border-white/10 text-white placeholder:text-gray-400"
@@ -245,15 +162,7 @@ export default function SettingsPanel() {
           <input
             type="password"
             placeholder="Confirm Password"
-            className={`
-              w-full
-              px-5
-              py-4
-              rounded-2xl
-              outline-none
-              border
-              transition-all
-
+            className={` w-full px-5 py-4 rounded-2xl outline-none border transition-all
               ${
                 darkMode
                   ? "bg-slate-800 border-white/10 text-white placeholder:text-gray-400"
@@ -265,14 +174,9 @@ export default function SettingsPanel() {
       </div>
 
       {/* NOTIFICATIONS */}
-
       <div className="mt-10">
         <h2
-          className={`
-            text-2xl
-            font-bold
-            mb-5
-
+          className={` text-2xl font-bold mb-5
             ${darkMode ? "text-white" : "text-black"}
           `}
         >
@@ -283,14 +187,7 @@ export default function SettingsPanel() {
           {/* EMAIL NOTIFICATION */}
 
           <div
-            className={`
-              flex
-              items-center
-              justify-between
-              p-5
-              rounded-2xl
-              transition-all
-
+            className={` flex items-center justify-between p-5 rounded-2xl transition-all
               ${darkMode ? "bg-slate-800" : "bg-slate-100"}
             `}
           >
@@ -304,21 +201,13 @@ export default function SettingsPanel() {
           {/* REPORTS */}
 
           <div
-            className={`
-              flex
-              items-center
-              justify-between
-              p-5
-              rounded-2xl
-              transition-all
-
+            className={` flex items-center justify-between p-5 rounded-2xl transition-all
               ${darkMode ? "bg-slate-800" : "bg-slate-100"}
             `}
           >
             <span className={darkMode ? "text-white" : "text-black"}>
               Monthly Reports
             </span>
-
             <input type="checkbox" className="w-5 h-5 accent-violet-600" />
           </div>
         </div>
@@ -328,14 +217,7 @@ export default function SettingsPanel() {
 
       <div className="mt-10">
         <h2
-          className={`
-            text-2xl
-            font-bold
-            flex
-            items-center
-            gap-3
-            mb-5
-
+          className={` text-2xl font-bold flex items-center gap-3 mb-5
             ${darkMode ? "text-white" : "text-black"}
           `}
         >
@@ -344,13 +226,7 @@ export default function SettingsPanel() {
         </h2>
 
         <div
-          className={`
-            p-5
-            rounded-2xl
-            flex
-            justify-between
-            items-center
-
+          className={` p-5 rounded-2xl flex justify-between items-center
             ${darkMode ? "bg-slate-800" : "bg-slate-100"}
           `}
         >
@@ -360,17 +236,7 @@ export default function SettingsPanel() {
 
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="
-              bg-violet-600
-              text-white
-              px-5
-              py-2
-              rounded-xl
-              hover:bg-violet-700
-              hover:scale-105
-              transition-all
-              duration-300
-            "
+            className=" bg-violet-600 text-white px-5 py-2 rounded-xl hover:bg-violet-700 hover:scale-105 transition-all duration-300"
           >
             {darkMode ? "Disable" : "Enable"}
           </button>
@@ -381,29 +247,9 @@ export default function SettingsPanel() {
 
       <div className="mt-10">
         <button
-          className="
-            flex
-            items-center
-            gap-3
-
-            px-8
-            py-4
-
-            rounded-2xl
-
-            bg-gradient-to-r
-            from-violet-600
-            to-purple-700
-
-            text-white
-            text-lg
-            font-semibold
-
-            hover:scale-[1.03]
-            hover:shadow-[0_15px_40px_rgba(168,85,247,0.45)]
-
-            transition-all
-            duration-300
+          className=" flex items-center gap-3 px-8 py-4 rounded-2xl
+          bg-gradient-to-r from-violet-600 to-purple-700 text-white text-lg font-semibold
+          hover:scale-[1.03] hover:shadow-[0_15px_40px_rgba(168,85,247,0.45)] transition-all duration-300
           "
         >
           <FaSave />

@@ -2,20 +2,17 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-
+import { FaRotateLeft } from "react-icons/fa6";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import FilterPanel from "@/components/FilterPanel";
 import AddTransactionModal from "@/components/AddTransactionModal";
-
+import { motion } from "framer-motion";
 import CategoryRanking from "@/components/CategoryRanking";
 import SmartInsights from "@/components/SmartInsights";
 import TransactionList from "@/components/TransactionList";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useNotifications } from "@/context/NotificationContext";
-
 import { useTransactions } from "@/context/TransactionContext";
 
 const TrendChart = dynamic(() => import("@/components/charts/TrendChart"), {
@@ -40,73 +37,53 @@ export default function AnalyticsPage() {
   const {
     transactions,
     setTransactions,
-
     filteredTransactions,
-
     showFilters,
     setShowFilters,
-
     isModalOpen,
     setIsModalOpen,
-
     filterType,
     setFilterType,
-
     filterCategory,
     setFilterCategory,
-
     paymentMethod,
     setPaymentMethod,
-
     sortBy,
     setSortBy,
-
     addTransaction,
   } = useTransactions();
 
   // DATE FILTERS
 
   const [fromDate, setFromDate] = useState("");
-
   const [toDate, setToDate] = useState("");
-
-  // DATE FILTERED DATA
-
   const analyticsTransactions = transactions.filter((item) => {
-    
     const transactionDate = new Date(item.date);
 
     if (fromDate && transactionDate < new Date(fromDate)) {
       return false;
     }
-
     if (toDate && transactionDate > new Date(toDate)) {
       return false;
     }
-
     return true;
   });
 
   const expenseTransactions = analyticsTransactions.filter(
-  (item) => item.type === "expense"
-);
+    (item) => item.type === "expense",
+  );
 
   // TOTALS
 
   const totalIncome = analyticsTransactions
-
     .filter((item) => item.type === "income")
-
     .reduce((acc, item) => acc + item.amount, 0);
 
   const totalExpense = analyticsTransactions
-
     .filter((item) => item.type === "expense")
-
     .reduce((acc, item) => acc + item.amount, 0);
 
   const savings = totalIncome - totalExpense;
-
   return (
     <div
       className={`flex min-h-screen ${
@@ -114,7 +91,6 @@ export default function AnalyticsPage() {
       }`}
     >
       {/* SIDEBAR */}
-
       <Sidebar
         openTransactionModal={() => setIsModalOpen(true)}
         toggleFilters={() => setShowFilters((prev) => !prev)}
@@ -123,15 +99,18 @@ export default function AnalyticsPage() {
       />
 
       {/* MAIN */}
-
       <div className="flex-1 min-w-0 ml-[320px]">
         <Navbar />
 
         <div className="p-6 md:p-8">
           {/* FILTER PAGE */}
-
           {showFilters ? (
-            <div className="mt-6">
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               <FilterPanel
                 filterType={filterType}
                 setFilterType={setFilterType}
@@ -146,7 +125,6 @@ export default function AnalyticsPage() {
               />
 
               {/* FILTERED TRANSACTIONS */}
-
               <div className="mt-8">
                 <TransactionList
                   transactions={filteredTransactions}
@@ -158,19 +136,30 @@ export default function AnalyticsPage() {
                   savings={savings}
                 />
               </div>
-            </div>
+            </motion.div>
           ) : (
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               {/* HEADER */}
 
               <div className="mb-8">
                 <h1
-                  className={`text-5xl font-bold ${
+                  className={`text-4xl font-black tracking-tight md:text-5xl ${
                     darkMode ? "text-white" : "text-black"
                   }`}
                 >
                   Analytics Dashboard
                 </h1>
+                <p
+                  className={`mt-3 text-lg ${
+                    darkMode ? "text-slate-400" : "text-slate-600"
+                  }`}
+                >
+                  Analyze your spending habits and gain insights
+                </p>
               </div>
 
               {/* DATE FILTERS */}
@@ -201,7 +190,6 @@ export default function AnalyticsPage() {
                 </div>
 
                 {/* TO */}
-
                 <div>
                   <label
                     className={`block mb-2 font-semibold ${
@@ -232,15 +220,15 @@ export default function AnalyticsPage() {
                       setFromDate("");
                       setToDate("");
                     }}
-                    className="app-button app-button-danger px-6 py-3"
+                    className="app-button app-button-danger px-6 py-3 flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
                   >
+                    <FaRotateLeft/>  
                     Reset
                   </button>
                 </div>
               </div>
 
               {/* SUMMARY CARDS */}
-
               <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-6 mb-10">
                 <div
                   className={`app-surface p-6 ${
@@ -283,7 +271,6 @@ export default function AnalyticsPage() {
 
               <div className="grid xl:grid-cols-2 gap-8 mb-10">
                 <TrendChart transactions={expenseTransactions} />
-
                 <ExpensePieChart transactions={expenseTransactions} />
               </div>
 
@@ -302,27 +289,22 @@ export default function AnalyticsPage() {
               <div className="mt-8">
                 <SmartInsights transactions={analyticsTransactions} />
               </div>
-            </>
+            </motion.div>
           )}
         </div>
       </div>
 
       {/* MODAL */}
-
       <AddTransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={(transaction) => {
           addTransaction(transaction);
-
           addNotification({
             title: "Transaction Added",
-
             message: `${transaction.category} transaction of ₹${transaction.amount} added successfully.`,
-
             type: "transaction",
           });
-
           setIsModalOpen(false);
         }}
       />

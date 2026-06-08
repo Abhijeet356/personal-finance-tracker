@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
-import {
-  FaEnvelope,
-  FaLock,
-  FaArrowRight,
-  FaGoogle,
-  FaApple,
-} from "react-icons/fa";
+import {FaEnvelope,FaLock,FaArrowRight,FaGoogle,FaApple,} from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -18,7 +12,6 @@ export default function Home() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handleLogin = async () => {
     try {
       const response = await api.post("/auth/login", {
@@ -35,7 +28,6 @@ export default function Home() {
       }
     } catch (error) {
       console.error(error);
-
       alert("Invalid email or password");
     }
   };
@@ -44,24 +36,15 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-blue-700 flex items-center justify-center p-10">
       <div className="w-full max-w-7xl bg-white rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-[1.05fr_1fr]">
         {/* LEFT SIDE */}
-
         <div className="relative min-h-[700px] bg-[#050816] flex items-center justify-center overflow-hidden">
           {/* Background Glow */}
-
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-violet-700/20 z-0" />
 
           {/* IMAGE */}
-
           <img
             src="/images/bg-main.png"
             alt="SpendSense"
-            className="
-      relative z-10
-      w-[115%]
-      max-w-none
-      object-cover
-      object-center
-    "
+            className="relative z-10 w-[115%] max-w-none object-cover object-center"
           />
         </div>
 
@@ -99,28 +82,22 @@ export default function Home() {
           </label>
 
           {/* EMAIL INPUT */}
-
           <div className="flex items-center border border-gray-300 shadow-sm rounded-2xl px-5 py-4 mb-8">
             <FaEnvelope className="text-gray-400 text-lg mr-4" />
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full outline-none text-black"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+            <input 
+            type="email" 
+            placeholder="Enter your email" 
+            className="w-full outline-none text-black" value={email} onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           {/* PASSWORD LABEL */}
-
           <label className="font-semibold text-gray-700 mb-3">Password</label>
 
           {/* PASSWORD INPUT */}
-
           <div className="flex items-center border border-gray-300 shadow-sm rounded-2xl px-5 py-4 mb-6">
             <FaLock className="text-gray-400 text-lg mr-4" />
-
             <input
               type="password"
               placeholder="Enter your password"
@@ -135,10 +112,8 @@ export default function Home() {
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <input type="checkbox" className="accent-violet-600 w-4 h-4" />
-
               <span className="text-gray-600">Remember me</span>
             </div>
-
             <button className="text-violet-600 font-medium hover:underline">
               Forgot Password?
             </button>
@@ -148,16 +123,10 @@ export default function Home() {
 
           <button
             onClick={handleLogin}
-            className="
-w-full py-4 rounded-2xl
-bg-gradient-to-r from-fuchsia-600 via-purple-600 to-violet-500
-text-white text-xl font-semibold
-flex items-center justify-center gap-3
-shadow-[0_10px_30px_rgba(168,85,247,0.45)]
-hover:scale-[1.02]
-hover:shadow-[0_15px_40px_rgba(168,85,247,0.6)]
-transition-all duration-300
-"
+            className=" w-full py-4 rounded-2xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-violet-500 
+            text-white text-xl font-semibold flex items-center justify-center gap-3 
+            shadow-[0_10px_30px_rgba(168,85,247,0.45)] hover:scale-[1.02] hover:shadow-[0_15px_40px_rgba(168,85,247,0.6)] 
+            transition-all duration-300"
           >
             Login
           </button>
@@ -166,9 +135,7 @@ transition-all duration-300
 
           <div className="flex items-center my-8">
             <div className="flex-1 h-px bg-gray-300"></div>
-
             <span className="px-4 text-gray-500">or</span>
-
             <div className="flex-1 h-px bg-gray-300"></div>
           </div>
 
@@ -176,7 +143,6 @@ transition-all duration-300
 
           <button className="w-full border border-gray-300 bg-white rounded-2xl py-4 flex items-center justify-center gap-4 mb-5 hover:bg-gray-200 transition shadow-sm">
             <FaGoogle className="text-red-500 text-xl" />
-
             <span className="font-medium text-gray-700">
               Continue with Google
             </span>
@@ -186,7 +152,6 @@ transition-all duration-300
 
           <button className="w-full border border-gray-300 bg-white rounded-2xl py-4 flex items-center justify-center gap-4 hover:bg-gray-200 transition shadow-sm">
             <FaApple className="text-black text-xl" />
-
             <span className="font-medium text-gray-700">
               Continue with Apple
             </span>

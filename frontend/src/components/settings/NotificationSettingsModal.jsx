@@ -1,39 +1,29 @@
 "use client";
 
 import { FaTimes, FaBell } from "react-icons/fa";
-
 import { useState } from "react";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useNotifications } from "@/context/NotificationContext";
-
 export default function NotificationSettingsModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
-
   const { addNotification } = useNotifications();
-
   const [settings, setSettings] = useState(() => {
-    const saved =
-      typeof window !== "undefined"
-        ? localStorage.getItem("notification_settings")
-        : null;
+  const saved =
+    typeof window !== "undefined"
+      ? localStorage.getItem("notification_settings")
+      : null;
 
     return saved
       ? JSON.parse(saved)
       : {
           transactions: true,
-
           exports: true,
-
           email: false,
-
           push: true,
         };
   });
 
   // TOGGLE
-
   const toggleSetting = (key) => {
     setSettings((prev) => ({
       ...prev,
@@ -43,17 +33,14 @@ export default function NotificationSettingsModal({ isOpen, closeModal }) {
   };
 
   // SAVE
-
   const handleSave = () => {
     localStorage.setItem(
       "notification_settings",
-
       JSON.stringify(settings),
     );
 
     addNotification({
       title: "Notification Settings Updated",
-
       message: "Your notification preferences were saved successfully.",
     });
 
@@ -110,33 +97,25 @@ export default function NotificationSettingsModal({ isOpen, closeModal }) {
           {[
             {
               key: "transactions",
-
               title: "Transaction Notifications",
-
               desc: "Get alerts when transactions are added",
             },
 
             {
               key: "exports",
-
               title: "Export Notifications",
-
               desc: "Receive alerts when reports are downloaded",
             },
 
             {
               key: "email",
-
               title: "Email Notifications",
-
               desc: "Receive important updates via email",
             },
 
             {
               key: "push",
-
               title: "Push Notifications",
-
               desc: "Enable browser push notifications",
             },
           ].map((item) => (
@@ -165,7 +144,6 @@ export default function NotificationSettingsModal({ isOpen, closeModal }) {
               </div>
 
               {/* TOGGLE */}
-
               <button
                 onClick={() => toggleSetting(item.key)}
                 className={`w-20 h-10 rounded-full transition-all duration-300 flex items-center px-1 ${

@@ -1,67 +1,41 @@
 "use client";
 
-import {
-  FaTimes,
-  FaShieldAlt,
-  FaLock,
-  FaFingerprint,
-  FaClock,
-} from "react-icons/fa";
-
+import { FaTimes, FaShieldAlt, FaLock, FaFingerprint, FaClock, } from "react-icons/fa";
 import { useState } from "react";
-
 import { useTheme } from "@/context/ThemeContext";
-
 import { useNotifications } from "@/context/NotificationContext";
-
 import ForgotPasswordModal from "@/components/settings/ForgotPasswordModal";
 
 export default function SecurityModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
-
   const { addNotification } = useNotifications();
-
   const [currentPassword, setCurrentPassword] = useState("");
-
   const [newPassword, setNewPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [appLock, setAppLock] = useState(false);
-
   const [biometric, setBiometric] = useState(false);
-
   const [autoLogout, setAutoLogout] = useState(false);
-
   const [showForgotModal, setShowForgotModal] = useState(false);
 
   // SAVE
-
   const handleSave = () => {
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match");
-
       return;
     }
-
     localStorage.setItem(
       "security_settings",
-
       JSON.stringify({
         appLock,
-
         biometric,
-
         autoLogout,
       }),
     );
 
     addNotification({
       title: "Security Updated",
-
       message: "Security settings updated successfully.",
     });
-
     closeModal();
   };
 
@@ -110,30 +84,23 @@ export default function SecurityModal({ isOpen, closeModal }) {
         </div>
 
         {/* PASSWORDS */}
-
         <div className="mt-10 space-y-6">
           {[
             {
               label: "Current Password",
-
               value: currentPassword,
-
               setter: setCurrentPassword,
             },
 
             {
               label: "New Password",
-
               value: newPassword,
-
               setter: setNewPassword,
             },
 
             {
               label: "Confirm Password",
-
               value: confirmPassword,
-
               setter: setConfirmPassword,
             },
           ].map((item) => (
@@ -165,36 +132,26 @@ export default function SecurityModal({ isOpen, closeModal }) {
         </div>
 
         {/* TOGGLES */}
-
         <div className="mt-10 space-y-5">
           {[
             {
               title: "Enable App Lock",
-
               state: appLock,
-
               setter: setAppLock,
-
               icon: <FaLock />,
             },
 
             {
               title: "Biometric Authentication",
-
               state: biometric,
-
               setter: setBiometric,
-
               icon: <FaFingerprint />,
             },
 
             {
               title: "Auto Logout",
-
               state: autoLogout,
-
               setter: setAutoLogout,
-
               icon: <FaClock />,
             },
           ].map((item) => (
@@ -217,7 +174,6 @@ export default function SecurityModal({ isOpen, closeModal }) {
               </div>
 
               {/* TOGGLE */}
-
               <button
                 onClick={() => item.setter(!item.state)}
                 className={`w-20 h-10 rounded-full transition-all duration-300 flex items-center px-1 ${

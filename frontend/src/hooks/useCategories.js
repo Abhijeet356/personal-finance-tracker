@@ -30,10 +30,8 @@ const mergeCategories = (apiCategories = []) => {
 export default function useCategories() {
   const [categories, setCategories] = useState(fallbackCategories);
   const [loading, setLoading] = useState(false);
-
   const refreshCategories = useCallback(async () => {
     setLoading(true);
-
     try {
       const response = await api.get("/categories");
       setCategories(mergeCategories(response.data.categories));

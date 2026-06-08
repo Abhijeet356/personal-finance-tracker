@@ -9,7 +9,6 @@ import api from "@/lib/api";
 
 export default function BudgetModal({ isOpen, closeModal }) {
   if (!isOpen) return null;
-
   return <BudgetModalContent closeModal={closeModal} />;
 }
 
@@ -17,14 +16,15 @@ function BudgetModalContent({ closeModal }) {
   const { darkMode } = useTheme();
   const { userData, setUserData } = useUser();
   const { addNotification } = useNotifications();
-
   const [monthlyBudget, setMonthlyBudget] = useState(
     userData?.monthlyBudget || "",
   );
+
   const savedBudgetSettings =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("budget_settings") || "null")
       : null;
+
   const [monthlySalary, setMonthlySalary] = useState(
     userData?.monthlySalary || "",
   );
@@ -38,7 +38,6 @@ function BudgetModalContent({ closeModal }) {
   );
 
   // SAVE
-
   const handleSave = async () => {
     const token = localStorage.getItem("token");
     const nextMonthlyBudget = Number(monthlyBudget || 0);
@@ -72,12 +71,10 @@ function BudgetModalContent({ closeModal }) {
       warningThreshold,
     }),
   );
-
   addNotification({
     title: "Financial Settings Updated",
     message: "Your financial settings were saved successfully.",
   });
-
   closeModal();
 }
 
@@ -89,7 +86,6 @@ return (
       }`}
     >
       {/* CLOSE */}
-
       <button
         onClick={closeModal}
         className="absolute top-6 right-6 text-2xl text-slate-400 hover:text-red-500 transition"
@@ -98,7 +94,6 @@ return (
       </button>
 
       {/* HEADER */}
-
       <div className="flex items-center gap-5">
         <div className="w-20 h-20 rounded-3xl bg-emerald-600 text-white text-4xl flex items-center justify-center shadow-lg">
           <FaWallet />
@@ -122,7 +117,6 @@ return (
       </div>
 
       {/* FORM */}
-
       <div className="mt-10 space-y-6">
         {/* MONTHLY SALARY */}
 

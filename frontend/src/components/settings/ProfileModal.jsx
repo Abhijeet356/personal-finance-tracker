@@ -1,50 +1,29 @@
 "use client";
 
 import { useState } from "react";
-
-import {
-  FaTimes,
-  FaUser,
-  FaEnvelope,
-  FaBullseye,
-  FaCoins,
-  FaCamera,
-} from "react-icons/fa";
-
+import api from "@/lib/api";
+import { FaTimes, FaUser, FaEnvelope, FaBullseye, FaCoins, FaCamera, } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext";
-
 import { useNotifications } from "@/context/NotificationContext";
-
 import { useUser } from "@/context/UserContext";
 
 export default function ProfileModal({ isOpen, closeModal }) {
   const { darkMode } = useTheme();
-
   const { addNotification } = useNotifications();
-
   const { userData, setUserData } = useUser();
-
   const [name, setName] = useState(userData?.name || "");
-
   const [email, setEmail] = useState(userData?.email || "");
-
   const [currency, setCurrency] = useState(userData?.currency || "INR");
-
   const [financialGoal, setFinancialGoal] = useState(
     userData?.financialGoal || "Save More",
   );
-
   const [avatar, setAvatar] = useState(userData?.avatar || null);
 
   // IMAGE UPLOAD
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
-
     const reader = new FileReader();
-
     reader.onloadend = () => {
       setAvatar(reader.result);
     };
@@ -53,42 +32,31 @@ export default function ProfileModal({ isOpen, closeModal }) {
   };
 
   // SAVE
-
-  const handleSave = () => {
-    const updatedUser = {
-      ...userData,
-
+  const handleSave = async () => {
+  try {
+    const response = await api.patch("/auth/profile", {
       name,
-
       email,
-
       currency,
-
       financialGoal,
-
       avatar,
-    };
+    });
 
-    // UPDATE CONTEXT
-
-    setUserData(updatedUser);
-
-    // SAVE LOCALSTORAGE
-
-    localStorage.setItem(
-      "user_setup",
-
-      JSON.stringify(updatedUser),
-    );
-
+    setUserData(response.data.user);
     addNotification({
       title: "Profile Updated",
-
       message: "Your profile information was updated successfully.",
     });
 
     closeModal();
-  };
+  } catch (error) {
+    console.error(error);
+    addNotification({
+      title: "Update Failed",
+      message: "Could not save profile changes.",
+    });
+  }
+};
 
   if (!isOpen) return null;
 
@@ -111,7 +79,6 @@ export default function ProfileModal({ isOpen, closeModal }) {
         </button>
 
         {/* HEADER */}
-
         <h1
           className={`text-4xl font-bold ${
             darkMode ? "text-white" : "text-black"
@@ -125,7 +92,6 @@ export default function ProfileModal({ isOpen, closeModal }) {
         </p>
 
         {/* AVATAR */}
-
         <div className="flex flex-col items-center mt-10">
           <div
             className={`w-28 h-28 rounded-full overflow-hidden border-4 ${
@@ -240,18 +206,14 @@ export default function ProfileModal({ isOpen, closeModal }) {
                 }`}
               >
                 <option value="INR">₹ INR</option>
-
                 <option value="USD">$ USD</option>
-
                 <option value="EUR">€ EUR</option>
-
                 <option value="GBP">£ GBP</option>
               </select>
             </div>
           </div>
 
           {/* GOAL */}
-
           <div>
             <label
               className={`font-semibold ${
@@ -274,11 +236,8 @@ export default function ProfileModal({ isOpen, closeModal }) {
                 }`}
               >
                 <option>Save More</option>
-
                 <option>Reduce Expenses</option>
-
                 <option>Build Emergency Fund</option>
-
                 <option>Invest Better</option>
               </select>
             </div>
