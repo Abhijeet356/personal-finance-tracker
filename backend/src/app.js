@@ -1,4 +1,5 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 
 import authRoutes from "./routes/auth.routes.js";
@@ -8,11 +9,43 @@ import healthRoutes from "./routes/health.routes.js";
 import recurringRuleRoutes from "./routes/recurringRule.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
 
+dotenv.config({ quiet: true });
+
 const app = express();
+
+const parseAllowedOrigins = () => {
+  const configuredOrigins = [
+    process.env.CLIENT_URL,
+    process.env.CLIENT_URLS,
+  ]
+    .filter(Boolean)
+    .flatMap((value) => value.split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  return new Set([
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    ...configuredOrigins,
+  ]);
+};
+
+const allowedOrigins = parseAllowedOrigins();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin(origin, callback) {
+      if (
+        !origin ||
+        allowedOrigins.has(origin) ||
+        /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)
+      ) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );

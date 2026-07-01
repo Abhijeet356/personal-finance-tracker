@@ -16,3 +16,5 @@ services:
         generateValue: true
       - key: CLIENT_URL
         sync: false
+      - key: CLIENT_URLS
+        sync: false

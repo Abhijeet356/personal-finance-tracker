@@ -121,7 +121,7 @@ export default function SetupPage() {
             </h1>
 
             <p className="text-gray-500 mt-3 text-lg">
-              Let's personalize your finance workspace
+              Let&apos;s personalize your finance workspace
             </p>
           </div>
 
@@ -426,7 +426,7 @@ export default function SetupPage() {
             shadow-[0_15px_50px_rgba(168,85,247,0.45)] hover:shadow-[0_20px_60px_rgba(168,85,247,0.6)] rounded-3xl
             hover:-translate-y-1 active:scale-95 tracking-wide transition-all duration-300"
           >
-            Let's Get Started
+            Let&apos;s Get Started
           </button>
         </div>
       </div>

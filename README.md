@@ -198,7 +198,12 @@ Environment variables:
 MONGO_URI=<your MongoDB Atlas connection string>
 JWT_SECRET=<a long random secret>
 CLIENT_URL=<your Vercel frontend URL>
+CLIENT_URLS=<optional comma-separated extra frontend origins>
 ```
+
+The API requires a working `MONGO_URI` at startup. `/api/health` returns `503`
+until MongoDB is connected, so failed database configuration is visible to the
+hosting platform instead of producing a healthy but unusable API.
 
 ### Frontend on Vercel
 
@@ -220,6 +225,8 @@ NEXT_PUBLIC_API_BASE_URL=<your Render backend URL>/api
 ```
 
 After both deploys are live, update `CLIENT_URL` in Render to the final Vercel URL and redeploy the backend.
+For Vercel preview deployments, the backend also accepts `*.vercel.app` origins.
+Use `CLIENT_URLS` if you add custom preview or staging domains.
 
 ## API Docs
 
