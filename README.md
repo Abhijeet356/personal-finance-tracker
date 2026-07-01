@@ -171,6 +171,56 @@ Health check:
 GET http://localhost:5000/api/health
 ```
 
+## Deployment
+
+Recommended setup:
+
+- Backend: Render web service from `backend/`
+- Frontend: Vercel project from `frontend/`
+- Database: MongoDB Atlas
+
+### Backend on Render
+
+Create a new Render web service from this repo or use the included `render.yaml` blueprint.
+
+Render settings:
+
+```text
+Root Directory: backend
+Build Command: npm install
+Start Command: npm start
+Health Check Path: /api/health
+```
+
+Environment variables:
+
+```text
+MONGO_URI=<your MongoDB Atlas connection string>
+JWT_SECRET=<a long random secret>
+CLIENT_URL=<your Vercel frontend URL>
+```
+
+### Frontend on Vercel
+
+Create a new Vercel project from the `frontend/` directory.
+
+Vercel settings:
+
+```text
+Root Directory: frontend
+Build Command: npm run build
+Install Command: npm install
+Output Directory: .next
+```
+
+Environment variables:
+
+```text
+NEXT_PUBLIC_API_BASE_URL=<your Render backend URL>/api
+```
+
+After both deploys are live, update `CLIENT_URL` in Render to the final Vercel URL and redeploy the backend.
+
 ## API Docs
 
 - API reference: [docs/API_DOCS.md](docs/API_DOCS.md)
