@@ -176,7 +176,7 @@ GET http://localhost:5000/api/health
 Recommended setup:
 
 - Backend: Render web service from `backend/`
-- Frontend: Vercel project from `frontend/`
+- Frontend: Vercel project from the repository root
 - Database: MongoDB Atlas
 
 ### Backend on Render
@@ -202,15 +202,15 @@ CLIENT_URL=<your Vercel frontend URL>
 
 ### Frontend on Vercel
 
-Create a new Vercel project from the `frontend/` directory.
+Create a new Vercel project from this repository.
 
 Vercel settings:
 
 ```text
-Root Directory: frontend
+Root Directory: leave empty / default
 Build Command: npm run build
 Install Command: npm install
-Output Directory: .next
+Output Directory: leave empty / default
 ```
 
 Environment variables:
